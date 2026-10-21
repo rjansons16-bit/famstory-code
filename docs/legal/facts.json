@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "inForceFrom": "",
+  "company": {
+    "name": "",
+    "registrationNumber": "",
+    "address": ""
+  },
+  "email": {
+    "support": "support@famstory.lv",
+    "privacy": "privacy@famstory.lv",
+    "security": "security@famstory.lv"
+  },
+  "hosting": "",
+  "mailbox": "",
+  "mailer": ""
+}

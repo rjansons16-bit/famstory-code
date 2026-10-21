@@ -1,0 +1,47 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "Screens" },
+    { "id": "page-2", "name": "Directions and system" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 390, "h": 844, "title": "Timeline", "page": "page-1" },
+    { "file": "EventDetail.dc.html", "x": 510, "y": 0, "w": 390, "h": 844, "title": "Event detail", "page": "page-1" },
+    { "file": "Compose.dc.html", "x": 1020, "y": 0, "w": 390, "h": 844, "title": "Event composer", "page": "page-1" },
+    { "file": "Visibility.dc.html", "x": 1530, "y": 0, "w": 390, "h": 844, "title": "Visibility · interactive", "page": "page-1", "is_interactive": true },
+    { "file": "Welcome.dc.html", "x": 0, "y": 1000, "w": 390, "h": 844, "title": "Welcome", "page": "page-1" },
+    { "file": "Calendar.dc.html", "x": 510, "y": 1000, "w": 390, "h": 844, "title": "Calendar", "page": "page-1" },
+    { "file": "Family.dc.html", "x": 1020, "y": 1000, "w": 390, "h": 844, "title": "Family", "page": "page-1" },
+    { "file": "Premium.dc.html", "x": 1530, "y": 1000, "w": 390, "h": 844, "title": "Paywall", "page": "page-1" },
+
+    { "file": "DirectionB.dc.html", "x": 0, "y": 0, "w": 390, "h": 844, "title": "Direction B · The quiet index", "page": "page-2" },
+    { "file": "DirectionC.dc.html", "x": 510, "y": 0, "w": 390, "h": 844, "title": "Direction C · The family album", "page": "page-2" },
+    { "file": "System.dc.html", "x": 1020, "y": 0, "w": 760, "h": 844, "title": "The visual system", "page": "page-2" }
+  ],
+  "annotations": [
+    {
+      "id": "direction",
+      "x": 0,
+      "y": -168,
+      "w": 900,
+      "page": "page-1",
+      "text": "DIRECTION A — “The family chronicle”\nA warm paper ground, an editorial serif (Newsreader) for content, Work Sans for the UI.\nThe idea: the product looks like a well-made family book, not like a calendar. That works directly against the study's elevated risk “insufficient differentiation”.\n\nAlternative directions B and C are on the second page, with an honest for and against."
+    },
+    {
+      "id": "visibility-note",
+      "x": 1530,
+      "y": -168,
+      "w": 390,
+      "page": "page-1",
+      "text": "This screen is live — try switching between the options and the groups.\nThe “Will see:” summary at the bottom follows along, and with no recipients the button stays disabled."
+    },
+    {
+      "id": "tokens",
+      "x": 1020,
+      "y": -168,
+      "w": 760,
+      "page": "page-2",
+      "text": "Once a direction is approved, these values replace apps/mobile/src/theme/tokens.ts.\nThe category tone keys (growth, learn, landmark…) must not disappear — they come from domain/categories.ts and are used for the calendar dots as well."
+    }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}

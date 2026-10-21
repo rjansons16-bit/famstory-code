@@ -1,0 +1,6 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "FamStory uses the microphone to record voice notes for your family's events.",
+    "NSPhotoLibraryUsageDescription": "FamStory uses your photos so that you can add them to your family's events and profiles."
+  }
+}

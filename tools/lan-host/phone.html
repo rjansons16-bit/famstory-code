@@ -1,0 +1,2517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FamStory - phone view</title>
+<!--
+  The app inside a phone-sized frame, for looking at it from a computer.
+
+  Served at /phone by static-server.mjs. The frame loads the app from the same
+  server, so it is the same app with the same sign-in as the full page: the
+  frame only changes the size it is drawn at. A 390px-wide window is what makes
+  the app lay itself out as it does on a phone; the bezel, the clock and the
+  home bar are decoration around that.
+
+  THREE WAYS TO LOOK (?view=, and the first three buttons):
+    home     the phone's home screen, the way a phone is met: FamStory's icon
+             among the phone's own, and a tap opens it - the splash while it
+             loads, then the app. The bar at the bottom (the round button on
+             an iPhone SE) goes back home, and the app stays where it was
+             left, as it would on a phone. Dragged up and held (the button
+             pressed twice) it opens the app switcher, where an app swiped up
+             is closed: its next open is a cold start, splash and all. The
+             browser's icon opens the site as "browser" below. The other
+             icons are pictures.
+    app      the app as it runs from the home screen, full screen, opened the
+             way the installed app is (/?source=installed): on its sign-in,
+             under the mark, as apps open (app/index.tsx). On the demo the
+             sample family's address is filled in, and every cold start there
+             begins signed out, so the front door is always what is met.
+    browser  the site in a phone's browser, as somebody sees it who typed
+             FamStory into Google and opened the result: the welcome page,
+             under Safari's bar on an iPhone and Chrome's on Android.
+
+  Not a phone's operating system: the nearest thing on Windows to a Mac's
+  iPhone Mirroring or iOS Simulator is Android Studio's emulator, which needs
+  its own download and the Windows Hypervisor Platform switched on.
+
+  THREE SIZES (?size=):
+    real     as big as the phone itself, in millimetres on this screen. A web
+             page cannot know how large a screen's pixels are, so it asks once
+             per screen: a bank card held against the screen, and a slider
+             until the outline matches it. Kept per screen and zoom level.
+             Until it is measured - and in a window shorter than the phone -
+             the whole phone is shown, fitted, with a line saying why. It used
+             to open the measuring dialog by itself, and in a small window
+             that dialog was all anybody saw: no phone at all.
+    actual   one CSS pixel per phone pixel - on a large monitor that is well
+             over twice the phone.
+    fit      whatever fits the window.
+
+  Light and Dark here are the app's own setting (Profile -> Dark mode), stored
+  under the same key, so the app inside changes with them and this page follows
+  a change made inside the app. The page and the phone's bars take the same
+  scheme, or a dark app would sit under a light status bar. EN and LV are the
+  app's language setting the same way, and this page speaks it too.
+
+  "Open on a phone" shows where a real phone can open this server: on the same
+  network, the address this computer has right now, and from anywhere, its
+  Tailscale address - each as a QR code, asked of the server when the button
+  is pressed (/phone/addresses in static-server.mjs). Never a written-down
+  IP - those go stale with every new lease.
+
+  DEMO AND REAL (the first two buttons): this machine serves the app twice,
+  the real one and the demo on the sample family, and this page goes from one
+  to the other - the whole page, since they are two origins with a storage and
+  a sign-in each - taking the view, the phone, the size, the colours, the
+  language and the screen's measurement along (?appearance, ?locale, ?pxmm,
+  used once). The demo's own "Start your own family" asks for it from inside
+  the phone, and on the real copy the phone then opens FamStory (?launch=app).
+  Where the other copy is, the server says (/phone/copies).
+-->
+<script>
+  // Before the first paint, so a dark app does not open inside a light frame.
+  (function () {
+    // Carried over from the other copy (Demo / Real): each is an origin of its
+    // own, and the app should not change language or colours on the way.
+    try {
+      var carried = new URLSearchParams(location.search);
+      var appearance = carried.get('appearance');
+      if (appearance === 'light' || appearance === 'dark' || appearance === 'system') {
+        localStorage.setItem('famstory.appearance', JSON.stringify({ preference: appearance }));
+      }
+      var locale = carried.get('locale');
+      if (locale === 'en' || locale === 'lv') localStorage.setItem('famstory.locale', JSON.stringify({ locale: locale }));
+    } catch (e) {}
+    var preference = 'system';
+    try {
+      preference = JSON.parse(localStorage.getItem('famstory.appearance') || '{}').preference || 'system';
+    } catch (e) {}
+    var dark = preference === 'dark' ||
+      (preference !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.setAttribute('data-scheme', dark ? 'dark' : 'light');
+  })();
+</script>
+<style>
+  :root {
+    --page: #e6e1d7;
+    --ink: #17160f;
+    --muted: #6e6a61;
+    --panel: rgba(255, 255, 255, 0.72);
+    --on: #234e42;
+    --on-text: #f4f1ea;
+    --screen: #f4f1ea;
+    --screen-text: #17160f;
+    --bar: #f7f7f7;
+    --pill: #e3e3e8;
+    --bar-ink: #1c1c1e;
+    --bar-muted: #6c6c72;
+  }
+  :root[data-scheme="dark"] {
+    --page: #0b0a07;
+    --ink: #f4f1ea;
+    --muted: #a8a296;
+    --panel: rgba(32, 30, 23, 0.9);
+    --on: #3dbb8c;
+    --on-text: #0f1a15;
+    --screen: #16150e;
+    --screen-text: #f4f1ea;
+    --bar: #1c1c1e;
+    --pill: #2c2c2f;
+    --bar-ink: #f2f2f7;
+    --bar-muted: #98989f;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    display: flex;
+    flex-direction: column;
+    background: var(--page);
+    color: var(--ink);
+    font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 12px;
+    padding: 12px 16px;
+  }
+  .group {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 999px;
+    background: var(--panel);
+  }
+  .group[hidden] { display: none; }
+  button, .link {
+    border: 0;
+    border-radius: 999px;
+    padding: 6px 12px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  button:hover, .link:hover { background: rgba(127, 127, 127, 0.14); }
+  button[aria-pressed="true"] { background: var(--on); color: var(--on-text); }
+  button:focus-visible, .link:focus-visible { outline: 2px solid var(--on); outline-offset: 2px; }
+
+  main {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4px 16px 24px;
+  }
+  /* Takes the scaled size, so the page scrolls exactly as far as the phone. */
+  .holder { flex: none; position: relative; }
+  .phone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top left;
+    background: #0c0c0c;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28), inset 0 0 0 2px #2b2b2b;
+  }
+  .screen {
+    position: absolute;
+    overflow: hidden;
+    /* A stacking context of its own, under the island and the buttons. On it,
+       from the bottom up: the home screen (1), the apps' windows (10-19), the
+       app switcher (20), the splash (30), the phone's own bars (40). */
+    isolation: isolate;
+    background: var(--screen);
+  }
+  .status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--screen-text);
+    font-weight: 600;
+    background: var(--screen);
+    pointer-events: none;
+  }
+  .status .icons { display: flex; align-items: center; gap: 5px; }
+  .status svg { display: block; fill: currentColor; }
+  /* An app's window: the whole screen, with room at the top and the bottom
+     under the phone's own bars - so that it can shrink into a card of the
+     whole app, as a phone's app switcher shows it. Rounded like the screen,
+     and like a card there (--card-radius: an iPhone SE's screen is square). */
+  .window {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius, 0);
+    background: var(--screen);
+    transform-origin: 0 0;
+  }
+  .window[hidden] { display: none; }
+  .window.carded { border-radius: var(--card-radius, 0); }
+  .window-top, .window-bottom { flex: none; background: var(--screen); }
+  iframe {
+    flex: 1;
+    display: block;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    background: var(--screen);
+  }
+  /* While a finger is on the bar, and in the app switcher, the apps under it
+     take no taps: the gesture is the phone's. */
+  .screen.gesturing iframe, .screen.switching iframe { pointer-events: none; }
+  .screen.switching .window { will-change: transform; }
+  .bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--screen);
+    cursor: pointer;
+    touch-action: none;
+  }
+  .bottom span {
+    display: block;
+    border-radius: 3px;
+    background: var(--screen-text);
+    opacity: 0.85;
+  }
+  .island, .speaker, .button-home { z-index: 7; }
+  .island {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    border-radius: 999px;
+  }
+  .button-home {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 2px #3a3a3a;
+  }
+  .speaker {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 3px;
+    background: #2a2a2a;
+  }
+  .hint { color: var(--muted); font-size: 12px; text-align: center; padding: 0 16px 4px; margin: 0; }
+  .size-note {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 10px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+  .size-note[hidden] { display: none; }
+  .size-note button { background: var(--on); color: var(--on-text); padding: 4px 12px; }
+  /* A short window - a docked browser pane - gives its height to the phone:
+     the buttons go into a column beside it instead of rows above it. */
+  @media (max-height: 620px) {
+    button, .link { padding: 4px 9px; }
+    .hint { display: none; }
+  }
+  @media (max-height: 620px) and (min-width: 600px) {
+    body { flex-direction: row; }
+    header {
+      flex: none;
+      width: 232px;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 6px;
+      padding: 8px;
+      overflow-y: auto;
+    }
+    .group { flex-wrap: wrap; justify-content: center; }
+    main { padding: 8px; align-items: center; }
+  }
+
+  /* The browser's own bar, in the "browser" view: Safari's at the bottom of an
+     iPhone (its default since iOS 15), Chrome's at the top of an Android. */
+  .browserbar {
+    flex: none;
+    display: none;
+    color: var(--bar-ink);
+    background: var(--bar);
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  }
+  .browserbar.shown { display: block; }
+  .browserbar.chrome.shown { display: flex; }
+  .browserbar svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 12px;
+    background: var(--pill);
+    font-size: 15px;
+  }
+  .pill .host { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 0; }
+  .pill .host-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .quiet { color: var(--bar-muted); }
+  .safari { padding: 8px 12px 0; border-top: 1px solid rgba(127, 127, 127, 0.22); }
+  .safari .pill { height: 44px; padding: 0 12px; }
+  .safari .tools { display: flex; justify-content: space-between; align-items: center; height: 44px; padding: 0 14px; color: #0a84ff; }
+  .chrome { align-items: center; gap: 10px; height: 56px; padding: 0 10px; border-bottom: 1px solid rgba(127, 127, 127, 0.22); }
+  .chrome .pill { flex: 1; height: 40px; padding: 0 14px; border-radius: 999px; }
+  .chrome .pill .host { justify-content: flex-start; }
+  .chrome .tabs {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border: 2px solid currentColor;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  /* The home screen: the phone's own icons around FamStory's, over a wallpaper
+     in the app's colours. Only FamStory and the browser open anything. */
+  .home {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(165deg, #1d4a3d 0%, #2f8f6d 48%, #d9c9a1 100%);
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    color: #fff;
+  }
+  :root[data-scheme="dark"] .home { background: linear-gradient(165deg, #0c1f19 0%, #1a5a45 55%, #5c5239 100%); }
+  .home[hidden] { display: none; }
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px 8px;
+    padding: 18px 22px 0;
+    align-content: start;
+  }
+  .home-dock {
+    margin: auto 12px 10px;
+    padding: 14px 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    border-radius: 32px;
+    /* No backdrop blur: it would be drawn again on every frame the home
+       screen moves. */
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .home-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: inherit;
+    font-size: 12px;
+    white-space: normal;
+  }
+  .home-app:hover { background: none; }
+  .home-icon { transition: transform 160ms ease, filter 160ms ease; }
+  .home-app:active .home-icon { filter: brightness(0.82); transform: scale(0.9); }
+  .home-icon {
+    width: 62px;
+    height: 62px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+  .home-icon img { width: 100%; height: 100%; display: block; }
+  .home-icon svg { display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .round .home-icon { border-radius: 50%; }
+  .home-app span {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  }
+  .home-dock .home-app span { display: none; }
+  .cal-day { display: flex; flex-direction: column; align-items: center; line-height: 1; color: #1c1c1e; }
+  .cal-day small { color: #ff3b30; font-size: 10px; font-weight: 600; text-transform: uppercase; margin-bottom: 2px; }
+  .cal-day b { font-size: 28px; font-weight: 400; }
+  /* The icons in a layer of their own, so that the wallpaper can stay while
+     they go - behind the app switcher, and under an app being put away - and
+     the wallpaper dimmed there. */
+  .home-icons { position: absolute; inset: 0; display: flex; flex-direction: column; transform-origin: 50% 50%; }
+  .home-scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.3); opacity: 0; pointer-events: none; }
+  /* On the home screen, and in the app switcher, the phone's own bars sit
+     over the wallpaper. */
+  .screen.at-home .status, .screen.at-home .bottom,
+  .screen.switching .status, .screen.switching .bottom { background: transparent; color: #fff; }
+  .screen.at-home .bottom span, .screen.switching .bottom span { background: #fff; }
+  .toast {
+    position: absolute;
+    left: 50%;
+    bottom: 120px;
+    z-index: 45;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 80%;
+    padding: 10px 16px;
+    border-radius: 14px;
+    background: rgba(20, 20, 20, 0.86);
+    color: #fff;
+    font: 14px/1.35 -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    text-align: center;
+  }
+  .toast[hidden] { display: none; }
+  /* The splash while FamStory starts: its own background and icon, as an
+     installed web app opens on a phone. */
+  .launch {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: #f4f1ea;
+    color: #17160f;
+    font: 600 22px/1.2 -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    transition: opacity 220ms ease;
+  }
+  :root[data-scheme="dark"] .launch { background: #16150e; color: #f4f1ea; }
+  .launch[hidden] { display: none; }
+  .launch.leaving { opacity: 0; }
+  /* The mark in its three layers (tools/brand/make-icons.mjs), stacked. */
+  .launch .mark { position: relative; width: 118px; height: 139px; }
+  .launch .mark img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .launch-name { font: 600 28px/1.1 Georgia, "Times New Roman", serif; letter-spacing: -0.5px; }
+  /* The mark coming together, as it does on the welcome screen
+     (components/ui/logo-mark.tsx): the halves swing in from either side and
+     meet, the child lands on top, the heart beats once; then the name. Only
+     transform and opacity, so it runs off the main thread. */
+  .launch.playing .mark {
+    animation: mark-beat calc(320ms * var(--slow, 1)) cubic-bezier(0.4, 0, 0.2, 1) calc(980ms * var(--slow, 1)) both;
+  }
+  .launch.playing .mark-left {
+    transform-origin: 50% 100%;
+    animation: mark-left calc(700ms * var(--slow, 1)) cubic-bezier(0.26, 1.34, 0.46, 1) both;
+  }
+  .launch.playing .mark-right {
+    transform-origin: 50% 100%;
+    animation: mark-right calc(700ms * var(--slow, 1)) cubic-bezier(0.26, 1.34, 0.46, 1) calc(40ms * var(--slow, 1)) both;
+  }
+  .launch.playing .mark-child {
+    animation: mark-child calc(480ms * var(--slow, 1)) cubic-bezier(0.26, 1.34, 0.46, 1) calc(420ms * var(--slow, 1)) both;
+  }
+  .launch.playing .launch-name {
+    animation: rise calc(380ms * var(--slow, 1)) cubic-bezier(0.16, 1, 0.3, 1) calc(700ms * var(--slow, 1)) both;
+  }
+  @keyframes mark-left {
+    0% { opacity: 0; transform: translateX(-28%) rotate(-16deg); }
+    40% { opacity: 1; }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes mark-right {
+    0% { opacity: 0; transform: translateX(28%) rotate(16deg); }
+    40% { opacity: 1; }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes mark-child {
+    0% { opacity: 0; transform: translateY(-60%) scale(0.6); }
+    30% { opacity: 1; }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes mark-beat {
+    0% { transform: none; }
+    40% { transform: scale(1.08); }
+    100% { transform: none; }
+  }
+  @keyframes rise {
+    0% { opacity: 0; transform: translateY(14px); }
+    100% { opacity: 1; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .launch { transition: none; }
+    .launch.playing * { animation: none !important; }
+  }
+
+  /* The app switcher over the wallpaper: an icon and a name over each card,
+     the cards being the apps' own windows, scaled. */
+  .switcher {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    touch-action: none;
+    user-select: none;
+    color: #fff;
+    font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+  }
+  .switcher[hidden] { display: none; }
+  .card-head {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+  }
+  .card-head .home-icon { width: 30px; height: 30px; border-radius: 7px; box-shadow: none; }
+  .card-head .home-icon svg { width: 19px; height: 19px; }
+  .switcher.android .card-head { justify-content: center; height: 36px; }
+  .switcher.android .card-head .home-icon { width: 36px; height: 36px; border-radius: 50%; }
+  .switcher-empty {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    font-size: 16px;
+    opacity: 0.85;
+  }
+
+  /* Over the screen when the app cannot load in this browser. */
+  .blocked {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px;
+    background: var(--screen);
+    color: var(--screen-text);
+    font-size: 17px;
+    line-height: 1.45;
+  }
+  .blocked.shown { display: flex; }
+  .blocked strong { font-size: 22px; line-height: 1.25; }
+  .blocked code {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(127, 127, 127, 0.16);
+    font-size: 14px;
+    word-break: break-all;
+    user-select: all;
+  }
+
+  /* The two dialogs: "Open on a phone", and measuring the screen. */
+  dialog {
+    border: 0;
+    border-radius: 20px;
+    padding: 20px 24px;
+    max-width: min(94vw, 1080px);
+    background: var(--screen);
+    color: var(--screen-text);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  }
+  dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+  .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .dialog-head strong { font-size: 18px; }
+  .qr { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 12px 0; }
+  .qr .code { padding: 8px; border-radius: 12px; background: #fff; line-height: 0; }
+  .qr .code svg { width: 220px; height: 220px; }
+  .qr a { color: var(--on); font-size: 15px; word-break: break-all; }
+  .dialog-note { max-width: 420px; margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+  /* Two ways to the server, side by side where there is room. */
+  .qr-sections { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 36px; }
+  .qr-section { display: flex; flex-direction: column; align-items: center; max-width: 320px; }
+  .qr-section > strong { margin-top: 10px; font-size: 15px; }
+  .qr-section .dialog-note { text-align: center; }
+  #calibrate p { max-width: 520px; margin: 0 0 16px; }
+  .card-room { display: flex; justify-content: center; overflow-x: auto; padding: 12px 0 16px; }
+  .card {
+    flex: none;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--on);
+    background: rgba(61, 187, 140, 0.08);
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .calibrate-row { display: flex; align-items: center; gap: 10px; }
+  .calibrate-row input { flex: 1; min-width: 200px; accent-color: var(--on); }
+  .calibrate-row button { background: var(--panel); }
+  .calibrate-row .primary { background: var(--on); color: var(--on-text); }
+</style>
+</head>
+<body>
+<header>
+  <div class="group" id="copies" role="group" aria-label="Demo or real" hidden>
+    <button type="button" data-copy="demo" data-text="copyDemo">Demo</button>
+    <button type="button" data-copy="real" data-text="copyReal">Real</button>
+  </div>
+  <div class="group" role="group" aria-label="View">
+    <button type="button" data-view="home" data-text="viewHome">Home screen</button>
+    <button type="button" data-view="app" data-text="viewApp">As the app</button>
+    <button type="button" data-view="browser" data-text="viewBrowser">From Google</button>
+  </div>
+  <div class="group" role="group" aria-label="Phone">
+    <button type="button" data-device="iphone">iPhone 15</button>
+    <button type="button" data-device="se">iPhone SE</button>
+    <button type="button" data-device="android">Android</button>
+  </div>
+  <div class="group" role="group" aria-label="Size">
+    <button type="button" data-size="real" data-text="sizeReal">Real size</button>
+    <button type="button" data-size="actual" data-text="sizeActual">Pixels 1:1</button>
+    <button type="button" data-size="fit" data-text="sizeFit">Fit</button>
+  </div>
+  <div class="group" role="group" aria-label="Theme">
+    <button type="button" data-scheme-choice="light" data-text="light">Light</button>
+    <button type="button" data-scheme-choice="dark" data-text="dark">Dark</button>
+  </div>
+  <div class="group" role="group" aria-label="Language">
+    <button type="button" data-locale-choice="en">EN</button>
+    <button type="button" data-locale-choice="lv">LV</button>
+  </div>
+  <div class="group">
+    <button type="button" id="reload" data-text="reload">Reload</button>
+    <a class="link" id="full-page" href="/" target="_blank" rel="noopener" data-text="fullPage">Full page</a>
+  </div>
+  <div class="group">
+    <button type="button" id="on-phone" data-text="onPhone">Open on a phone</button>
+  </div>
+  <p class="size-note" id="size-note" hidden>
+    <span id="size-note-text"></span>
+    <button type="button" id="size-note-measure" data-text="measure">Measure</button>
+  </p>
+</header>
+<p class="hint" id="hint"></p>
+<main id="main">
+  <div class="holder" id="holder">
+    <div class="phone" id="phone">
+      <div class="screen" id="screen">
+        <div class="status" id="status">
+          <span id="clock">9:41</span>
+          <span class="icons" aria-hidden="true">
+            <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="4.7" y="4.7" width="3" height="6.3" rx="1"/><rect x="9.4" y="2.4" width="3" height="8.6" rx="1"/><rect x="14" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="15" height="11" viewBox="0 0 15 11"><path d="M7.5 2.2c2.1 0 4 .8 5.5 2.1l1.2-1.3C12.4 1.2 10 .2 7.5.2S2.6 1.2.8 3L2 4.3c1.5-1.3 3.4-2.1 5.5-2.1zm0 3.3c1.2 0 2.3.4 3.2 1.2l1.2-1.3A6.6 6.6 0 0 0 7.5 3.7 6.6 6.6 0 0 0 3.1 5.4l1.2 1.3c.9-.8 2-1.2 3.2-1.2zm0 3.3c.4 0 .8.1 1 .4L7.5 10.8 6.5 9.2c.2-.3.6-.4 1-.4z"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3" fill="none" stroke="currentColor" opacity="0.45"/><rect x="2" y="2" width="15" height="8" rx="1.6"/><rect x="22.6" y="4" width="1.8" height="4" rx="0.9" opacity="0.45"/></svg>
+          </span>
+        </div>
+        <div class="home" id="home" hidden>
+          <div class="home-icons" id="home-icons">
+            <div class="home-grid" id="home-grid"></div>
+            <div class="home-dock" id="home-dock"></div>
+          </div>
+          <div class="home-scrim" id="home-scrim"></div>
+        </div>
+        <div class="window" id="app-window">
+          <div class="window-top"></div>
+          <iframe id="app" name="famstory-phone" title="FamStory"></iframe>
+          <div class="window-bottom"></div>
+        </div>
+        <div class="window" id="web-window" hidden>
+          <div class="window-top"></div>
+          <div class="browserbar chrome" id="chrome-bar" aria-hidden="true">
+            <div class="pill">
+              <span class="host"><span class="secure-icon"></span><span class="host-name"></span></span>
+            </div>
+            <span class="tabs">1</span>
+            <svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="12" cy="19" r="1.2"/></svg>
+          </div>
+          <iframe id="web" name="famstory-phone" title="FamStory in the browser"></iframe>
+          <div class="browserbar safari" id="safari-bar" aria-hidden="true">
+            <div class="pill">
+              <span class="quiet" style="font-weight: 600; font-size: 13px;">AA</span>
+              <span class="host"><span class="secure-icon"></span><span class="host-name"></span></span>
+              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>
+            </div>
+            <div class="tools">
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24" style="opacity: 0.4"><path d="M9 5l7 7-7 7"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M6 11v9h12v-9"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 5c3-1 5-1 8 1 3-2 5-2 8-1v14c-3-1-5-1-8 1-3-2-5-2-8-1z"/><path d="M12 6v14"/></svg>
+              <svg width="22" height="22" viewBox="0 0 24 24"><rect x="4" y="4" width="12" height="12" rx="2"/><path d="M8 20h10a2 2 0 0 0 2-2V8"/></svg>
+            </div>
+          </div>
+          <div class="window-bottom"></div>
+        </div>
+        <div class="switcher" id="switcher" hidden></div>
+        <div class="bottom" id="bottom" role="button" aria-label="Home"><span id="bar"></span></div>
+        <div class="launch" id="launch" hidden>
+          <div class="mark">
+            <img class="mark-left" id="mark-left" src="/mark-left.png" alt="">
+            <img class="mark-right" src="/mark-right.png" alt="">
+            <img class="mark-child" id="mark-child" src="/mark-child.png" alt="">
+          </div>
+          <span class="launch-name">FamStory</span>
+        </div>
+        <div class="toast" id="toast" role="status" hidden></div>
+        <div class="blocked" id="blocked" role="alert">
+          <strong data-text="blockedTitle">The app could not load in this browser.</strong>
+          <span data-text="blockedBody">This page arrived, but the browser refused the app's own files. Some
+            built-in browsers do that. Open the same address in Chrome or Edge:</span>
+          <code id="address"></code>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<dialog id="phone-dialog" aria-labelledby="phone-dialog-title">
+  <div class="dialog-head">
+    <strong id="phone-dialog-title" data-text="onPhone">Open on a phone</strong>
+    <button type="button" id="phone-dialog-close" aria-label="Close">&#x2715;</button>
+  </div>
+  <div id="phone-dialog-body"></div>
+  <p class="dialog-note" id="phone-dialog-note"></p>
+</dialog>
+
+<dialog id="calibrate" aria-labelledby="calibrate-title">
+  <div class="dialog-head">
+    <strong id="calibrate-title" data-text="calibrateTitle">Measure this screen once</strong>
+    <button type="button" id="calibrate-close" aria-label="Close">&#x2715;</button>
+  </div>
+  <p data-text="calibrateText">To draw the phone as big as it really is, this page has to learn the size of your screen once. Hold a bank card against the screen and move the slider until the outline is exactly as wide as the card.</p>
+  <div class="card-room"><div class="card" id="card">85.6 &times; 54 mm</div></div>
+  <div class="calibrate-row">
+    <button type="button" id="card-smaller" aria-label="Smaller">&minus;</button>
+    <input type="range" id="card-width" min="120" max="1000" step="1" aria-labelledby="calibrate-title">
+    <button type="button" id="card-bigger" aria-label="Bigger">+</button>
+    <button type="button" id="calibrate-done" class="primary" data-text="done">Done</button>
+  </div>
+</dialog>
+
+<script>
+  // Viewport sizes are the ones each phone reports to a web page, in CSS pixels.
+  // `top` and `bottom` are the phone's own bars; the app gets the height between.
+  // `mm` is the height of the phone itself, for "Real size"; `browser` is the
+  // browser whose bar the "browser" view draws.
+  const DEVICES = {
+    iphone:  { width: 390, height: 844, top: 50, bottom: 34, bezel: [14, 14, 14, 14], radius: 58, screenRadius: 46, island: true, bar: [134, 5], mm: 147.6, browser: 'safari' },
+    se:      { width: 375, height: 667, top: 20, bottom: 0,  bezel: [16, 86, 16, 86], radius: 50, screenRadius: 4,  homeButton: true, mm: 138.4, browser: 'safari' },
+    android: { width: 412, height: 915, top: 32, bottom: 22, bezel: [10, 12, 10, 12], radius: 40, screenRadius: 30, punch: true, bar: [108, 4], mm: 165.1, browser: 'chrome' },
+  };
+
+  // Where each view starts: the app as the installed one starts (the
+  // manifest's start_url, which makes it open on its sign-in rather than the
+  // site's welcome page), or the page a search result opens.
+  const START = { home: '/', app: '/?source=installed', browser: '/welcome' };
+
+  // The home screen. FamStory's icon is the one the web app installs with
+  // (manifest.webmanifest); the rest are the phone's own apps, drawn plainly -
+  // pictures, not the real thing - so the screen reads as a phone's.
+  const GLYPHS = {
+    phone: '<path d="M6.6 3.6l2.3-.6 1.7 3.9-1.8 1.4a11 11 0 0 0 5.3 5.3l1.4-1.8 3.9 1.7-.6 2.3a2 2 0 0 1-2 1.5C10.4 17.1 5.9 12.6 5.1 5.6a2 2 0 0 1 1.5-2z"/>',
+    messages: '<path d="M12 4c4.4 0 8 2.9 8 6.5S16.4 17 12 17c-.9 0-1.8-.1-2.6-.4L5 18.5l1.2-3.2C4.8 14 4 12.3 4 10.5 4 6.9 7.6 4 12 4z"/>',
+    browser: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.4 2.3 3.6 5.1 3.6 8.5s-1.2 6.2-3.6 8.5c-2.4-2.3-3.6-5.1-3.6-8.5S9.6 5.8 12 3.5z"/>',
+    camera: '<path d="M4 8.5h3l1.6-2.5h6.8L17 8.5h3v10H4z"/><circle cx="12" cy="13" r="3.4"/>',
+    photos: '<circle cx="12" cy="7.6" r="3.2"/><circle cx="16.4" cy="12" r="3.2"/><circle cx="12" cy="16.4" r="3.2"/><circle cx="7.6" cy="12" r="3.2"/>',
+    clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.4 2"/>',
+    weather: '<circle cx="9" cy="9" r="3.2"/><path d="M8 18h8.5a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.3 1.6A2.7 2.7 0 0 0 8 18z"/>',
+    notes: '<path d="M6 4.5h12v15H6z"/><path d="M9 9h6"/><path d="M9 12.5h6"/><path d="M9 16h4"/>',
+    maps: '<path d="M4 6.5l5-2 6 2 5-2v13l-5 2-6-2-5 2z"/><path d="M9 4.5v13"/><path d="M15 6.5v13"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M12 3.5v2.3M12 18.2v2.3M3.5 12h2.3M18.2 12h2.3M6 6l1.6 1.6M16.4 16.4L18 18M6 18l1.6-1.6M16.4 7.6L18 6"/>',
+  };
+  const HOME_GRID = [
+    { id: 'famstory', opens: 'app' },
+    { id: 'calendar', bg: '#ffffff' },
+    { id: 'photos', bg: '#ffffff', ink: '#f4a02a' },
+    { id: 'clock', bg: '#1c1c1e', ink: '#ffffff' },
+    { id: 'weather', bg: 'linear-gradient(180deg, #4aa3f0, #1f6fd1)', ink: '#ffffff' },
+    { id: 'notes', bg: '#ffffff', ink: '#e6b400' },
+    { id: 'maps', bg: '#d8efd9', ink: '#2f8f4e' },
+    { id: 'settings', bg: '#8e8e93', ink: '#ffffff' },
+  ];
+  const HOME_DOCK = [
+    { id: 'phone', bg: '#34c759', ink: '#ffffff' },
+    { id: 'messages', bg: '#30d158', ink: '#ffffff' },
+    { id: 'browser', bg: '#ffffff', ink: '#1a73e8', opens: 'browser' },
+    { id: 'camera', bg: '#3a3a3c', ink: '#ffffff' },
+  ];
+
+  // A bank card: ISO/IEC 7810 ID-1.
+  const CARD_MM = [85.6, 53.98];
+
+  const TEXT = {
+    en: {
+      viewHome: 'Home screen',
+      viewApp: 'As the app',
+      viewBrowser: 'From Google',
+      sizeReal: 'Real size',
+      sizeActual: 'Pixels 1:1',
+      sizeFit: 'Fit',
+      light: 'Light',
+      dark: 'Dark',
+      reload: 'Reload',
+      fullPage: 'Full page',
+      onPhone: 'Open on a phone',
+      hintApp: 'The app as it runs from the home screen. Click to tap, scroll with the mouse wheel.',
+      hintHome: 'The phone’s home screen: tap FamStory to open it.',
+      hintSwitch: {
+        bar: 'The bar at the bottom goes home and the app stays open; dragged up and held, it opens the app switcher, where an app swiped up closes - and opens anew next time, splash and all.',
+        button: 'The round button goes home and the app stays open; pressed twice, it opens the app switcher, where an app swiped up closes - and opens anew next time, splash and all.',
+      },
+      noRecent: 'No recent apps',
+      copyDemo: 'Demo',
+      copyReal: 'Real',
+      homeOnly: (browser) => `Only FamStory and ${browser} open here.`,
+      home: 'Home',
+      apps: { famstory: 'FamStory', calendar: 'Calendar', photos: 'Photos', clock: 'Clock', weather: 'Weather', notes: 'Notes', maps: 'Maps', settings: 'Settings', phone: 'Phone', messages: 'Messages', camera: 'Camera' },
+      weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      hintBrowser: 'The site in a phone’s browser, as somebody sees it who found FamStory on Google and opened the link.',
+      hintReal: 'Real size: as big as the phone itself. Click "Real size" again to measure the screen anew.',
+      blockedTitle: 'The app could not load in this browser.',
+      blockedBody: 'This page arrived, but the browser refused the app’s own files. Some built-in browsers do that. Open the same address in Chrome or Edge:',
+      calibrateTitle: 'Measure this screen once',
+      calibrateText: 'To draw the phone as big as it really is, this page has to learn the size of your screen once. Hold a bank card against the screen and move the slider until the outline is exactly as wide as the card.',
+      done: 'Done',
+      measure: 'Measure',
+      noteUnmeasured: 'The phone is fitted to the window. To see it at its real size, measure this screen once.',
+      noteTooBig: 'The window is smaller than the phone, so it is shown smaller. Make the window taller to see its real size.',
+      scan: 'Scan it with the phone camera. The phone has to be on the same network as this computer.',
+      hereTitle: 'On this network',
+      anywhereTitle: 'From anywhere - Tailscale',
+      anywhereNote: 'From any network, with Tailscale on the phone signed in to your account - or, for somebody else, this computer shared with them from the Tailscale admin page. An https address, so voice notes and installing the app work too.',
+      publicTitle: 'From anywhere - a public link',
+      publicNote: 'Opens on any phone, Tailscale or not: Tailscale Funnel opens this demo to the internet while this computer is on. The real app stays private.',
+      noTailscale: 'Tailscale is not running on this computer, so only the network above reaches it.',
+      secure: 'This address is plain http, so voice notes and installing the app do not work on it; the Tailscale address has both.',
+      none: 'This computer is not connected to a local network right now.',
+      looking: 'Looking up this computer’s addresses…',
+      failed: 'The addresses could not be read.',
+      close: 'Close',
+      smaller: 'Smaller',
+      bigger: 'Bigger',
+    },
+    lv: {
+      viewHome: 'Sākuma ekrāns',
+      viewApp: 'Kā lietotne',
+      viewBrowser: 'Kā no Google',
+      sizeReal: 'Īstais izmērs',
+      sizeActual: 'Pikseļi 1:1',
+      sizeFit: 'Ietilpināt',
+      light: 'Gaišs',
+      dark: 'Tumšs',
+      reload: 'Pārlādēt',
+      fullPage: 'Visa lapa',
+      onPhone: 'Atvērt telefonā',
+      hintApp: 'Lietotne tā, kā tā atveras no sākuma ekrāna. Klikšķis ir pieskāriens, ritini ar peles ritenīti.',
+      hintHome: 'Telefona sākuma ekrāns: pieskaries FamStory, lai to atvērtu.',
+      hintSwitch: {
+        bar: 'Josla apakšā ved uz sākumu, un lietotne paliek atvērta; pavelc to augšup un paturi — atveras lietotņu pārslēdzējs, kur augšup pavilkta lietotne aizveras un nākamreiz atveras no jauna, ar visu sākuma animāciju.',
+        button: 'Apaļā poga ved uz sākumu, un lietotne paliek atvērta; nospied to divreiz — atveras lietotņu pārslēdzējs, kur augšup pavilkta lietotne aizveras un nākamreiz atveras no jauna, ar visu sākuma animāciju.',
+      },
+      noRecent: 'Nav nesen atvērtu lietotņu',
+      copyDemo: 'Demo',
+      copyReal: 'Īstā',
+      homeOnly: (browser) => `Šeit atveras tikai FamStory un ${browser}.`,
+      home: 'Uz sākumu',
+      apps: { famstory: 'FamStory', calendar: 'Kalendārs', photos: 'Foto', clock: 'Pulkstenis', weather: 'Laikapstākļi', notes: 'Piezīmes', maps: 'Kartes', settings: 'Iestatījumi', phone: 'Tālrunis', messages: 'Ziņas', camera: 'Kamera' },
+      weekdays: ['Sv', 'P', 'O', 'T', 'C', 'Pk', 'S'],
+      hintBrowser: 'Vietne telefona pārlūkā — tā, kā to redz cilvēks, kurš Google atrada FamStory un atvēra saiti.',
+      hintReal: 'Īstais izmērs: tikpat liels kā pats telefons. Klikšķini “Īstais izmērs” vēlreiz, lai ekrānu nomērītu no jauna.',
+      blockedTitle: 'Lietotne šajā pārlūkā neielādējās.',
+      blockedBody: 'Šī lapa atnāca, bet pārlūks atteicās ielādēt lietotnes failus. Daži iebūvētie pārlūki tā dara. Atver to pašu adresi Chrome vai Edge:',
+      calibrateTitle: 'Vienreiz nomēri šo ekrānu',
+      calibrateText: 'Lai telefons būtu tieši tik liels kā īstais, šai lapai vienreiz jāuzzina tava ekrāna izmērs. Pieliec bankas karti pie ekrāna un velc slīdni, līdz rāmis ir tieši kartes platumā.',
+      done: 'Gatavs',
+      measure: 'Nomērīt',
+      noteUnmeasured: 'Telefons ir ietilpināts logā. Lai to redzētu īstajā izmērā, vienreiz nomēri ekrānu.',
+      noteTooBig: 'Logs ir mazāks par telefonu, tāpēc tas ir rādīts mazāks. Palielini loga augstumu, lai redzētu īsto izmēru.',
+      scan: 'Noskenē ar telefona kameru. Telefonam jābūt tajā pašā tīklā, kur šis dators.',
+      hereTitle: 'Šajā tīklā',
+      anywhereTitle: 'No jebkuras vietas — Tailscale',
+      anywhereNote: 'No jebkura tīkla, ja telefonā ir Tailscale, pieslēgts tavam kontam — vai citam cilvēkam, ja Tailscale administrēšanas lapā šo datoru nodali viņam. Tā ir https adrese, tāpēc strādā arī balss ieraksti un lietotnes instalēšana.',
+      publicTitle: 'No jebkuras vietas — publiska saite',
+      publicNote: 'Atveras jebkurā telefonā, arī bez Tailscale: Tailscale Funnel šo demo atver internetā, kamēr šis dators ir ieslēgts. Īstā lietotne paliek privāta.',
+      noTailscale: 'Tailscale šajā datorā nedarbojas, tāpēc to sasniedz tikai no šī tīkla.',
+      secure: 'Šī adrese ir parasts http, tāpēc balss ieraksti un lietotnes instalēšana tajā nestrādā; Tailscale adresē strādā abi.',
+      none: 'Šis dators šobrīd nav pieslēgts vietējam tīklam.',
+      looking: 'Meklē šī datora adreses…',
+      failed: 'Adreses neizdevās nolasīt.',
+      close: 'Aizvērt',
+      smaller: 'Mazāk',
+      bigger: 'Vairāk',
+    },
+  };
+
+  const LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" style="fill: currentColor; stroke: none"><path d="M7 10V7a5 5 0 0 1 10 0v3h.5A1.5 1.5 0 0 1 19 11.5v8a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19.5v-8A1.5 1.5 0 0 1 6.5 10H7zm2 0h6V7a3 3 0 0 0-6 0v3z"/></svg>';
+  const INFO = '<svg width="15" height="15" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.5"/></svg>';
+
+  const phone = document.getElementById('phone');
+  const screenBox = document.getElementById('screen');
+  const holder = document.getElementById('holder');
+  const main = document.getElementById('main');
+  const status = document.getElementById('status');
+  const bottom = document.getElementById('bottom');
+  const bar = document.getElementById('bar');
+  const frame = document.getElementById('app');
+  const webFrame = document.getElementById('web');
+  const homeScreen = document.getElementById('home');
+  const launchScreen = document.getElementById('launch');
+  const toast = document.getElementById('toast');
+  const chromeBar = document.getElementById('chrome-bar');
+  const safariBar = document.getElementById('safari-bar');
+  const appWindow = document.getElementById('app-window');
+  const webWindow = document.getElementById('web-window');
+  const iconLayer = document.getElementById('home-icons');
+  const scrim = document.getElementById('home-scrim');
+  const switcherBox = document.getElementById('switcher');
+
+  function remembered(key, fallback, allowed) {
+    try {
+      const value = localStorage.getItem(key);
+      return allowed.includes(value) ? value : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+  function remember(key, value) {
+    try { localStorage.setItem(key, value); } catch {}
+  }
+
+  // A link can say which view and size to open with (?view=browser&size=real).
+  const query = new URLSearchParams(location.search);
+  function chosen(name, key, fallback, allowed) {
+    const asked = query.get(name);
+    if (allowed.includes(asked)) {
+      remember(key, asked);
+      return asked;
+    }
+    return remembered(key, fallback, allowed);
+  }
+
+  let device = chosen('device', 'phone-view.device', 'iphone', Object.keys(DEVICES));
+  let size = chosen('size', 'phone-view.size.v2', 'real', ['real', 'actual', 'fit']);
+  let view = chosen('view', 'phone-view.view', 'home', ['home', 'app', 'browser']);
+
+  // --- The language: the app's own setting (Profile -> Language) -----------
+
+  const LOCALE_KEY = 'famstory.locale';
+
+  function storedLocale() {
+    try {
+      const value = JSON.parse(localStorage.getItem(LOCALE_KEY) || '{}').locale;
+      return value === 'lv' ? 'lv' : 'en';
+    } catch {
+      return 'en';
+    }
+  }
+  function text() {
+    return TEXT[storedLocale()];
+  }
+
+  function writeHint() {
+    const words = text();
+    const what = view === 'home' ? words.hintHome : view === 'browser' ? words.hintBrowser : words.hintApp;
+    const how = words.hintSwitch[DEVICES[device].homeButton ? 'button' : 'bar'];
+    document.getElementById('hint').textContent = [what, how, size === 'real' ? words.hintReal : ''].filter(Boolean).join(' ');
+  }
+
+  function applyLocale() {
+    const locale = storedLocale();
+    const words = TEXT[locale];
+    document.documentElement.lang = locale;
+    document.querySelectorAll('[data-locale-choice]').forEach((b) =>
+      b.setAttribute('aria-pressed', String(b.dataset.localeChoice === locale)),
+    );
+    document.querySelectorAll('[data-text]').forEach((el) => {
+      el.textContent = words[el.dataset.text];
+    });
+    document.getElementById('phone-dialog-close').setAttribute('aria-label', words.close);
+    document.getElementById('calibrate-close').setAttribute('aria-label', words.close);
+    document.getElementById('card-smaller').setAttribute('aria-label', words.smaller);
+    document.getElementById('card-bigger').setAttribute('aria-label', words.bigger);
+    writeHint();
+    writeSizeNote();
+    drawHome();
+    document.getElementById('bottom').setAttribute('aria-label', words.home);
+  }
+
+  // --- Real size: how many CSS pixels make a millimetre on this screen -------
+
+  // Per screen and zoom level: a different monitor, or Ctrl+plus, is a
+  // different answer. CSS's own millimetre assumes 96 pixels to the inch,
+  // which is right on no screen in particular - it is only where the slider
+  // starts.
+  function screenKey() {
+    return 'phone-view.px-per-mm:' + window.screen.width + 'x' + window.screen.height + '@' + window.devicePixelRatio;
+  }
+  function measured() {
+    try {
+      const value = Number(localStorage.getItem(screenKey()));
+      return value > 0 ? value : null;
+    } catch {
+      return null;
+    }
+  }
+  function pxPerMm() {
+    return measured() ?? 96 / 25.4;
+  }
+
+  const calibrate = document.getElementById('calibrate');
+  const card = document.getElementById('card');
+  const cardWidth = document.getElementById('card-width');
+
+  function drawCard() {
+    const width = Number(cardWidth.value);
+    card.style.width = width + 'px';
+    card.style.height = Math.round((width * CARD_MM[1]) / CARD_MM[0]) + 'px';
+    card.style.borderRadius = Math.round((width * 3.18) / CARD_MM[0]) + 'px';
+  }
+  function openCalibration() {
+    cardWidth.value = String(Math.round(pxPerMm() * CARD_MM[0]));
+    drawCard();
+    if (!calibrate.open) calibrate.showModal();
+  }
+  cardWidth.addEventListener('input', drawCard);
+  document.getElementById('card-smaller').addEventListener('click', () => {
+    cardWidth.value = String(Number(cardWidth.value) - 1);
+    drawCard();
+  });
+  document.getElementById('card-bigger').addEventListener('click', () => {
+    cardWidth.value = String(Number(cardWidth.value) + 1);
+    drawCard();
+  });
+  document.getElementById('calibrate-done').addEventListener('click', () => {
+    remember(screenKey(), String(Number(cardWidth.value) / CARD_MM[0]));
+    calibrate.close();
+    fit();
+  });
+  document.getElementById('calibrate-close').addEventListener('click', () => calibrate.close());
+  document.getElementById('size-note-measure').addEventListener('click', openCalibration);
+
+  // --- The phone ---------------------------------------------------------------
+
+  function decorate(d) {
+    phone.querySelectorAll('.island, .button-home, .speaker').forEach((el) => el.remove());
+    const [left, top, right, bottomBezel] = d.bezel;
+
+    phone.style.width = d.width + left + right + 'px';
+    phone.style.height = d.height + top + bottomBezel + 'px';
+    phone.style.borderRadius = d.radius + 'px';
+
+    Object.assign(screenBox.style, {
+      left: left + 'px',
+      top: top + 'px',
+      width: d.width + 'px',
+      height: d.height + 'px',
+      borderRadius: d.screenRadius + 'px',
+    });
+
+    status.style.height = d.top + 'px';
+    status.style.padding = d.island ? '0 34px 0 38px' : '0 16px';
+    status.style.fontSize = d.island ? '15px' : '12px';
+    bottom.style.height = d.bottom + 'px';
+    // The windows leave the same room under the phone's bars, and are rounded
+    // like its screen - and like a card in the switcher.
+    document.querySelectorAll('.window-top').forEach((el) => (el.style.height = d.top + 'px'));
+    document.querySelectorAll('.window-bottom').forEach((el) => (el.style.height = d.bottom + 'px'));
+    screenBox.style.setProperty('--radius', d.screenRadius + 'px');
+    screenBox.style.setProperty('--card-radius', Math.max(d.screenRadius, 24) + 'px');
+    // The home screen starts under the phone's own bar and ends above its
+    // home bar, as a phone's does; both sit over the wallpaper.
+    document.getElementById('home-grid').style.paddingTop = d.top + 18 + 'px';
+    document.getElementById('home-dock').style.marginBottom = d.bottom + 8 + 'px';
+    bar.style.display = d.bar ? 'block' : 'none';
+    if (d.bar) {
+      bar.style.width = d.bar[0] + 'px';
+      bar.style.height = d.bar[1] + 'px';
+    }
+
+    if (d.island) {
+      const island = document.createElement('div');
+      island.className = 'island';
+      Object.assign(island.style, { top: top + 11 + 'px', width: '122px', height: '35px' });
+      phone.appendChild(island);
+    }
+    if (d.punch) {
+      const punch = document.createElement('div');
+      punch.className = 'island';
+      Object.assign(punch.style, { top: top + 9 + 'px', width: '14px', height: '14px' });
+      phone.appendChild(punch);
+    }
+    if (d.homeButton) {
+      const speaker = document.createElement('div');
+      speaker.className = 'speaker';
+      Object.assign(speaker.style, { top: top / 2 - 3 + 'px', width: '60px', height: '6px' });
+      phone.appendChild(speaker);
+
+      const home = document.createElement('div');
+      home.className = 'button-home';
+      home.setAttribute('role', 'button');
+      home.setAttribute('aria-label', text().home);
+      home.style.cursor = 'pointer';
+      home.addEventListener('click', pressHomeButton);
+      Object.assign(home.style, { top: top + d.height + (bottomBezel - 54) / 2 + 'px', width: '54px', height: '54px' });
+      phone.appendChild(home);
+    }
+
+    // The browser's own bar, in the browser's window; round icons on Android.
+    homeScreen.classList.toggle('round', device === 'android');
+    switcherBox.classList.toggle('android', device === 'android');
+    chromeBar.classList.toggle('shown', d.browser === 'chrome');
+    safariBar.classList.toggle('shown', d.browser === 'safari');
+    const secure = location.protocol === 'https:' || location.hostname === 'localhost';
+    document.querySelectorAll('.host-name').forEach((el) => (el.textContent = location.host));
+    document.querySelectorAll('.secure-icon').forEach((el) => {
+      el.innerHTML = secure ? LOCK : INFO;
+      el.className = 'secure-icon' + (secure ? '' : ' quiet');
+    });
+  }
+
+  // Why the phone is not at its real size, when "Real size" is chosen: null,
+  // 'unmeasured' or 'tooBig'. Said under the header (writeSizeNote).
+  let sizeNote = null;
+  let currentScale = 1;
+
+  function fit() {
+    const d = DEVICES[device];
+    const width = d.width + d.bezel[0] + d.bezel[2];
+    const height = d.height + d.bezel[1] + d.bezel[3];
+    // Twice: the note under the buttons, shown or not, changes how much
+    // room is left for the phone - measured once it is in place.
+    let scale = 1;
+    for (let pass = 0; pass < 2; pass++) {
+      const room = main.getBoundingClientRect();
+      const pad = getComputedStyle(main);
+      const padY = parseFloat(pad.paddingTop) + parseFloat(pad.paddingBottom);
+      const padX = parseFloat(pad.paddingLeft) + parseFloat(pad.paddingRight);
+      const roomFits = Math.min((room.height - padY) / height, (room.width - padX) / width);
+      sizeNote = null;
+      if (size === 'actual') scale = 1;
+      else if (size === 'real') {
+        // The whole phone, smaller, rather than a dialog or half a phone:
+        // until the screen is measured, and in a window shorter than the phone.
+        const real = measured() === null ? null : (d.mm * pxPerMm()) / height;
+        if (real === null) {
+          scale = Math.min(1, roomFits);
+          sizeNote = 'unmeasured';
+        } else if (real > roomFits) {
+          scale = roomFits;
+          sizeNote = 'tooBig';
+        } else scale = real;
+      } else scale = Math.min(1, roomFits);
+      writeSizeNote();
+    }
+    scale = Math.max(scale, 0.1);
+    currentScale = scale;
+
+    phone.style.transform = `scale(${scale})`;
+    holder.style.width = width * scale + 'px';
+    holder.style.height = height * scale + 'px';
+  }
+
+  function writeSizeNote() {
+    const note = document.getElementById('size-note');
+    if (!sizeNote) {
+      note.hidden = true;
+      return;
+    }
+    const words = text();
+    document.getElementById('size-note-text').textContent =
+      sizeNote === 'unmeasured' ? words.noteUnmeasured : words.noteTooBig;
+    document.getElementById('size-note-measure').hidden = sizeNote !== 'unmeasured';
+    note.hidden = false;
+  }
+
+  // Which apps have been started, as on a phone: the first open is a cold
+  // start behind the splash, after that the app is where it was left.
+  const started = { app: false, browser: false };
+  const loaded = { app: false, browser: false };
+  // about:blank - an app being closed - is not the app having loaded.
+  function hasApp(el) {
+    try {
+      return el.contentWindow.location.href !== 'about:blank';
+    } catch {
+      return true;
+    }
+  }
+  frame.addEventListener('load', () => {
+    if (started.app && hasApp(frame)) loaded.app = true;
+  });
+  webFrame.addEventListener('load', () => {
+    if (started.browser && hasApp(webFrame)) loaded.browser = true;
+  });
+
+  function frameFor(which) {
+    return which === 'browser' ? webFrame : frame;
+  }
+  /** The window an app is drawn in: its frame and, for the browser, its bar. */
+  function windowFor(which) {
+    return which === 'browser' ? webWindow : appWindow;
+  }
+
+  function start(which) {
+    if (started[which]) return;
+    started[which] = true;
+    // The demo keeps nothing, and here not even who signed in: each cold start
+    // of its app begins at the front door - the sign-in, the sample family's
+    // address in it - which is what the phone view is for. Never on the real
+    // copy, where a sign-in is somebody's own.
+    if (which === 'app' && copies?.copy === 'demo') {
+      try {
+        localStorage.removeItem('famstory.session');
+      } catch {}
+    }
+    frameFor(which).src = new URL(START[which], location.origin).href;
+  }
+
+  // What the screen shows: the home screen, or one app with the other hidden -
+  // and, while one grows or shrinks, whichever of them it moves over (`keep`).
+  function showScreen(keep = {}) {
+    screenBox.classList.toggle('at-home', view === 'home');
+    homeScreen.hidden = view !== 'home' && !keep.home;
+    appWindow.hidden = Boolean(keep.noFrame) || (view !== 'app' && keep.frame !== 'app');
+    webWindow.hidden = Boolean(keep.noFrame) || (view !== 'browser' && keep.frame !== 'browser');
+    // "Full page" is the site, as a browser shows it - not the app's own
+    // address (START.app), which opens it the way the installed app opens.
+    document.getElementById('full-page').setAttribute('href', view === 'browser' ? START.browser : '/');
+  }
+
+  function openStart() {
+    if (view !== 'home') {
+      start(view);
+      opened[view] = true;
+      touch(view);
+    } else {
+      // FamStory loads behind the home screen, so its first open waits on
+      // nothing: the splash's time is the mark's, not the app's download.
+      start('app');
+    }
+    showScreen();
+    // Come over from the demo's "Start your own family": the phone opens the
+    // real app from its icon, as the person would.
+    if (query.get('launch') === 'app' && view === 'home') {
+      setTimeout(() => {
+        if (view === 'home' && !sw) launch('app', null);
+      }, 700 * SLOW);
+    }
+  }
+
+  // --- Opening and closing, the way a phone does it ---------------------------
+  //
+  // Tapping FamStory the first time: the icon gives under the finger, the
+  // splash comes up out of it, and on the splash the mark comes together - the
+  // halves swing in and meet, the child lands on top, the heart beats once -
+  // the same film as the welcome screen's (components/ui/logo-mark.tsx). Then
+  // the splash fades and the app is there. Opened again, the app itself grows
+  // out of its icon; going home it shrinks back into it, which gives a little
+  // bounce as it takes it, and the home screen settles in behind.
+  //
+  // What moves is the app's window (#app-window, #web-window): the whole
+  // screen, the room under the phone's bars included, so that it can become a
+  // card in the app switcher as well (below). Only transform and opacity move
+  // - the two a browser moves off the main thread, so nothing waits on the app
+  // inside (the first version moved a clip and a blur as the app was still
+  // loading, and it stuttered). The app is loaded behind the home screen as
+  // the page opens, so the first open has nothing to wait for either. What is
+  // shown is decided by timers, never by an animation ending - a hidden pane
+  // runs none - and reduced motion turns the movement off. ?slow=4 plays every
+  // move four times slower, to look at it - what a Mac's iOS Simulator calls
+  // Debug > Slow Animations.
+  const SLOW = Math.min(10, Math.max(1, Number(query.get('slow')) || 1));
+  document.documentElement.style.setProperty('--slow', String(SLOW));
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // The mark's own time on the splash: the halves meeting, the child landing, the beat.
+  const MARK_MS = 1380 * SLOW;
+  const OPEN_MS = 420 * SLOW;
+  const CLOSE_MS = 360 * SLOW;
+  const EASE_OPEN = 'cubic-bezier(0.22, 1.12, 0.36, 1)';
+  const EASE_CLOSE = 'cubic-bezier(0.4, 0, 0.2, 1)';
+  const EASE_OUT = 'cubic-bezier(0.2, 0.7, 0.2, 1)';
+
+  // The icon each app opens from and closes into: drawHome() keeps them.
+  const homeIcons = {};
+  // Opened since the page loaded, or since it was closed - by Reload, or in
+  // the app switcher: the first open is the one with the splash, as a cold
+  // start on a phone.
+  const opened = { app: false, browser: false };
+  let screenTimer = null;
+  let splashTimer = null;
+
+  function moving() {
+    return !reducedMotion.matches;
+  }
+
+  function stopAnimations(el) {
+    el.getAnimations().forEach((a) => a.cancel());
+  }
+
+  /** An element's box on the phone's screen, in the screen's own pixels. */
+  function boxOf(el) {
+    const a = el.getBoundingClientRect();
+    const s = screenBox.getBoundingClientRect();
+    return {
+      left: (a.left - s.left) / currentScale,
+      top: (a.top - s.top) / currentScale,
+      width: a.width / currentScale,
+      height: a.height / currentScale,
+    };
+  }
+
+  function centreIn(el, icon) {
+    const e = boxOf(el);
+    const i = boxOf(icon);
+    return `${i.left + i.width / 2 - e.left}px ${i.top + i.height / 2 - e.top}px`;
+  }
+
+  /** The screen in its own pixels: what every window covers. */
+  function screenSize() {
+    const d = DEVICES[device];
+    return { W: d.width, H: d.height };
+  }
+
+  /** The transform that puts a window - the whole screen - with its centre at (cx, cy), scaled by s (transform-origin 0 0). */
+  function placeAt(cx, cy, s) {
+    const { W, H } = screenSize();
+    return `translate(${cx - (s * W) / 2}px, ${cy - (s * H) / 2}px) scale(${s})`;
+  }
+
+  /** ...and the one that puts it on an icon, evenly scaled to the icon's width. */
+  function onIcon(icon) {
+    const i = boxOf(icon);
+    return placeAt(i.left + i.width / 2, i.top + i.height / 2, i.width / screenSize().W);
+  }
+
+  const HERE = 'translate(0px, 0px) scale(1)';
+
+  /** Where a window comes from and goes to when there is no icon: just short of the whole screen. */
+  function near() {
+    const { W, H } = screenSize();
+    return placeAt(W / 2, H / 2 + 24, 0.94);
+  }
+
+  /** An app already running grows out of its icon. */
+  function zoomOut(el, icon) {
+    stopAnimations(el);
+    if (!moving()) return;
+    el.style.transformOrigin = '0 0';
+    const from = icon && icon.isConnected ? onIcon(icon) : near();
+    el.animate([{ transform: from, opacity: 0 }, { opacity: 1, offset: 0.25 }, { transform: HERE, opacity: 1 }], {
+      duration: OPEN_MS,
+      easing: EASE_OPEN,
+    });
+  }
+
+  /** ...and shrinks back into it - from where a finger left it, if one did - which bounces as it takes it. */
+  function zoomIn(el, icon, from = HERE) {
+    stopAnimations(el);
+    if (!moving()) return;
+    el.style.transformOrigin = '0 0';
+    const home = icon && icon.isConnected;
+    el.animate([{ transform: from, opacity: 1 }, { opacity: 1, offset: 0.5 }, { transform: home ? onIcon(icon) : near(), opacity: 0 }], {
+      duration: CLOSE_MS,
+      easing: EASE_CLOSE,
+      fill: 'forwards',
+    });
+    if (!home) return;
+    stopAnimations(icon);
+    icon.animate(
+      [
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.14)', offset: 0.35 },
+        { transform: 'scale(0.96)', offset: 0.7 },
+        { transform: 'scale(1)' },
+      ],
+      { duration: 480 * SLOW, easing: EASE_OUT, delay: CLOSE_MS * 0.55 },
+    );
+  }
+
+  /** The home screen steps back as an app opens, and forward again after it. */
+  function homeAway() {
+    stopAnimations(homeScreen);
+    if (!moving()) return;
+    homeScreen.style.transformOrigin = '50% 50%';
+    homeScreen.animate([{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.08)', opacity: 0 }], {
+      duration: 300 * SLOW,
+      easing: EASE_OUT,
+      fill: 'forwards',
+    });
+  }
+  function homeBack() {
+    stopAnimations(homeScreen);
+    if (!moving()) return;
+    homeScreen.style.transformOrigin = '50% 50%';
+    homeScreen.animate([{ transform: 'scale(1.08)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }], {
+      duration: CLOSE_MS * 1.1,
+      easing: EASE_OUT,
+    });
+  }
+
+  /** The splash comes up out of the icon, and the mark comes together on it (CSS: .launch.playing). */
+  function playSplash(icon) {
+    stopAnimations(launchScreen);
+    launchScreen.classList.remove('playing');
+    launchScreen.hidden = false;
+    if (!moving()) return;
+    void launchScreen.offsetWidth; // so the mark's animations start again
+    launchScreen.classList.add('playing');
+    launchScreen.style.transformOrigin = icon && icon.isConnected ? centreIn(launchScreen, icon) : '50% 50%';
+    launchScreen.animate([{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'scale(1)' }], {
+      duration: 240 * SLOW,
+      easing: EASE_OUT,
+    });
+  }
+
+  /** The splash fades, and the app under it steps into place. */
+  function splashLeaves() {
+    const done = () => {
+      launchScreen.hidden = true;
+      launchScreen.classList.remove('playing');
+      stopAnimations(launchScreen);
+    };
+    if (!moving()) {
+      done();
+      return;
+    }
+    launchScreen.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260 * SLOW, easing: EASE_OUT, fill: 'forwards' });
+    stopAnimations(appWindow);
+    appWindow.style.transformOrigin = '0 0';
+    const { W, H } = screenSize();
+    appWindow.animate([{ transform: placeAt(W / 2, H / 2, 0.96), opacity: 0.4 }, { transform: HERE, opacity: 1 }], {
+      duration: 340 * SLOW,
+      easing: EASE_OPEN,
+    });
+    splashTimer = setTimeout(done, 270 * SLOW);
+  }
+
+  function launch(which, icon) {
+    const leaving = view;
+    // From the toolbar on the home screen, the app still opens out of its icon.
+    const from = icon ?? (leaving === 'home' ? homeIcons[which] : null);
+    const splash = which === 'app' && !opened[which];
+    const target = windowFor(which);
+    // Measured with the home screen at rest, before it starts to move.
+    stopAnimations(homeScreen);
+    stopAnimations(iconLayer);
+    view = which;
+    remember('phone-view.view', view);
+    render();
+    start(which);
+    opened[which] = true;
+    touch(which);
+    clearTimeout(screenTimer);
+    clearTimeout(splashTimer);
+    // The home screen stays under the opening app until it has come up; under
+    // a splash, the page itself waits out of sight until the splash is there.
+    showScreen({ home: leaving === 'home', noFrame: splash });
+
+    if (splash) {
+      playSplash(from);
+      const shownAt = Date.now();
+      const leave = () => {
+        if (!loaded.app && Date.now() - shownAt < 8000 * SLOW) {
+          splashTimer = setTimeout(leave, 100);
+          return;
+        }
+        splashTimer = setTimeout(splashLeaves, moving() ? Math.max(0, MARK_MS - (Date.now() - shownAt)) : 0);
+      };
+      leave();
+    } else {
+      zoomOut(target, from);
+    }
+
+    if (leaving === 'home') homeAway();
+    screenTimer = setTimeout(
+      () => {
+        showScreen();
+        stopAnimations(homeScreen);
+      },
+      moving() ? (splash ? 260 * SLOW : OPEN_MS) : 0,
+    );
+  }
+
+  function goHome() {
+    if (sw) {
+      leaveSwitcher();
+      return;
+    }
+    if (view === 'home') return;
+    const closing = view;
+    clearTimeout(splashTimer);
+    clearTimeout(screenTimer);
+    // The splash, if the app is still on it; the app otherwise.
+    const windowEl = launchScreen.hidden ? windowFor(closing) : launchScreen;
+    const icon = homeIcons[closing];
+    stopAnimations(homeScreen);
+    view = 'home';
+    remember('phone-view.view', view);
+    render();
+    // The app stays over the home screen while it shrinks away; a splash
+    // shrinks alone, the page behind it never having been seen.
+    showScreen(windowEl === launchScreen ? {} : { frame: closing });
+    zoomIn(windowEl, icon);
+    homeBack();
+    screenTimer = setTimeout(
+      () => {
+        showScreen();
+        launchScreen.hidden = true;
+        launchScreen.classList.remove('playing');
+        stopAnimations(windowEl);
+        stopAnimations(windowFor(closing));
+      },
+      moving() ? CLOSE_MS : 0,
+    );
+  }
+
+  let toastTimer = null;
+  function sayOnlyTwo() {
+    toast.textContent = text().homeOnly(DEVICES[device].browser === 'chrome' ? 'Chrome' : 'Safari');
+    toast.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => (toast.hidden = true), 1800);
+  }
+
+  function labelFor(app) {
+    return app.id === 'browser' ? (DEVICES[device].browser === 'chrome' ? 'Chrome' : 'Safari') : text().apps[app.id];
+  }
+
+  /** An app's icon, as the home screen and the switcher draw it. */
+  function faceFor(app) {
+    const words = text();
+    const face = document.createElement('div');
+    face.className = 'home-icon';
+    if (app.id === 'famstory') {
+      const img = document.createElement('img');
+      img.src = '/icon-192.png';
+      img.alt = '';
+      face.appendChild(img);
+    } else if (app.id === 'calendar') {
+      const today = new Date();
+      face.style.background = app.bg;
+      face.innerHTML = `<div class="cal-day"><small>${words.weekdays[today.getDay()]}</small><b>${today.getDate()}</b></div>`;
+    } else {
+      face.style.background = app.bg;
+      face.style.color = app.ink;
+      face.innerHTML = `<svg width="34" height="34" viewBox="0 0 24 24">${GLYPHS[app.id]}</svg>`;
+    }
+    return face;
+  }
+
+  function iconFor(app) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'home-app';
+    const label = labelFor(app);
+    button.setAttribute('aria-label', label);
+    const face = faceFor(app);
+    const name = document.createElement('span');
+    name.textContent = label;
+    button.append(face, name);
+    if (app.opens) homeIcons[app.opens] = face;
+    button.addEventListener('click', () => (app.opens ? launch(app.opens, face) : sayOnlyTwo()));
+    return button;
+  }
+
+  function drawHome() {
+    const grid = document.getElementById('home-grid');
+    const dock = document.getElementById('home-dock');
+    grid.replaceChildren(...HOME_GRID.map(iconFor));
+    dock.replaceChildren(...HOME_DOCK.map(iconFor));
+  }
+
+  // --- The app switcher: closing an app the way a phone does -----------------
+  //
+  // The bar at the bottom goes home when it is tapped, as it always has here,
+  // and when it is flicked up. Dragged up and held, the app shrinks into a
+  // card under the finger and the app switcher opens around it (an iPhone
+  // SE's round button, pressed twice, opens it too): every open app a card of
+  // the whole app - the most recent on top at the right on an iPhone, in the
+  // middle on an Android. A card swiped up closes its app, and its next open
+  // is a cold start again, splash and all, which is what closing it is for
+  // here: seeing the opening once more. A card tapped opens its app where it
+  // was left; the empty space, the bar and the button go home. The cards are
+  // the apps' own windows, scaled, so they show the apps as they are, and as
+  // everywhere here only transform and opacity move - the finger's included.
+
+  const recent = []; // the open apps, the most recently used first
+  let sw = null; // the switcher while it is open: { deck, offset, cards, closing, busy }
+  let barDrag = null; // a finger on the bar
+  let cardDrag = null; // a finger on the switcher
+  let pressTimer = null; // an SE's button, waiting a moment for a second press
+  let warmTimer = null;
+  const SWITCH_MS = 380 * SLOW;
+
+  /** An app used: it goes to the front of the switcher. */
+  function touch(which) {
+    forget(which);
+    recent.unshift(which);
+  }
+  function forget(which) {
+    const at = recent.indexOf(which);
+    if (at >= 0) recent.splice(at, 1);
+  }
+
+  /** A closed app's page unloaded, so that its next open is a cold start. */
+  function unload(which) {
+    started[which] = false;
+    loaded[which] = false;
+    frameFor(which).src = 'about:blank';
+  }
+
+  /** FamStory loads behind the home screen again once it has been closed, for its next first open. */
+  function warmUp() {
+    clearTimeout(warmTimer);
+    warmTimer = setTimeout(() => {
+      if (!sw && !barDrag && !started.app) start('app');
+    }, 600 * SLOW);
+  }
+
+  /** Whatever was moving, at its end at once: a gesture takes over from here. */
+  function settle() {
+    clearTimeout(screenTimer);
+    clearTimeout(splashTimer);
+    [appWindow, webWindow, launchScreen, homeScreen, iconLayer, scrim].forEach(stopAnimations);
+    launchScreen.hidden = true;
+    launchScreen.classList.remove('playing');
+    showScreen();
+  }
+
+  function resetWindow(el) {
+    stopAnimations(el);
+    el.classList.remove('carded');
+    el.style.transform = '';
+    el.style.transformOrigin = '';
+    el.style.opacity = '';
+    el.style.zIndex = '';
+  }
+
+  function fadeTo(el, to, duration) {
+    const from = getComputedStyle(el).opacity;
+    stopAnimations(el);
+    el.style.opacity = String(to);
+    if (moving() && Number(from) !== to) el.animate([{ opacity: from }, { opacity: to }], { duration, easing: EASE_OUT });
+  }
+
+  /** The icons come forward again, onto the wallpaper that stayed. */
+  function iconsBack(delay = 0) {
+    const from = { opacity: getComputedStyle(iconLayer).opacity, transform: iconLayer.style.transform || 'scale(1.08)' };
+    stopAnimations(iconLayer);
+    iconLayer.style.opacity = '';
+    iconLayer.style.transform = '';
+    if (!moving()) return;
+    iconLayer.animate([from, { opacity: 1, transform: 'scale(1)' }], {
+      duration: CLOSE_MS * 1.1,
+      easing: EASE_OUT,
+      delay,
+      fill: 'backwards',
+    });
+  }
+
+  function pointOnScreen(e) {
+    const s = screenBox.getBoundingClientRect();
+    return { x: (e.clientX - s.left) / currentScale, y: (e.clientY - s.top) / currentScale, t: e.timeStamp };
+  }
+
+  /** How fast the finger was going as it let go, in screen pixels a millisecond - still, if it had stopped. */
+  function releaseSpeed(samples) {
+    const last = samples[samples.length - 1];
+    const first = samples.find((p) => last.t - p.t <= 100) ?? last;
+    const dt = last.t - first.t;
+    return dt < 16 ? { x: 0, y: 0 } : { x: (last.x - first.x) / dt, y: (last.y - first.y) / dt };
+  }
+
+  /** Past its ends, a drag gives a third as much. */
+  function rubber(value, min, max) {
+    if (value < min) return min - (min - value) / 3;
+    if (value > max) return max + (value - max) / 3;
+    return value;
+  }
+
+  function currentTransform(el) {
+    const now = getComputedStyle(el).transform;
+    return now && now !== 'none' ? now : HERE;
+  }
+
+  /** Where the switcher's cards go on this phone, for n of them. */
+  function deckFor(n) {
+    const { W, H } = screenSize();
+    const android = device === 'android';
+    const S = android ? 0.58 : 0.6;
+    const cw = W * S;
+    const ch = H * S;
+    // Android lays them side by side, the newest in the middle and the older
+    // ones off to its left; an iPhone fans them, the newest on top at the right.
+    const step = android ? cw + 20 : cw * 0.5;
+    const first = !android && n > 1 ? W * 0.94 - cw / 2 : W / 2;
+    const leftmost = first - (n - 1) * step - cw / 2;
+    return {
+      W,
+      H,
+      S,
+      cw,
+      ch,
+      step,
+      first,
+      android,
+      cy: H / 2 + (android ? -12 : 8),
+      head: android ? 50 : 40,
+      maxOffset: Math.max(0, android ? (n - 1) * step : 12 - leftmost),
+    };
+  }
+
+  function cardX(i) {
+    return sw.deck.first - i * sw.deck.step + sw.offset;
+  }
+  function cardPlace(i, lift = 0) {
+    return placeAt(cardX(i), sw.deck.cy + lift, sw.deck.S);
+  }
+  function headPlace(i, lift = 0) {
+    const g = sw.deck;
+    return `translate(${cardX(i) - g.cw / 2}px, ${g.cy + lift - g.ch / 2 - g.head}px)`;
+  }
+
+  /** A card put in its place at once... */
+  function putCard(card, i, lift = 0) {
+    card.el.style.transform = cardPlace(i, lift);
+    card.head.style.transform = headPlace(i, lift);
+  }
+
+  /** ...or moved there from wherever it is. */
+  function moveCard(card, i, duration = 320 * SLOW) {
+    const from = currentTransform(card.el);
+    const headFrom = currentTransform(card.head);
+    stopAnimations(card.el);
+    stopAnimations(card.head);
+    putCard(card, i);
+    card.el.style.zIndex = String(19 - i);
+    if (!moving()) return;
+    card.el.animate([{ transform: from }, { transform: card.el.style.transform }], { duration, easing: EASE_OPEN });
+    card.head.animate([{ transform: headFrom }, { transform: card.head.style.transform }], { duration, easing: EASE_OPEN });
+  }
+
+  /** An app's icon and name, over its card. */
+  function headFor(which) {
+    const app = [...HOME_GRID, ...HOME_DOCK].find((a) => a.opens === which);
+    const head = document.createElement('div');
+    head.className = 'card-head';
+    head.style.width = sw.deck.cw + 'px';
+    head.append(faceFor(app));
+    if (!sw.deck.android) {
+      const name = document.createElement('span');
+      name.textContent = labelFor(app);
+      head.append(name);
+    }
+    return head;
+  }
+
+  /** The card under a point: the topmost, as a phone takes it. */
+  function cardUnder(p) {
+    const g = sw.deck;
+    const hit = (card, i) =>
+      Math.abs(p.x - cardX(i)) <= g.cw / 2 && p.y >= g.cy - g.ch / 2 - g.head && p.y <= g.cy + g.ch / 2;
+    return sw.cards.find(hit) ?? null;
+  }
+
+  /**
+   * The switcher opens: the open apps as cards over the dimmed wallpaper. A
+   * window a finger brought up from the bar goes on from where it was let go;
+   * from an app otherwise the app shrinks into its card and the older ones
+   * come in from the left; from the home screen they come in from the right.
+   */
+  function openSwitcher({ from, dragged = null }) {
+    settle();
+    clearTimeout(warmTimer);
+    const running = recent.filter((which) => opened[which]);
+    sw = { deck: deckFor(running.length), offset: 0, cards: [], closing: [], busy: false };
+    view = 'home';
+    remember('phone-view.view', view);
+    render();
+    screenBox.classList.add('switching');
+    homeScreen.hidden = false;
+
+    // The icons give way to the wallpaper, dimmed, as behind a phone's switcher.
+    const iconsFrom = { opacity: getComputedStyle(iconLayer).opacity, transform: iconLayer.style.transform || 'scale(1)' };
+    iconLayer.style.opacity = '0';
+    iconLayer.style.transform = 'scale(0.92)';
+    if (moving()) iconLayer.animate([iconsFrom, { opacity: 0, transform: 'scale(0.92)' }], { duration: 200 * SLOW, easing: EASE_OUT });
+    fadeTo(scrim, 1, 260 * SLOW);
+
+    switcherBox.replaceChildren();
+    switcherBox.hidden = false;
+    const g = sw.deck;
+    running.forEach((which, i) => {
+      const el = windowFor(which);
+      const card = { which, el, head: headFor(which) };
+      sw.cards.push(card);
+      switcherBox.append(card.head);
+      const begin =
+        dragged && dragged.which === which
+          ? { transform: dragged.transform || HERE, opacity: 1 }
+          : from === 'app' && i === 0
+            ? { transform: HERE, opacity: 1 }
+            : from === 'app'
+              ? { transform: placeAt(cardX(i) - g.W * 0.4, g.cy, g.S), opacity: 0 }
+              : { transform: placeAt(cardX(i) + g.W * 0.3, g.cy, g.S * 0.94), opacity: 0 };
+      stopAnimations(el);
+      el.hidden = false;
+      el.classList.add('carded');
+      el.style.transformOrigin = '0 0';
+      el.style.zIndex = String(19 - i);
+      putCard(card, i);
+      if (!moving()) return;
+      el.animate([begin, { transform: el.style.transform, opacity: 1 }], { duration: SWITCH_MS, easing: EASE_OPEN });
+      card.head.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 200 * SLOW,
+        delay: 160 * SLOW,
+        easing: EASE_OUT,
+        fill: 'backwards',
+      });
+    });
+    if (running.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'switcher-empty';
+      empty.textContent = text().noRecent;
+      switcherBox.append(empty);
+    }
+  }
+
+  /** The switcher closes onto the home screen: the cards fall back, the icons come forward. */
+  function leaveSwitcher() {
+    if (!sw || sw.busy) return;
+    const session = sw;
+    session.busy = true;
+    if (moving()) {
+      session.cards.forEach((card, i) => {
+        card.el.animate(
+          [
+            { transform: card.el.style.transform, opacity: 1 },
+            { transform: placeAt(cardX(i), session.deck.cy + 24, session.deck.S * 0.9), opacity: 0 },
+          ],
+          { duration: 240 * SLOW, easing: EASE_CLOSE, fill: 'forwards' },
+        );
+      });
+      switcherBox.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 140 * SLOW, easing: EASE_OUT, fill: 'forwards' });
+    }
+    iconsBack(60 * SLOW);
+    fadeTo(scrim, 0, 280 * SLOW);
+    screenTimer = setTimeout(() => endSwitcher('home', false), moving() ? 260 * SLOW : 0);
+  }
+
+  /**
+   * The switcher gone: the windows back as they were and the chosen view in
+   * front - at once, unless the icons and the wallpaper are still on their
+   * way back (leaveSwitcher), which are then left to finish.
+   */
+  function endSwitcher(to = 'home', instant = true) {
+    if (!sw) return;
+    const session = sw;
+    sw = null;
+    cardDrag = null;
+    clearTimeout(screenTimer);
+    for (const which of session.closing.splice(0)) unload(which);
+    resetWindow(appWindow);
+    resetWindow(webWindow);
+    switcherBox.hidden = true;
+    switcherBox.replaceChildren();
+    stopAnimations(switcherBox);
+    screenBox.classList.remove('switching');
+    if (instant) {
+      stopAnimations(iconLayer);
+      stopAnimations(scrim);
+      iconLayer.style.opacity = '';
+      iconLayer.style.transform = '';
+      scrim.style.opacity = '';
+    }
+    view = to;
+    remember('phone-view.view', view);
+    render();
+    showScreen();
+    warmUp();
+  }
+
+  /** A card swiped up: its app is closed, and the others close up behind it. */
+  function closeCard(card, lift, speed) {
+    const session = sw;
+    const g = session.deck;
+    const i = session.cards.indexOf(card);
+    const cx = cardX(i);
+    const gone = -g.ch / 2 - 60;
+    const from = card.el.style.transform;
+    const headFrom = card.head.style.transform;
+    const duration = Math.round(Math.min(280, Math.max(140, (g.cy + lift - gone) / Math.max(speed, 1.6))) * SLOW);
+    stopAnimations(card.el);
+    stopAnimations(card.head);
+    card.el.style.transform = placeAt(cx, gone, g.S);
+    card.head.style.transform = `translate(${cx - g.cw / 2}px, ${gone - g.ch / 2 - g.head}px)`;
+    if (moving()) {
+      const fly = { duration, easing: 'cubic-bezier(0.25, 0.6, 0.35, 1)' };
+      card.el.animate([{ transform: from }, { transform: card.el.style.transform }], fly);
+      card.head.animate([{ transform: headFrom, opacity: 1 }, { transform: card.head.style.transform, opacity: 0 }], fly);
+    }
+    // Closed at once; its page unloaded once the card is out of sight.
+    session.cards.splice(i, 1);
+    session.closing.push(card.which);
+    opened[card.which] = false;
+    forget(card.which);
+    session.busy = true;
+    session.deck = deckFor(session.cards.length);
+    session.offset = Math.min(session.offset, session.deck.maxOffset);
+    session.cards.forEach((other, j) => moveCard(other, j));
+    setTimeout(
+      () => {
+        if (sw !== session) return;
+        for (const which of session.closing.splice(0)) unload(which);
+        card.head.remove();
+        resetWindow(card.el);
+        card.el.hidden = true;
+        session.busy = false;
+        if (session.cards.length === 0) leaveSwitcher();
+      },
+      moving() ? Math.max(duration, 320 * SLOW) : 0,
+    );
+  }
+
+  /** A card tapped: its app comes forward and grows back to the whole screen, where it was left. */
+  function openCard(card) {
+    const session = sw;
+    session.busy = true;
+    touch(card.which);
+    const from = card.el.style.transform;
+    stopAnimations(card.el);
+    card.el.style.zIndex = '19';
+    card.el.style.transform = HERE;
+    for (const other of session.cards) {
+      if (other === card) continue;
+      other.el.style.zIndex = '10';
+      if (moving()) other.el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 * SLOW, easing: EASE_OUT, fill: 'forwards' });
+    }
+    if (moving()) {
+      card.el.animate([{ transform: from }, { transform: HERE }], { duration: OPEN_MS, easing: EASE_OPEN });
+      switcherBox.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 120 * SLOW, easing: EASE_OUT, fill: 'forwards' });
+    }
+    screenTimer = setTimeout(() => endSwitcher(card.which), moving() ? OPEN_MS : 0);
+  }
+
+  // A finger on the switcher: up on a card, sideways along them, or a tap.
+  switcherBox.addEventListener('pointerdown', (e) => {
+    if (!sw || sw.busy || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    e.preventDefault();
+    switcherBox.setPointerCapture(e.pointerId);
+    const p = pointOnScreen(e);
+    const card = cardUnder(p);
+    cardDrag = { id: e.pointerId, x0: p.x, y0: p.y, samples: [p], card, index: card ? sw.cards.indexOf(card) : -1, axis: null, offset0: sw.offset, lift: 0 };
+  });
+
+  switcherBox.addEventListener('pointermove', (e) => {
+    if (!sw || !cardDrag || e.pointerId !== cardDrag.id) return;
+    const p = pointOnScreen(e);
+    cardDrag.samples.push(p);
+    if (cardDrag.samples.length > 40) cardDrag.samples.shift();
+    const dx = p.x - cardDrag.x0;
+    const dy = p.y - cardDrag.y0;
+    if (!cardDrag.axis) {
+      if (Math.hypot(dx, dy) < 8) return;
+      cardDrag.axis = cardDrag.card && Math.abs(dy) > Math.abs(dx) ? 'y' : 'x';
+      // The finger has it now, not whatever it was still doing.
+      for (const card of cardDrag.axis === 'y' ? [cardDrag.card] : sw.cards) {
+        stopAnimations(card.el);
+        stopAnimations(card.head);
+      }
+    }
+    if (cardDrag.axis === 'y') {
+      // Up, the card follows the finger; down, it only gives a little.
+      cardDrag.lift = dy < 0 ? dy : dy / 4;
+      putCard(cardDrag.card, cardDrag.index, cardDrag.lift);
+    } else {
+      sw.offset = rubber(cardDrag.offset0 + dx, 0, sw.deck.maxOffset);
+      sw.cards.forEach((card, i) => putCard(card, i));
+    }
+  });
+
+  function letGoOfCard(e, cancelled) {
+    if (!cardDrag || e.pointerId !== cardDrag.id) return;
+    const drag = cardDrag;
+    cardDrag = null;
+    if (!sw || sw.busy) return;
+    const p = pointOnScreen(e);
+    drag.samples.push(p);
+    const v = releaseSpeed(drag.samples);
+    if (!drag.axis) {
+      if (cancelled) return;
+      if (drag.card) openCard(drag.card);
+      else leaveSwitcher();
+      return;
+    }
+    if (drag.axis === 'y') {
+      const away = drag.lift < -20 && (drag.lift < -sw.deck.ch * 0.25 || v.y < -0.5);
+      if (!cancelled && away) closeCard(drag.card, drag.lift, -v.y);
+      else moveCard(drag.card, drag.index, 260 * SLOW);
+      return;
+    }
+    // Sideways: onto the nearest card, carried a little by the finger's speed.
+    const g = sw.deck;
+    const aim = sw.offset + v.x * 120;
+    sw.offset = Math.min(g.maxOffset, Math.max(0, g.android ? Math.round(aim / g.step) * g.step : aim));
+    sw.cards.forEach((card, i) => moveCard(card, i, 300 * SLOW));
+  }
+  switcherBox.addEventListener('pointerup', (e) => letGoOfCard(e, false));
+  switcherBox.addEventListener('pointercancel', (e) => letGoOfCard(e, true));
+
+  // A finger on the bar at the bottom. Tapped, home, as before; flicked up,
+  // home; dragged up and held, the switcher; let go short of it, back again.
+  bottom.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    e.preventDefault();
+    bottom.setPointerCapture(e.pointerId);
+    screenBox.classList.add('gesturing');
+    const p = pointOnScreen(e);
+    barDrag = { id: e.pointerId, x0: p.x, y0: p.y, samples: [p], mode: null, which: null, el: null, transform: null };
+  });
+
+  bottom.addEventListener('pointermove', (e) => {
+    if (!barDrag || e.pointerId !== barDrag.id) return;
+    const p = pointOnScreen(e);
+    barDrag.samples.push(p);
+    if (barDrag.samples.length > 40) barDrag.samples.shift();
+    const dx = p.x - barDrag.x0;
+    const up = barDrag.y0 - p.y;
+    if (!barDrag.mode) {
+      if (Math.hypot(dx, up) < 8) return;
+      takeUp(barDrag);
+    }
+    follow(barDrag, dx, up);
+  });
+
+  /** A finger has started up from the bar: out of an app, the app comes with it, over the wallpaper. */
+  function takeUp(drag) {
+    if (sw) {
+      drag.mode = 'switcher';
+      return;
+    }
+    settle();
+    homeScreen.hidden = false;
+    if (view === 'home') {
+      drag.mode = 'home';
+      return;
+    }
+    drag.mode = 'app';
+    drag.which = view;
+    drag.el = windowFor(view);
+    drag.el.classList.add('carded');
+    drag.el.style.transformOrigin = '0 0';
+    screenBox.classList.add('switching');
+    iconLayer.style.opacity = '0';
+  }
+
+  function follow(drag, dx, up) {
+    const { W, H } = screenSize();
+    const rise = Math.max(0, up);
+    if (drag.mode === 'app') {
+      // The app shrinks as it rises, its bottom edge under the finger.
+      const s = 1 - 0.46 * Math.min(1, rise / (H * 0.5));
+      drag.transform = placeAt(W / 2 + dx, H - rise - (s * H) / 2, s);
+      drag.el.style.transform = drag.transform;
+      scrim.style.opacity = String(Math.min(1, rise / 180));
+    } else if (drag.mode === 'home') {
+      const p = Math.min(1, rise / 240);
+      iconLayer.style.transform = `scale(${1 - 0.08 * p})`;
+      iconLayer.style.opacity = String(1 - 0.85 * p);
+      scrim.style.opacity = String(p);
+    }
+  }
+
+  function letGoOfBar(e, cancelled) {
+    if (!barDrag || e.pointerId !== barDrag.id) return;
+    const drag = barDrag;
+    barDrag = null;
+    screenBox.classList.remove('gesturing');
+    const p = pointOnScreen(e);
+    drag.samples.push(p);
+    const up = drag.y0 - p.y;
+    const flick = releaseSpeed(drag.samples).y < -0.6;
+    if (!drag.mode) {
+      // A tap: home, as the bar has always gone here.
+      if (cancelled) return;
+      if (sw) leaveSwitcher();
+      else goHome();
+      return;
+    }
+    if (drag.mode === 'switcher') {
+      if (!cancelled) leaveSwitcher();
+      return;
+    }
+    if (drag.mode === 'app') {
+      if (!cancelled && flick && up > 16) flickHome(drag);
+      else if (!cancelled && up > 70) openSwitcher({ from: 'app', dragged: drag });
+      else backToApp(drag);
+      return;
+    }
+    // From the home screen: held up, the switcher; anything else, back.
+    if (!cancelled && !flick && up > 50) openSwitcher({ from: 'home' });
+    else homeAgain();
+  }
+  bottom.addEventListener('pointerup', (e) => letGoOfBar(e, false));
+  bottom.addEventListener('pointercancel', (e) => letGoOfBar(e, true));
+
+  /** Not far enough: the app goes back to the whole screen. */
+  function backToApp(drag) {
+    const el = drag.el;
+    const from = drag.transform || HERE;
+    el.style.transform = '';
+    if (moving()) el.animate([{ transform: from }, { transform: HERE }], { duration: 280 * SLOW, easing: EASE_OPEN });
+    fadeTo(scrim, 0, 220 * SLOW);
+    screenTimer = setTimeout(
+      () => {
+        el.classList.remove('carded');
+        screenBox.classList.remove('switching');
+        iconLayer.style.opacity = '';
+        stopAnimations(scrim);
+        scrim.style.opacity = '';
+        showScreen();
+      },
+      moving() ? 280 * SLOW : 0,
+    );
+  }
+
+  /** Flicked up: the app goes home into its icon, from wherever the finger left it. */
+  function flickHome(drag) {
+    const { which, el } = drag;
+    const from = drag.transform || HERE;
+    view = 'home';
+    remember('phone-view.view', view);
+    render();
+    screenBox.classList.remove('switching');
+    showScreen({ frame: which });
+    zoomIn(el, homeIcons[which], from);
+    iconsBack();
+    fadeTo(scrim, 0, CLOSE_MS);
+    screenTimer = setTimeout(
+      () => {
+        showScreen();
+        resetWindow(el);
+        stopAnimations(scrim);
+        scrim.style.opacity = '';
+      },
+      moving() ? CLOSE_MS : 0,
+    );
+  }
+
+  /** A drag on the home screen let go of short of the switcher. */
+  function homeAgain() {
+    const from = { opacity: getComputedStyle(iconLayer).opacity, transform: iconLayer.style.transform || 'scale(1)' };
+    iconLayer.style.opacity = '';
+    iconLayer.style.transform = '';
+    if (moving()) iconLayer.animate([from, { opacity: 1, transform: 'scale(1)' }], { duration: 240 * SLOW, easing: EASE_OUT });
+    fadeTo(scrim, 0, 200 * SLOW);
+  }
+
+  /** An iPhone SE's round button: once for home, twice for the switcher - the phone waits a moment to tell. */
+  function pressHomeButton() {
+    if (pressTimer) {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+      if (!sw) openSwitcher({ from: view === 'home' ? 'home' : 'app' });
+      return;
+    }
+    pressTimer = setTimeout(() => {
+      pressTimer = null;
+      if (sw) leaveSwitcher();
+      else goHome();
+    }, 260);
+  }
+
+  // --- Light and dark: the app's own setting, shared through localStorage ---
+
+  const APPEARANCE_KEY = 'famstory.appearance';
+  const deviceDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+  function storedPreference() {
+    try {
+      const value = JSON.parse(localStorage.getItem(APPEARANCE_KEY) || '{}').preference;
+      return value === 'light' || value === 'dark' ? value : 'system';
+    } catch {
+      return 'system';
+    }
+  }
+
+  function currentScheme() {
+    const preference = storedPreference();
+    if (preference !== 'system') return preference;
+    return deviceDark.matches ? 'dark' : 'light';
+  }
+
+  function applyScheme() {
+    const scheme = currentScheme();
+    document.documentElement.setAttribute('data-scheme', scheme);
+    const dark = scheme === 'dark' ? '-dark' : '';
+    document.getElementById('mark-left').src = `/mark-left${dark}.png`;
+    document.getElementById('mark-child').src = `/mark-child${dark}.png`;
+    document.querySelectorAll('[data-scheme-choice]').forEach((b) =>
+      b.setAttribute('aria-pressed', String(b.dataset.schemeChoice === scheme)),
+    );
+  }
+
+  document.querySelectorAll('[data-scheme-choice]').forEach((b) =>
+    b.addEventListener('click', () => {
+      try {
+        // The app inside hears this as a `storage` event and redraws at once.
+        localStorage.setItem(APPEARANCE_KEY, JSON.stringify({ preference: b.dataset.schemeChoice }));
+      } catch {}
+      applyScheme();
+    }),
+  );
+  // A change made inside the app (Profile -> Dark mode) arrives here the same way.
+  window.addEventListener('storage', (event) => {
+    if (event.key === APPEARANCE_KEY || event.key === null) applyScheme();
+  });
+  deviceDark.addEventListener('change', applyScheme);
+
+  document.querySelectorAll('[data-locale-choice]').forEach((b) =>
+    b.addEventListener('click', () => {
+      try {
+        localStorage.setItem(LOCALE_KEY, JSON.stringify({ locale: b.dataset.localeChoice }));
+      } catch {}
+      // The app inside hears this as a `storage` event too (data/locale.ts)
+      // and switches in place. It used to be reloaded instead, which threw
+      // away whatever the demo had in memory - a family just made on it.
+      applyLocale();
+    }),
+  );
+  window.addEventListener('storage', (event) => {
+    if (event.key === LOCALE_KEY || event.key === null) applyLocale();
+  });
+
+  function render() {
+    decorate(DEVICES[device]);
+    fit();
+    applyScheme();
+    writeHint();
+    document.querySelectorAll('[data-device]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.device === device)));
+    document.querySelectorAll('[data-size]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.size === size)));
+    document.querySelectorAll('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+  }
+
+  document.querySelectorAll('[data-device]').forEach((b) =>
+    b.addEventListener('click', () => {
+      endSwitcher();
+      device = b.dataset.device;
+      remember('phone-view.device', device);
+      render();
+      drawHome();
+    }),
+  );
+  document.querySelectorAll('[data-size]').forEach((b) =>
+    b.addEventListener('click', () => {
+      // "Real size" pressed again measures the screen anew.
+      const again = size === 'real' && b.dataset.size === 'real';
+      size = b.dataset.size;
+      remember('phone-view.size.v2', size);
+      render();
+      if (size === 'real' && (again || measured() === null)) openCalibration();
+    }),
+  );
+  document.querySelectorAll('[data-view]').forEach((b) =>
+    b.addEventListener('click', () => {
+      endSwitcher();
+      if (b.dataset.view === 'home') goHome();
+      else if (b.dataset.view !== view) launch(b.dataset.view, null);
+    }),
+  );
+
+  // Reload the app that is open; on the home screen, close both - the next
+  // open is a cold start again, splash and all.
+  function reloadApp() {
+    endSwitcher();
+    if (view === 'home') {
+      recent.length = 0;
+      for (const which of ['app', 'browser']) {
+        started[which] = false;
+        loaded[which] = false;
+        opened[which] = false;
+        frameFor(which).src = 'about:blank';
+      }
+      // And loaded again behind the home screen, for its next first open.
+      start('app');
+      return;
+    }
+    loaded[view] = false;
+    frameFor(view).src = new URL(START[view], location.origin).href;
+  }
+
+  document.getElementById('reload').addEventListener('click', reloadApp);
+
+  function tick() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+  }
+
+  // --- Open on a phone: this server's address on the local network, as a QR ---
+
+  const phoneDialog = document.getElementById('phone-dialog');
+  const phoneBody = document.getElementById('phone-dialog-body');
+  const phoneNote = document.getElementById('phone-dialog-note');
+
+  async function openOnPhone() {
+    const words = text();
+    // Asking Tailscale can take a few seconds; an empty panel looked broken.
+    phoneBody.textContent = words.looking;
+    phoneNote.textContent = '';
+    phoneDialog.showModal();
+
+    let answer;
+    try {
+      const response = await fetch('/phone/addresses', { cache: 'no-store' });
+      answer = await response.json();
+    } catch {
+      phoneBody.textContent = words.failed;
+      return;
+    }
+
+    phoneBody.textContent = '';
+    const addresses = answer.addresses ?? [];
+    const sections = document.createElement('div');
+    sections.className = 'qr-sections';
+    // On this network: the addresses this computer has on it right now.
+    sections.appendChild(qrSection(words.hereTitle, addresses, addresses.length ? words.scan + ' ' + words.secure : words.none));
+    // From anywhere: Tailscale, while it runs here (/phone/addresses) - for
+    // anybody at all when Funnel opens it, which only the demo's ever is.
+    const anywhere = answer.tailscale;
+    sections.appendChild(
+      qrSection(
+        anywhere?.public ? words.publicTitle : words.anywhereTitle,
+        anywhere ? [anywhere] : [],
+        anywhere ? (anywhere.public ? words.publicNote : words.anywhereNote) : words.noTailscale,
+      ),
+    );
+    phoneBody.appendChild(sections);
+  }
+
+  /** One way to the server: what it is, its addresses as codes and links, and what it needs. */
+  function qrSection(title, addresses, note) {
+    const section = document.createElement('section');
+    section.className = 'qr-section';
+    const heading = document.createElement('strong');
+    heading.textContent = title;
+    section.appendChild(heading);
+    for (const address of addresses) {
+      const block = document.createElement('div');
+      block.className = 'qr';
+      if (address.qr) {
+        const code = document.createElement('div');
+        code.className = 'code';
+        // This server's own drawing of its own address; nothing a visitor typed.
+        code.innerHTML = address.qr;
+        block.appendChild(code);
+      }
+      const link = document.createElement('a');
+      link.href = address.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = address.url;
+      block.appendChild(link);
+      section.appendChild(block);
+    }
+    const line = document.createElement('p');
+    line.className = 'dialog-note';
+    line.textContent = note;
+    section.appendChild(line);
+    return section;
+  }
+
+  document.getElementById('on-phone').addEventListener('click', () => void openOnPhone());
+  document.getElementById('phone-dialog-close').addEventListener('click', () => phoneDialog.close());
+
+  /**
+   * A blank phone is not an answer.
+   *
+   * The first person to open this page did it in a built-in browser that lets a
+   * page load but blocks everything that page then asks the same address for —
+   * the frame, the scripts — and saw an empty phone with nothing to say why.
+   * So the page asks for the app's front page itself: a browser that refuses
+   * that will refuse the frame too, and the screen says what to do instead.
+   */
+  async function checkTheAppCanLoad() {
+    try {
+      const response = await fetch('/', { method: 'HEAD', cache: 'no-store' });
+      if (response.ok) return;
+    } catch {}
+    document.getElementById('address').textContent = location.href;
+    document.getElementById('blocked').classList.add('shown');
+  }
+
+  // --- The demo and the real app: two copies, and the way between them ------
+  //
+  // This machine serves FamStory twice (supervisor.ps1): the real app, and the
+  // demo on the sample family. They are two origins, each with its own storage
+  // and its own sign-in, so the app cannot be swapped inside the frame: the
+  // whole page goes over to the other copy's phone view, and takes the view,
+  // the phone, the size, the colours, the language and this screen's
+  // measurement along. Where the other copy is, the server says
+  // (/phone/copies in static-server.mjs): the same host, the other port.
+  //
+  // The demo's own "Start your own family" (lib/demo-exit.web.ts) asks this
+  // page to go, and on the real copy the phone then opens FamStory - its
+  // splash, then the real app's front door: somebody who has seen the sample
+  // family and wants one of their own.
+  let copies = null;
+
+  // The screen's measurement, carried over from the other copy with the rest.
+  const carriedMm = Number(query.get('pxmm'));
+  if (carriedMm > 0 && measured() === null) remember(screenKey(), String(carriedMm));
+
+  async function findCopies() {
+    try {
+      const response = await fetch('/phone/copies', { cache: 'no-store' });
+      if (!response.ok) return;
+      copies = await response.json();
+    } catch {
+      return;
+    }
+    const group = document.getElementById('copies');
+    group.hidden = !copies.other;
+    group.querySelectorAll('[data-copy]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.copy === copies.copy)));
+  }
+
+  function goToCopy(wanted, over = {}) {
+    if (!copies || !copies.other || copies.copy === wanted) return;
+    const params = new URLSearchParams({
+      view: over.view ?? (sw ? 'home' : view),
+      device,
+      size,
+      appearance: storedPreference(),
+      locale: storedLocale(),
+    });
+    const mm = measured();
+    if (mm) params.set('pxmm', String(mm));
+    if (over.launch) params.set('launch', over.launch);
+    location.assign(`${copies.other}/phone?${params}`);
+  }
+
+  document.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', () => goToCopy(b.dataset.copy)));
+
+  // The demo's "Start your own family", from inside the phone: out of the
+  // app, the real app on the phone; out of the browser, the real site in it.
+  window.addEventListener('message', (event) => {
+    if (event.origin !== location.origin || event.data?.type !== 'famstory:real') return;
+    const from = event.source === frame.contentWindow ? 'app' : event.source === webFrame.contentWindow ? 'browser' : null;
+    if (!from) return;
+    // No real copy this visitor can reach - from the internet through Funnel,
+    // or a host with the demo alone: the page that says so, in the phone.
+    if (!copies?.other) {
+      event.source.location.assign('/real');
+      return;
+    }
+    goToCopy('real', from === 'app' ? { view: 'home', launch: 'app' } : { view: 'browser' });
+  });
+
+  /** What came over from the other copy is used once: a reload is not another arrival. */
+  function forgetCarried() {
+    const kept = new URLSearchParams(location.search);
+    const carried = ['appearance', 'locale', 'pxmm', 'launch'].filter((key) => kept.has(key));
+    if (carried.length === 0) return;
+    carried.forEach((key) => kept.delete(key));
+    const rest = kept.toString();
+    history.replaceState(null, '', location.pathname + (rest ? `?${rest}` : ''));
+  }
+
+  window.addEventListener('resize', fit);
+  setInterval(tick, 15000);
+  tick();
+  applyLocale();
+  render();
+  checkTheAppCanLoad();
+  forgetCarried();
+  // Which copy this is decides how its app starts (start(), above), so the
+  // phone waits the few milliseconds it takes to ask.
+  findCopies().finally(openStart);
+  // Not the measuring dialog by itself: the phone first, and the note under
+  // the header offers the measuring (fit, writeSizeNote).
+</script>
+</body>
+</html>

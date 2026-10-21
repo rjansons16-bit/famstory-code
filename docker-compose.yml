@@ -1,0 +1,52 @@
+# The local development environment: PostgreSQL + Redis.
+#
+#   docker compose up -d
+#   npm --prefix apps/api run prisma:migrate
+#   npm --prefix apps/api run dev
+#
+# This file is not used in production. A server runs
+# tools/deploy/docker-compose.yml instead: the database, the API and Caddy,
+# with only 80 and 443 published (tools/deploy/README.md). Redis is here for
+# the queue docs/00-PLAN.md plans; nothing in the API uses it yet.
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: famstory-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: famstory
+      POSTGRES_PASSWORD: famstory
+      POSTGRES_DB: famstory
+      # Event titles are searched and sorted as text, so the encoding is
+      # pinned rather than left to the host locale.
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8'
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U famstory -d famstory']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: famstory-redis
+    restart: unless-stopped
+    # The reminder queue must not be lost on a server restart.
+    command: redis-server --appendonly yes
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-data:
+  redis-data:

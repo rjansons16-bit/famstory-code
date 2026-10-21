@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Work+Sans:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Work Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #B65A2E; } a:hover { color: #8F4522; }
+    * { box-sizing: border-box; }
+    .sw { border-radius: 10px; height: 62px; display: flex; align-items: flex-end; padding: 8px; }
+    .hex { font-size: 10px; font-weight: 600; letter-spacing: 0.03em; font-variant-numeric: tabular-nums; }
+    .key { font-size: 11px; color: #6B6259; margin-top: 6px; }
+    .sec { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9A9086; }
+  </style>
+</helmet>
+
+<div style="width: 760px; height: 844px; background: #FAF7F2; color: #1F1B16; padding: 28px 32px; overflow: hidden;">
+
+  <div style="display: flex; align-items: flex-end; gap: 14px;">
+    <div style="font-family: 'Newsreader', Georgia, serif; font-size: 30px; font-weight: 500;">The family chronicle</div>
+    <div style="font-size: 12px; color: #9A9086; padding-bottom: 6px;">the visual system → <code style="font-family: ui-monospace, monospace; font-size: 11px;">apps/mobile/src/theme/tokens.ts</code></div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; margin-top: 26px;">
+
+    <!-- ── Left column ─────────────────────────────────── -->
+    <div>
+      <div class="sec">Core colours</div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 10px;">
+        <div>
+          <div class="sw" style="background: #FAF7F2; border: 1px solid #E5DED2;"><span class="hex" style="color: #6B6259;">FAF7F2</span></div>
+          <div class="key">background</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #FFFFFF; border: 1px solid #E5DED2;"><span class="hex" style="color: #6B6259;">FFFFFF</span></div>
+          <div class="key">surface</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #1F1B16;"><span class="hex" style="color: #FAF7F2;">1F1B16</span></div>
+          <div class="key">text</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #6B6259;"><span class="hex" style="color: #FAF7F2;">6B6259</span></div>
+          <div class="key">textMuted</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #2F5D4C;"><span class="hex" style="color: #FFFFFF;">2F5D4C</span></div>
+          <div class="key">primary</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #E9F0EC;"><span class="hex" style="color: #2F5D4C;">E9F0EC</span></div>
+          <div class="key">primarySoft</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #B65A2E;"><span class="hex" style="color: #FFFFFF;">B65A2E</span></div>
+          <div class="key">accent</div>
+        </div>
+        <div>
+          <div class="sw" style="background: #F8E7DC;"><span class="hex" style="color: #B65A2E;">F8E7DC</span></div>
+          <div class="key">accentSoft</div>
+        </div>
+      </div>
+
+      <div class="sec" style="margin-top: 26px;">Category tones</div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px;">
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #E6F1E8; color: #3D7A4E; font-size: 11px; font-weight: 600;">Development</div><span class="hex" style="color: #9A9086;">growth</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #E4ECF5; color: #3A5F8A; font-size: 11px; font-weight: 600;">Education</div><span class="hex" style="color: #9A9086;">learn</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #F0E6F2; color: #7B4A86; font-size: 11px; font-weight: 600;">Milestone</div><span class="hex" style="color: #9A9086;">landmark</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #F8E4E2; color: #A93A33; font-size: 11px; font-weight: 600;">Health</div><span class="hex" style="color: #9A9086;">care</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #FBEADF; color: #B8622A; font-size: 11px; font-weight: 600;">Celebration</div><span class="hex" style="color: #9A9086;">joy</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #E1F0F1; color: #2E7A82; font-size: 11px; font-weight: 600;">Travel</div><span class="hex" style="color: #9A9086;">journey</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #F0EEEA; color: #6B6259; font-size: 11px; font-weight: 600;">Activity</div><span class="hex" style="color: #9A9086;">routine</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #F6EDDB; color: #8A6B1F; font-size: 11px; font-weight: 600;">Chore</div><span class="hex" style="color: #9A9086;">task</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #EAF0E6; color: #4A6640; font-size: 11px; font-weight: 600;">Finanses</div><span class="hex" style="color: #9A9086;">money</span></div>
+        <div style="display: flex; align-items: center; gap: 9px;"><div style="padding: 4px 11px; border-radius: 999px; background: #F0EEEA; color: #6B6259; font-size: 11px; font-weight: 600;">Cits</div><span class="hex" style="color: #9A9086;">neutral</span></div>
+      </div>
+
+      <div class="sec" style="margin-top: 24px;">The visibility badge</div>
+      <div style="display: flex; gap: 18px; margin-top: 10px; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 5px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9A9086" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span style="font-size: 12px; color: #9A9086;">Whole family</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B65A2E" stroke-width="1.7" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 19a6.5 6.5 0 0113 0"/><path d="M16 6.2a3.2 3.2 0 010 6"/><path d="M17.5 13.4A6.5 6.5 0 0121.5 19"/></svg>
+          <span style="font-size: 12px; color: #B65A2E; font-weight: 500;">Parents</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B65A2E" stroke-width="1.7"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+          <span style="font-size: 12px; color: #B65A2E; font-weight: 500;">Tikai es</span>
+        </div>
+      </div>
+      <div style="font-size: 11px; line-height: 16px; color: #9A9086; margin-top: 8px;">Restricted visibility is always in the accent colour. Grey = everyone sees it.</div>
+    </div>
+
+    <!-- ── Right column ───────────────────────────────────── -->
+    <div>
+      <div class="sec">Typography</div>
+      <div style="margin-top: 10px;">
+        <div style="font-family: 'Newsreader', Georgia, serif; font-size: 30px; line-height: 37px; font-weight: 500; letter-spacing: -0.015em;">Emily's first day of school</div>
+        <div class="key">Newsreader 500 · 30/37 · display — the screen heading</div>
+      </div>
+      <div style="margin-top: 14px;">
+        <div style="font-family: 'Newsreader', Georgia, serif; font-size: 20px; line-height: 26px; font-weight: 500;">Robert's 3rd birthday</div>
+        <div class="key">Newsreader 500 · 20/26 · title — the event title</div>
+      </div>
+      <div style="margin-top: 14px;">
+        <div style="font-family: 'Newsreader', Georgia, serif; font-size: 17px; line-height: 27px; color: #3D372F;">She wanted to walk in alone, then looked back at the door anyway.</div>
+        <div class="key">Newsreader 400 · 17/27 · read — the event text</div>
+      </div>
+      <div style="margin-top: 14px;">
+        <div style="font-size: 15px; line-height: 22px;">Family members, buttons, lists, settings</div>
+        <div class="key">Work Sans 400 · 15/22 · body — UI</div>
+      </div>
+      <div style="margin-top: 12px;">
+        <div style="font-size: 13px; line-height: 18px; color: #9A9086;">1 September · 08:30 · Whole family</div>
+        <div class="key">Work Sans 400 · 13/18 · caption — metadata</div>
+      </div>
+      <div style="margin-top: 12px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9A9086;">Septembris 2026</div>
+        <div class="key">Work Sans 600 · 11/16 · label — section labels</div>
+      </div>
+
+      <div class="sec" style="margin-top: 24px;">Spacing and radii</div>
+      <div style="display: flex; align-items: flex-end; gap: 8px; margin-top: 10px;">
+        <div style="width: 4px; height: 26px; background: #C9D9CE;"></div>
+        <div style="width: 8px; height: 26px; background: #C9D9CE;"></div>
+        <div style="width: 12px; height: 26px; background: #C9D9CE;"></div>
+        <div style="width: 16px; height: 26px; background: #C9D9CE;"></div>
+        <div style="width: 24px; height: 26px; background: #C9D9CE;"></div>
+        <div style="width: 32px; height: 26px; background: #C9D9CE;"></div>
+        <div style="width: 48px; height: 26px; background: #C9D9CE;"></div>
+        <div style="font-size: 11px; color: #9A9086; padding-bottom: 4px;">4 · 8 · 12 · 16 · 24 · 32 · 48</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px;">
+        <div style="width: 44px; height: 34px; border: 1.5px solid #C9D9CE; border-radius: 10px;"></div>
+        <div style="width: 44px; height: 34px; border: 1.5px solid #C9D9CE; border-radius: 12px;"></div>
+        <div style="width: 44px; height: 34px; border: 1.5px solid #C9D9CE; border-radius: 14px;"></div>
+        <div style="width: 44px; height: 34px; border: 1.5px solid #C9D9CE; border-radius: 22px;"></div>
+        <div style="width: 44px; height: 34px; border: 1.5px solid #C9D9CE; border-radius: 999px;"></div>
+        <div style="font-size: 11px; color: #9A9086;">10 · 12 · 14 · 22 · pill</div>
+      </div>
+
+      <div class="sec" style="margin-top: 24px;">Buttons · min. 48px</div>
+      <div style="display: flex; gap: 10px; margin-top: 10px; align-items: center;">
+        <div style="height: 48px; padding: 0 22px; border-radius: 12px; background: #2F5D4C; color: #FFFFFF; font-size: 15px; font-weight: 600; display: flex; align-items: center;">Save</div>
+        <div style="height: 48px; padding: 0 22px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E5DED2; color: #1F1B16; font-size: 15px; font-weight: 500; display: flex; align-items: center;">Atcelt</div>
+        <div style="height: 48px; padding: 0 22px; border-radius: 12px; background: #EDE7DD; color: #B3A99C; font-size: 15px; font-weight: 600; display: flex; align-items: center;">Disabled</div>
+      </div>
+
+      <div style="margin-top: 22px; padding: 12px 14px; border-radius: 10px; background: #FFFFFF; border: 1px solid #E5DED2;">
+        <div style="font-size: 12px; line-height: 18px; color: #6B6259;"><strong style="color: #1F1B16;">Contrast:</strong> text on background ≥ 4.5:1, large text ≥ 3:1. Grandparents are in the audience — this is not optional.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,16 @@
+# The build context for tools/deploy is the whole repository. What must never
+# go into an image: secrets, the families' photographs, and anything built on
+# this machine for this machine.
+**/.env
+**/.env.*
+!**/.env.example
+**/node_modules
+**/dist
+apps/mobile/dist-web*
+apps/mobile/.expo
+**/var
+.git
+.claude
+tools/lan-host/logs
+design
+docs

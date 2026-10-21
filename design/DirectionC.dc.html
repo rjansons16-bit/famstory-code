@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Work Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #1F1B16; } a:hover { color: #000000; }
+    * { box-sizing: border-box; }
+    .ln { height: 9px; border-radius: 999px; background: rgba(31,27,22,0.12); }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #FFFDFB; position: relative; overflow: hidden; color: #1F1B16;">
+
+  <div style="padding: 18px 20px 0;">
+    <div style="display: inline-block; padding: 4px 9px; border-radius: 999px; background: #1F1B16; color: #FFFDFB; font-size: 10px; font-weight: 700; letter-spacing: 0.1em;">VIRZIENS C</div>
+    <div style="font-size: 19px; font-weight: 700; letter-spacing: -0.01em; margin-top: 10px;">The family album</div>
+    <div style="font-size: 12px; line-height: 17px; color: #7A7267; margin-top: 4px;">The photo rules. An event is a picture with a caption. Soft, round, emotional.</div>
+  </div>
+
+  <!-- A large cover photo -->
+  <div style="margin: 16px 20px 0; height: 210px; border-radius: 26px; background: linear-gradient(150deg, #F7DCC8 0%, #EFC9B4 50%, #DCC5D8 100%); position: relative; overflow: hidden;">
+    <svg width="350" height="210" viewBox="0 0 350 210" style="position: absolute; inset: 0; opacity: 0.35;">
+      <circle cx="268" cy="56" r="34" fill="#FFFFFF"/>
+      <path d="M0 156 L70 156 L70 106 L104 84 L138 106 L138 156 L350 156 L350 210 L0 210 Z" fill="#B67A5E"/>
+    </svg>
+    <div style="position: absolute; left: 18px; right: 18px; bottom: 16px;">
+      <div style="font-size: 20px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.01em; text-shadow: 0 1px 8px rgba(0,0,0,0.28);">Emily's first day of school</div>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 7px;">
+        <div style="width: 22px; height: 22px; border-radius: 999px; background: rgba(255,255,255,0.85);"></div>
+        <div style="width: 22px; height: 22px; border-radius: 999px; background: rgba(255,255,255,0.85); margin-left: -10px;"></div>
+        <div style="padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,0.9); font-size: 10px; font-weight: 700; color: #6B4B36;">1. SEPT</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Two smaller ones -->
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 20px 0;">
+    <div>
+      <div style="height: 120px; border-radius: 20px; background: linear-gradient(150deg, #D9E7DA, #C2DBCB);"></div>
+      <div style="font-size: 13px; font-weight: 600; margin-top: 8px;">Roberta dz. diena</div>
+      <div class="ln" style="margin-top: 6px; width: 70%;"></div>
+    </div>
+    <div>
+      <div style="height: 120px; border-radius: 20px; background: linear-gradient(150deg, #E4DCF0, #CFC3E4);"></div>
+      <div style="font-size: 13px; font-weight: 600; margin-top: 8px;">A week at the coast</div>
+      <div class="ln" style="margin-top: 6px; width: 84%;"></div>
+    </div>
+  </div>
+
+  <!-- A text event with no photo: this is where the direction starts to creak -->
+  <div style="margin: 16px 20px 0; padding: 15px 16px; border-radius: 20px; background: #F6F2EE;">
+    <div style="font-size: 13px; font-weight: 600; color: #7A7267;">Meeting with the school counsellor</div>
+    <div class="ln" style="margin-top: 8px; width: 90%;"></div>
+    <div class="ln" style="margin-top: 5px; width: 46%;"></div>
+    <div style="display: flex; align-items: center; gap: 6px; margin-top: 10px;">
+      <div style="width: 12px; height: 12px; border-radius: 999px; background: #C99A7E;"></div>
+      <span style="font-size: 11px; color: #A08974;">Parents</span>
+    </div>
+  </div>
+
+  <!-- The verdict -->
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 20px; padding: 14px; border-radius: 16px; background: #F6F2EE;">
+    <div style="display: flex; gap: 10px;">
+      <div style="font-size: 11px; font-weight: 700; color: #2F5D4C; width: 34px; flex-shrink: 0;">PAR</div>
+      <div style="font-size: 11px; line-height: 16px; color: #575046; flex-grow: 1;">Emotionally the strongest. It is immediately clear this is not a calendar.</div>
+    </div>
+    <div style="display: flex; gap: 10px; margin-top: 9px;">
+      <div style="font-size: 11px; font-weight: 700; color: #A93A33; width: 34px; flex-shrink: 0;">PRET</div>
+      <div style="font-size: 11px; line-height: 16px; color: #575046; flex-grow: 1;">Half the mock events have no photo — they look second class. The visibility badge gets small on a photo.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

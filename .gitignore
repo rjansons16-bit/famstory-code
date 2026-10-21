@@ -1,0 +1,30 @@
+node_modules/
+dist/
+build/
+.expo/
+.expo-shared/
+*.log
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+apps/api/prisma/migrations/dev.db*
+
+# The design canvas is generated: the .dc.html artboards next to it are the
+# source, and this file is 2.5 MB of the editor bundled around them.
+design/famstory-screens.html
+
+# The families' photographs. Whatever the server has been given, under the
+# MEDIA_ROOT it was configured with - never in the repository.
+var/
+
+# Local tooling: how to serve the static export for testing on a phone.
+# Useful, but it is this machine's setup, not the project's.
+.claude/
+
+# What the LAN host supervisor writes while it runs.
+tools/lan-host/logs/
+
+# Store screenshots, drawn by tools/store/screenshots.mjs - made again, not kept.
+tools/store/out/

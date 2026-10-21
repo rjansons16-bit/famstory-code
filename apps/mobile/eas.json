@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 16.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "base": {
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://famstory.lv/v1",
+        "EXPO_PUBLIC_SITE_ORIGIN": "https://famstory.lv",
+        "EXPO_PUBLIC_SUPPORT_EMAIL": "support@famstory.lv",
+        "EXPO_PUBLIC_REVENUECAT_APPLE_KEY": "",
+        "EXPO_PUBLIC_REVENUECAT_GOOGLE_KEY": ""
+      }
+    },
+    "preview": {
+      "extends": "base",
+      "distribution": "internal"
+    },
+    "production": {
+      "extends": "base",
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

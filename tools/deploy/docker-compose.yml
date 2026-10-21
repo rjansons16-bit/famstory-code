@@ -1,0 +1,123 @@
+# FamStory on a server: the database, the API and Caddy in front.
+#
+#   cp tools/deploy/.env.example tools/deploy/.env     # then fill it in
+#   docker compose -f tools/deploy/docker-compose.yml up -d --build
+#
+# The whole runbook - the server, the domain, moving the laptop's data, updates,
+# backups - is tools/deploy/README.md.
+#
+# Not the file at the repository root: that one is the development database.
+# This one publishes ports 80 and 443 and nothing else. The database and the
+# API are reachable only from each other and from Caddy.
+
+name: famstory
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: famstory
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in tools/deploy/.env}
+      POSTGRES_DB: famstory
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8'
+    volumes:
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U famstory -d famstory']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Runs the migrations and exits. The API waits for it, so a release never
+  # starts against a schema it does not know.
+  migrate:
+    build:
+      context: ../..
+      dockerfile: tools/deploy/api.Dockerfile
+      target: build
+    command: ['npx', 'prisma', 'migrate', 'deploy']
+    environment:
+      DATABASE_URL: postgresql://famstory:${POSTGRES_PASSWORD}@db:5432/famstory
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: 'no'
+
+  api:
+    build:
+      context: ../..
+      dockerfile: tools/deploy/api.Dockerfile
+      target: runtime
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://famstory:${POSTGRES_PASSWORD}@db:5432/famstory
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in tools/deploy/.env}
+      MEDIA_SIGNING_SECRET: ${MEDIA_SIGNING_SECRET:?set MEDIA_SIGNING_SECRET in tools/deploy/.env}
+      AUDIT_IP_SALT: ${AUDIT_IP_SALT:?set AUDIT_IP_SALT in tools/deploy/.env}
+      # Caddy is another container: a private address, not loopback.
+      TRUST_PROXY: loopback,uniquelocal
+      # The page and the API share one origin, so the browser needs no CORS.
+      # Only a separate web origin would go here.
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      # Premium (docs/12-LAUNCH-RUNBOOK.md, RevenueCat). Empty until the
+      # stores and RevenueCat exist; the paywall then sells nothing and the
+      # webhook refuses every call.
+      REVENUECAT_SECRET_KEY: ${REVENUECAT_SECRET_KEY:-}
+      REVENUECAT_WEBHOOK_AUTH: ${REVENUECAT_WEBHOOK_AUTH:-}
+      # The site an emailed password link opens - never the request's Host.
+      SITE_ORIGIN: https://${DOMAIN:?set DOMAIN in tools/deploy/.env}
+      # "Forgot your password?" by email. Empty: the family admin's link, as
+      # on the LAN host (apps/api/src/common/mail.service.ts).
+      SMTP_URL: ${SMTP_URL:-}
+      MAIL_FROM: ${MAIL_FROM:-}
+      # Pushes, straight to Apple and Google (apps/api/src/modules/push).
+      # Empty: the bell inside the app only.
+      APNS_KEY: ${APNS_KEY:-}
+      APNS_KEY_ID: ${APNS_KEY_ID:-}
+      APNS_TEAM_ID: ${APPLE_TEAM_ID:-}
+      FCM_SERVICE_ACCOUNT: ${FCM_SERVICE_ACCOUNT:-}
+    volumes:
+      - media:/data/media
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  web:
+    build:
+      context: ../..
+      dockerfile: tools/deploy/web.Dockerfile
+      # Baked into the pages: the address a shared link and a search result name.
+      args:
+        DOMAIN: ${DOMAIN:?set DOMAIN in tools/deploy/.env}
+        # "Write to us" and the account-deletion page (/support) name it.
+        SUPPORT_EMAIL: ${SUPPORT_EMAIL:?set SUPPORT_EMAIL in tools/deploy/.env}
+        # The welcome page's store buttons. Empty until the app is in the stores.
+        APP_STORE_URL: ${APP_STORE_URL:-}
+        PLAY_STORE_URL: ${PLAY_STORE_URL:-}
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN in tools/deploy/.env}
+      ACME_EMAIL: ${ACME_EMAIL:?set ACME_EMAIL in tools/deploy/.env}
+      # Which app may open the site's links (Caddyfile, .well-known). Empty
+      # until the developer accounts exist.
+      APPLE_TEAM_ID: ${APPLE_TEAM_ID:-}
+      ANDROID_CERT_SHA256: ${ANDROID_CERT_SHA256:-}
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      # The certificates. Losing them is not a disaster - Caddy asks again -
+      # but Let's Encrypt limits how often, so they are kept.
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - api
+
+volumes:
+  db-data:
+  # The families' photographs. backup.sh copies this; losing it is losing them.
+  media:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "FamStory",
+  "short_name": "FamStory",
+  "description": "Every family moment, tied together. A private family timeline and calendar - photographs, voices, birthdays and memories, shared only with the people you choose.",
+  "lang": "en",
+  "start_url": "/?source=installed",
+  "scope": "/",
+  "display": "standalone",
+  "handle_links": "not-preferred",
+  "orientation": "any",
+  "background_color": "#F4F1EA",
+  "theme_color": "#234E42",
+  "categories": ["lifestyle", "social", "productivity"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

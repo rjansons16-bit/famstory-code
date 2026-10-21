@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Work+Sans:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Work Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #B65A2E; text-decoration: none; }
+    a:hover { color: #8F4522; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #FAF7F2; position: relative; overflow: hidden; color: #1F1B16;">
+
+  <!-- ── Aizmugure: notikuma izveide ────────────────────────── -->
+  <div style="padding: 20px; opacity: 0.5;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      <div style="font-family: 'Newsreader', Georgia, serif; font-size: 20px; font-weight: 500; flex-grow: 1;">Jauns notikums</div>
+    </div>
+    <div style="font-family: 'Newsreader', Georgia, serif; font-size: 22px; line-height: 29px; font-weight: 500; margin-top: 24px;">Emily's dentist</div>
+    <div style="height: 1px; background: #E5DED2; margin-top: 16px;"></div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-top: 16px;">
+      <div style="width: 28px; height: 28px; border-radius: 999px; background: #E4ECF5; color: #3A5F8A; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center;">E</div>
+      <span style="font-size: 14px; color: #6B6259;">Emily</span>
+    </div>
+  </div>
+
+  <!-- ── Scrim ────────────────────────────────────────── -->
+  <div style="position: absolute; inset: 0; background: rgba(31,27,22,0.42);"></div>
+
+  <!-- ── Panelis ────────────────────────────────────────────── -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; background: #FAF7F2; border-radius: 22px 22px 0 0; box-shadow: 0 -8px 40px rgba(31,27,22,0.22); padding-bottom: 20px;">
+
+    <div style="display: flex; justify-content: center; padding-top: 10px;">
+      <div style="width: 36px; height: 4px; border-radius: 999px; background: #DDD5C8;"></div>
+    </div>
+
+    <div style="display: flex; align-items: center; padding: 14px 20px 0;">
+      <div style="font-family: 'Newsreader', Georgia, serif; font-size: 24px; font-weight: 500; flex-grow: 1;">Who can see it</div>
+      <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; margin-right: -12px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </div>
+    </div>
+
+    <!-- The child warning -->
+    <div style="display: flex; gap: 10px; margin: 12px 20px 0; padding: 12px 14px; border-radius: 12px; background: #F8E7DC;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B65A2E" stroke-width="1.7" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px;"><path d="M12 3l7.5 3.4v5.2c0 4.4-3.1 8.3-7.5 9.4-4.4-1.1-7.5-5-7.5-9.4V6.4z"/><path d="M9.3 12.2l1.9 1.9 3.6-3.7"/></svg>
+      <div style="font-size: 13px; line-height: 19px; color: #7A3D1B;">There is a child in this event. By default only parents can see it.</div>
+    </div>
+
+    <div style="padding: 8px 20px 0;">
+
+      <!-- Whole family -->
+      <div onClick="{{family.pick}}" style="{{family.row}}">
+        <div style="{{family.iconWrap}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.7"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div style="flex-grow: 1; min-width: 0;">
+          <div style="font-size: 15px; font-weight: 500; line-height: 20px;">Whole family</div>
+          <div style="font-size: 13px; line-height: 18px; color: #9A9086; margin-top: 1px;">Every active member of the family</div>
+        </div>
+        <div style="{{family.check}}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+        </div>
+      </div>
+
+      <!-- Named groups -->
+      <div onClick="{{groupsOpt.pick}}" style="{{groupsOpt.row}}">
+        <div style="{{groupsOpt.iconWrap}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.7" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 19a6.5 6.5 0 0113 0"/><path d="M16 6.2a3.2 3.2 0 010 6"/><path d="M17.5 13.4A6.5 6.5 0 0121.5 19"/></svg>
+        </div>
+        <div style="flex-grow: 1; min-width: 0;">
+          <div style="font-size: 15px; font-weight: 500; line-height: 20px;">Named groups</div>
+          <div style="font-size: 13px; line-height: 18px; color: #9A9086; margin-top: 1px;">Parents, children, grandparents</div>
+        </div>
+        <div style="{{groupsOpt.check}}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+        </div>
+      </div>
+
+      <sc-if value="{{groupsOpt.open}}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 12px 46px;">
+          <sc-for list="{{chips}}" as="g" hint-placeholder-count="3">
+            <div onClick="{{g.toggle}}" style="{{g.style}}">{{g.label}}</div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- Named people -->
+      <div onClick="{{members.pick}}" style="{{members.row}}">
+        <div style="{{members.iconWrap}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.7"><circle cx="12" cy="8" r="3.4"/><path d="M5 19.5a7 7 0 0114 0"/></svg>
+        </div>
+        <div style="flex-grow: 1; min-width: 0;">
+          <div style="font-size: 15px; font-weight: 500; line-height: 20px;">Named people</div>
+          <div style="font-size: 13px; line-height: 18px; color: #9A9086; margin-top: 1px;">Pick them one by one</div>
+        </div>
+        <div style="{{members.check}}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+        </div>
+      </div>
+
+      <!-- Tikai es -->
+      <div onClick="{{privateOpt.pick}}" style="{{privateOpt.row}}">
+        <div style="{{privateOpt.iconWrap}}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.7"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+        </div>
+        <div style="flex-grow: 1; min-width: 0;">
+          <div style="font-size: 15px; font-weight: 500; line-height: 20px;">Tikai es</div>
+          <div style="font-size: 13px; line-height: 18px; color: #9A9086; margin-top: 1px;">Nobody else will see this event</div>
+        </div>
+        <div style="{{privateOpt.check}}">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Kopsavilkums + poga -->
+    <div style="margin: 10px 20px 0; padding-top: 16px; border-top: 1px solid #E5DED2;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span style="font-size: 13px; color: #6B6259;">Will see:</span>
+        <span style="font-size: 13px; font-weight: 600; color: #1F1B16;">{{summary}}</span>
+      </div>
+      <div style="{{doneStyle}}">Gatavs</div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"accent":{"editor":"color","default":"#2F5D4C","options":["#2F5D4C","#B65A2E","#3A5F8A","#7B4A86"]}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { kind: 'groups', groups: ['parents'] };
+  }
+
+  option(id, accent) {
+    const on = this.state.kind === id;
+    return {
+      pick: () => this.setState({ kind: id }),
+      open: on,
+      row:
+        'display: flex; align-items: center; gap: 14px; padding: 13px 14px; border-radius: 12px; cursor: pointer; min-height: 48px; ' +
+        (on ? 'background: #FFFFFF; box-shadow: 0 0 0 1.5px ' + accent + ';' : 'background: transparent;'),
+      iconWrap:
+        'width: 32px; height: 32px; border-radius: 999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; ' +
+        (on ? 'background: #E9F0EC;' : 'background: #F1EDE5;'),
+      check:
+        'width: 22px; height: 22px; border-radius: 999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; ' +
+        (on ? 'background: ' + accent + ';' : 'background: transparent; border: 1.5px solid #DDD5C8;'),
+    };
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#2F5D4C';
+
+    const defs = [
+      { id: 'parents', label: 'Parents · 2', short: 'Parents' },
+      { id: 'children', label: 'Children · 2', short: 'Children' },
+      { id: 'grandparents', label: 'Grandparents · 2', short: 'Grandparents' },
+    ];
+
+    const chips = defs.map((g) => {
+      const on = this.state.groups.indexOf(g.id) !== -1;
+      return {
+        label: g.label,
+        toggle: () =>
+          this.setState({
+            groups: on
+              ? this.state.groups.filter((x) => x !== g.id)
+              : this.state.groups.concat([g.id]),
+          }),
+        style:
+          'padding: 8px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; ' +
+          (on
+            ? 'background: ' + accent + '; color: #FFFFFF;'
+            : 'background: #FFFFFF; border: 1px solid #E5DED2; color: #6B6259;'),
+      };
+    });
+
+    let summary = '—';
+    if (this.state.kind === 'family') summary = 'Whole family';
+    else if (this.state.kind === 'private') summary = 'Only me';
+    else if (this.state.kind === 'members') summary = 'The chosen people';
+    else {
+      const picked = defs.filter((g) => this.state.groups.indexOf(g.id) !== -1);
+      summary = picked.length ? picked.map((g) => g.short).join(', ') : '—';
+    }
+
+    // With no recipients the button is disabled: an empty visibility means an
+    // event nobody can see, and that is almost never what the user meant.
+    const ready = summary !== '—';
+
+    return {
+      family: this.option('family', accent),
+      groupsOpt: this.option('groups', accent),
+      members: this.option('members', accent),
+      privateOpt: this.option('private', accent),
+      chips,
+      summary,
+      doneStyle:
+        'height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 600; ' +
+        (ready
+          ? 'background: ' + accent + '; color: #FFFFFF; cursor: pointer;'
+          : 'background: #EDE7DD; color: #B3A99C;'),
+    };
+  }
+}
+</script>
+</body>
+</html>

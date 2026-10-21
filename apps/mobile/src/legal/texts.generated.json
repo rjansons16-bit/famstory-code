@@ -1,0 +1,3163 @@
+{
+ "privacy": {
+  "en": {
+   "title": "FamStory — Privacy policy",
+   "blocks": [
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Version 1.0, in force from [inForceFrom].",
+       "i": true
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory is a private chronicle and calendar for one family. This page says what we keep about you and your family, why, who can see it, and what you can do about it. We have tried to write it the way the app works: plainly."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "1. Who we are"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "The controller of your personal data is "
+      },
+      {
+       "t": "[company.name]",
+       "b": true
+      },
+      {
+       "t": ", registration number [company.registrationNumber], [company.address]. Questions, requests and complaints: "
+      },
+      {
+       "t": "privacy@famstory.lv",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "2. The short version"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Your family's events, photographs and comments are seen by "
+      },
+      {
+       "t": "your family only",
+       "b": true
+      },
+      {
+       "t": ", and within the family only by the people each entry is for."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Nothing is public, nothing is sold, there is no advertising, and nothing you write is used to train an AI model."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "A child has no account. A parent manages a child's profile, and entries with a child in them are seen by the parents only unless a parent widens them."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "What your family keeps here is stored in the European Union."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "You can download everything your account is, and delete it."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "3. What we keep, and why"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Your account.",
+       "b": true
+      },
+      {
+       "t": " Your email address, a scrambled form of your password (we cannot read it), your name, your photograph if you add one, your language, when the account was made, and which version of this policy and the terms you accepted, and when. "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " to let you sign in and to show your family who added what. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " our contract with you (GDPR Art. 6(1)(b))."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "What your family writes.",
+       "b": true
+      },
+      {
+       "t": " Events — a title, a date, a description, the people in it, its category and tags, whether it repeats — photographs and videos, comments, reactions, reminders, wish lists, and the family's name and groups. "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " this is the service. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " the contract with the account holder who writes it, and, for what it says about other people in the family, our legitimate interest and the family's in keeping a shared family record (Art. 6(1)(f))."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Health information.",
+       "b": true
+      },
+      {
+       "t": " An entry in the Health category is health information, which the law protects more (GDPR Art. 9). Before the first one the app asks for your consent, and we keep that you gave it and when. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " your explicit consent (Art. 9(2)(a)), for yourself and, as a parent, for your child. You can withdraw it in Settings → "
+      },
+      {
+       "t": "Health information",
+       "i": true
+      },
+      {
+       "t": "; from then on no new health entries can be added, and those already written stay until you delete them."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "People in the family.",
+       "b": true
+      },
+      {
+       "t": " For each person: a name, a role (admin, member, viewer, child), optionally a birth date and a photograph, and — only if the family marks it — the date someone died. "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " birthdays, who is in which event, who may see what."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Invitations.",
+       "b": true
+      },
+      {
+       "t": " The email address or the code an invitation was sent to, until it is accepted, withdrawn or expires."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Your visits.",
+       "b": true
+      },
+      {
+       "t": " When your latest visit began, so the app can say what is new since you last looked. Only you see it."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Security records.",
+       "b": true
+      },
+      {
+       "t": " When you sign in, a record of the session: a scrambled form of your network address and the name of your browser or device. An audit log of sensitive actions — who changed who can see an event, who opened a child's profile, who made a guest link — with the same scrambled address. "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " to protect accounts and to be able to say, after an incident, who saw what. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " legitimate interest (Art. 6(1)(f)) and our duty to keep data secure (Art. 32)."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Usage counts.",
+       "b": true
+      },
+      {
+       "t": " How often things in the app are used — for example \"an event was added\", \"a suggestion was accepted\" — with the family it happened in, but "
+      },
+      {
+       "t": "never who you are, what you wrote, or your device or address",
+       "b": true
+      },
+      {
+       "t": ". "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " to know whether FamStory is useful enough to keep building. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " legitimate interest (Art. 6(1)(f)). "
+      },
+      {
+       "t": "You can switch this off",
+       "b": true
+      },
+      {
+       "t": " in Profile → "
+      },
+      {
+       "t": "Share usage counts",
+       "i": true
+      },
+      {
+       "t": "; from then on nothing is kept, on any of your devices. Kept 400 days."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Error reports.",
+       "b": true
+      },
+      {
+       "t": " When the app breaks, what broke and on which screen — with addresses, keys and email addresses removed before it is stored, and tied to nobody. "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " to fix it. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " legitimate interest. Kept 90 days. The same switch turns these off once you are signed in."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Suggestions.",
+       "b": true
+      },
+      {
+       "t": " The app suggests an event type from the words of a title, a reminder time from your family's habits, and warns when somebody is already busy. These are rules running on our server; "
+      },
+      {
+       "t": "no outside AI service",
+       "b": true
+      },
+      {
+       "t": " sees your data. We record whether a suggestion was accepted, to learn whether they help. Suggestions are a helper, never advice (see the terms of use)."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Voice notes.",
+       "b": true
+      },
+      {
+       "t": " A recording you make in FamStory and keep with an event - somebody telling the story instead of typing it. It is stored on our server like a photograph, heard by the same people the event is for, "
+      },
+      {
+       "t": "never shown through a guest link",
+       "b": true
+      },
+      {
+       "t": ", and deleted with its file when you take it out. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " as for the rest of what your family writes."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Dictation.",
+       "b": true
+      },
+      {
+       "t": " If you press "
+      },
+      {
+       "t": "Dictate",
+       "i": true
+      },
+      {
+       "t": ", your browser turns your speech into text: "
+      },
+      {
+       "t": "Chrome and Edge send the sound to Google, Safari to Apple",
+       "b": true
+      },
+      {
+       "t": ", under your browser's own terms. FamStory receives only the text, which becomes part of the entry; we never receive or keep the sound. The app tells you this before the first time on each device. For something private, type it or record a voice note instead."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Reports.",
+       "b": true
+      },
+      {
+       "t": " When you report an entry or a comment, we keep which one it was, the reason you chose, your note if you wrote one, and who reported it. The family's admins are told that something was reported, but not by whom, and we see the report too. "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " to deal with what breaks the terms of use. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " legitimate interest (Art. 6(1)(f)). Kept 12 months from the report."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Blocks.",
+       "b": true
+      },
+      {
+       "t": " When you block somebody in your family, we keep that you blocked them, and since when. Nobody is told, the person you blocked included. "
+      },
+      {
+       "t": "Why:",
+       "i": true
+      },
+      {
+       "t": " so that what they add is not shown to you. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " our contract with you (Art. 6(1)(b)). Kept until you unblock them; deleting your account deletes it."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Premium.",
+       "b": true
+      },
+      {
+       "t": " When Premium is bought in the app, Apple or Google take the payment under their own terms, and RevenueCat (section 4) checks the purchase with them for us. We receive only whether the family's subscription is active, until when, and in which store, never card details. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " our contract with you (Art. 6(1)(b))."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Notifications on your phone.",
+       "b": true
+      },
+      {
+       "t": " If you allow them, your phone's push address (a token Apple or Google gives the app, nothing else about the phone) and the app's language, so that our server can tell your phone there is something new. A notification says only that — \"you have a reminder\", \"there is a new reply\" — "
+      },
+      {
+       "t": "never a title, a name or anything your family wrote",
+       "b": true
+      },
+      {
+       "t": "; the app shows what it is once you open it. Apple or Google deliver it. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " our contract with you (Art. 6(1)(b)). You can turn notifications off in your phone's settings at any time; signing out on the phone removes its address, and an address the app has not used for six months is deleted."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Emails we send.",
+       "b": true
+      },
+      {
+       "t": " If you ask for a new password and our server can send email, we send a link to your account's address through [mailer]. The email holds the link and nothing else about you or your family; the link works once, for one hour. "
+      },
+      {
+       "t": "Basis:",
+       "i": true
+      },
+      {
+       "t": " our contract with you (Art. 6(1)(b))."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "4. Who can see what"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Inside FamStory, every entry says who it is for: the whole family, chosen groups and people, or only its author. "
+      },
+      {
+       "t": "That choice is enforced by our server, not only by the app.",
+       "b": true
+      },
+      {
+       "t": " A person who is not in an entry's audience cannot see it, search for it, or learn that it exists."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Two things can reach outside the family, and both only because a member made them:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "A guest link",
+       "b": true
+      },
+      {
+       "t": " to one event: the title, date, description and photographs of that event, for anyone holding the link, for 1, 7 or 30 days. It can be withdrawn at any time. It never shows who else is in the event, who can see it, or the comments."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "A calendar feed",
+       "b": true
+      },
+      {
+       "t": ": your own address that puts the events "
+      },
+      {
+       "t": "you",
+       "i": true
+      },
+      {
+       "t": " can see into your phone's calendar. Anyone holding that address sees what you see, so treat it like a password; you can reset it in Profile at any time."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Our people",
+       "b": true
+      },
+      {
+       "t": " can technically reach the database to run and repair the service; they do so only for that, and it is recorded."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Service providers",
+       "b": true
+      },
+      {
+       "t": " who store or send data for us, under contracts that bind them to our instructions:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "[hosting], which runs our server in the European Union;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "[mailbox], which keeps the mailbox you write to;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "[mailer], which sends the emails our server sends — so far only the link to set a new password;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "RevenueCat, Inc., in the United States, which checks Premium purchases with Apple and Google for us. It receives the family's identifier, the store's record of the purchase and the network address of the phone that asks, never names, entries or photographs;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Apple and Google, whose push services carry notifications to phones that allowed them: the phone's push address and the one line it shows, never what your family writes."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "We do not sell data and do not share it for advertising. What your family writes is never transferred outside the European Union and the European Economic Area. Two things do go to the United States: RevenueCat's records of purchases, under the European Commission's standard contractual clauses (GDPR Art. 46(2)(c)), which are part of our agreement with it; and, for a notification, the phone's push address and a line with nothing of your family's in it, through Apple's and Google's push services, which are certified under the EU-U.S. Data Privacy Framework (Art. 45)."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "5. Children"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "A child in FamStory is a "
+      },
+      {
+       "t": "profile, not an account",
+       "b": true
+      },
+      {
+       "t": ": no sign-in, no email, no password. Each child profile has a parent who manages it. Events with a child in them are visible to the parents only unless a parent deliberately widens them, every access to a child's profile is recorded, and the app warns before a guest link is made for an event with a child in it."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory is not for children to use on their own. An account of your own is from the age of 16; a younger child is a profile that a parent manages."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "6. How long we keep it"
+      }
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Your account"
+       }
+      ],
+      [
+       {
+        "t": "Until you delete it; then 30 days in which signing in brings it back, then it is deleted"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "What you wrote in the family"
+       }
+      ],
+      [
+       {
+        "t": "Stays in the family's chronicle after you leave or delete your account, under \"Former member\" — your name, photograph and birthday are removed"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "A family nobody can sign in to any more"
+       }
+      ],
+      [
+       {
+        "t": "Closed, not shredded: it can be restored if someone asks within 12 months; then it is deleted, with its photographs"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Guest links"
+       }
+      ],
+      [
+       {
+        "t": "1, 7 or 30 days, or until withdrawn"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Usage counts"
+       }
+      ],
+      [
+       {
+        "t": "400 days"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Error reports"
+       }
+      ],
+      [
+       {
+        "t": "90 days"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Reports of an entry or a comment"
+       }
+      ],
+      [
+       {
+        "t": "12 months"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Sign-in records"
+       }
+      ],
+      [
+       {
+        "t": "Until the session ends, and 7 days more"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "The audit log"
+       }
+      ],
+      [
+       {
+        "t": "24 months"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "A phone's push address"
+       }
+      ],
+      [
+       {
+        "t": "Until you sign out on that phone; six months after the app last used it"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "A password link sent by email"
+       }
+      ],
+      [
+       {
+        "t": "Works one hour; the record of it is deleted 30 days later"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "7. Your rights"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "You can:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "See and download",
+       "b": true
+      },
+      {
+       "t": " everything your account is — Profile → "
+      },
+      {
+       "t": "Export my data",
+       "i": true
+      },
+      {
+       "t": ". Free on every plan."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Correct",
+       "b": true
+      },
+      {
+       "t": " your name, photograph and birthday — Profile → edit."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Delete",
+       "b": true
+      },
+      {
+       "t": " your account — Settings → "
+      },
+      {
+       "t": "Delete account",
+       "i": true
+      },
+      {
+       "t": " (30 days to change your mind)."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Object",
+       "b": true
+      },
+      {
+       "t": " to usage counts — Profile → "
+      },
+      {
+       "t": "Share usage counts",
+       "i": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Restrict",
+       "b": true
+      },
+      {
+       "t": " or "
+      },
+      {
+       "t": "object",
+       "b": true
+      },
+      {
+       "t": " to other processing, or ask anything else, by writing to privacy@famstory.lv. We answer within one month."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Complain",
+       "b": true
+      },
+      {
+       "t": " to the Latvian data protection authority, the Data State Inspectorate (Datu valsts inspekcija, www.dvi.gov.lv), or to the authority where you live."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Some of what you ask about may also be about other people — a photograph of you added by a relative, for example. Write to us and we will help you and your family sort it out."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "8. Security"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Connections are encrypted (HTTPS). Passwords are stored only as slow, salted hashes (scrypt). Photographs are served only through links that expire after 30 minutes and that are checked against who may see them. Sign-in attempts are limited. Backups are made every night and a restore is tested each time. The server and its backups are in the European Union, and only we can reach them."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "If something goes wrong that puts your data at risk, we will tell the Data State Inspectorate within 72 hours and tell you without undue delay when the risk to you is high."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "9. Changes"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "When this policy changes in a way that matters, the app will say so before the change applies, and ask again where the law requires it. Earlier versions are kept, and we send any of them on request."
+      }
+     ]
+    }
+   ],
+   "placeholders": [
+    "[inForceFrom]",
+    "[company.name]",
+    "[company.registrationNumber]",
+    "[company.address]",
+    "[mailer]",
+    "[hosting]",
+    "[mailbox]"
+   ],
+   "version": "1.0"
+  },
+  "lv": {
+   "title": "FamStory — Privātuma politika",
+   "blocks": [
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Versija 1.0, spēkā no [inForceFrom].",
+       "i": true
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory ir privāta vienas ģimenes hronika un kalendārs. Šeit ir rakstīts, ko mēs glabājam par tevi un tavu ģimeni, kāpēc, kas to var redzēt un ko tu vari ar to darīt. Esam centušies rakstīt tā, kā strādā lietotne: vienkārši."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "1. Kas mēs esam"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tavu personas datu pārzinis ir "
+      },
+      {
+       "t": "[company.name]",
+       "b": true
+      },
+      {
+       "t": ", reģistrācijas numurs [company.registrationNumber], [company.address]. Jautājumi, pieprasījumi un sūdzības: "
+      },
+      {
+       "t": "privacy@famstory.lv",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "2. Īsumā"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Tavas ģimenes notikumus, bildes un komentārus redz "
+      },
+      {
+       "t": "tikai tava ģimene",
+       "b": true
+      },
+      {
+       "t": ", un ģimenē — tikai tie, kam katrs ieraksts ir paredzēts."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Nekas nav publisks, nekas netiek pārdots, nav reklāmu, un nekas no tā, ko tu raksti, netiek izmantots mākslīgā intelekta modeļu apmācībai."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Bērnam nav sava konta. Bērna profilu pārvalda vecāks, un ierakstus, kuros ir bērns, redz tikai vecāki, ja vien kāds no vecākiem to apzināti nepaplašina."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Tas, ko tava ģimene šeit glabā, tiek glabāts Eiropas Savienībā."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Tu vari lejupielādēt visu, kas ir tavs konts, un to izdzēst."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "3. Ko mēs glabājam un kāpēc"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tavs konts.",
+       "b": true
+      },
+      {
+       "t": " E-pasta adrese, paroles sajaukta forma (mēs to nevaram izlasīt), tavs vārds, tava bilde, ja to pievieno, valoda, konta izveides laiks un tas, kuru šīs politikas un noteikumu versiju tu pieņēmi un kad. "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " lai tu varētu pieteikties un ģimene redzētu, kurš ko pievienoja. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " mūsu līgums ar tevi (VDAR 6. panta 1. punkta b) apakšpunkts)."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tas, ko raksta tava ģimene.",
+       "b": true
+      },
+      {
+       "t": " Notikumi — nosaukums, datums, apraksts, cilvēki tajā, veids un birkas, vai tas atkārtojas —, bildes un video, komentāri, reakcijas, atgādinājumi, vēlmju saraksti, ģimenes nosaukums un grupas. "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " tas ir pats pakalpojums. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " līgums ar konta turētāju, kurš to raksta, un tam, kas tajā teikts par citiem ģimenes cilvēkiem, — mūsu un ģimenes leģitīmās intereses uzturēt kopīgu ģimenes hroniku (6. panta 1. punkta f) apakšpunkts)."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Veselības informācija.",
+       "b": true
+      },
+      {
+       "t": " Ieraksts kategorijā \"Veselība\" ir veselības informācija, ko likums sargā vairāk (VDAR 9. pants). Pirms pirmā šāda ieraksta lietotne lūdz tavu piekrišanu, un mēs glabājam, ka tu to devi un kad. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " tava nepārprotamā piekrišana (9. panta 2. punkta a) apakšpunkts) par sevi un, kā vecākam, par savu bērnu. To vari atsaukt sadaļā Iestatījumi → "
+      },
+      {
+       "t": "Veselības informācija",
+       "i": true
+      },
+      {
+       "t": "; no tā brīža jaunus veselības ierakstus pievienot nevar, un jau uzrakstītie paliek, līdz tos izdzēs."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Cilvēki ģimenē.",
+       "b": true
+      },
+      {
+       "t": " Katram: vārds, loma (administrators, dalībnieks, skatītājs, bērns), pēc izvēles dzimšanas diena un bilde un — tikai tad, ja ģimene to atzīmē, — miršanas datums. "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " dzimšanas dienas, kurš ir kurā notikumā, kurš ko drīkst redzēt."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Ielūgumi.",
+       "b": true
+      },
+      {
+       "t": " E-pasta adrese vai kods, uz kuru ielūgums nosūtīts, līdz tas tiek pieņemts, atsaukts vai beidzas."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tavi apmeklējumi.",
+       "b": true
+      },
+      {
+       "t": " Kad sākās tavs pēdējais apmeklējums, lai lietotne varētu parādīt, kas jauns kopš pēdējās reizes. To redzi tikai tu."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Drošības ieraksti.",
+       "b": true
+      },
+      {
+       "t": " Piesakoties — sesijas ieraksts: tava tīkla adrese sajauktā formā un pārlūka vai ierīces nosaukums. Jutīgu darbību žurnāls — kurš mainīja, kas redz notikumu, kurš atvēra bērna profilu, kurš izveidoja viesa saiti — ar to pašu sajaukto adresi. "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " lai aizsargātu kontus un pēc incidenta varētu pateikt, kurš ko redzēja. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " leģitīmās intereses un mūsu pienākums datus aizsargāt (32. pants)."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Lietošanas skaiti.",
+       "b": true
+      },
+      {
+       "t": " Cik bieži kas lietotnē tiek lietots — piemēram, \"pievienots notikums\", \"pieņemts ieteikums\" — ar ģimeni, kurā tas notika, bet "
+      },
+      {
+       "t": "nekad ne tas, kas tu esi, ko tu rakstīji, ne tava ierīce vai adrese",
+       "b": true
+      },
+      {
+       "t": ". "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " lai saprastu, vai FamStory ir pietiekami noderīgs, lai to turpinātu veidot. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " leģitīmās intereses. "
+      },
+      {
+       "t": "To var izslēgt",
+       "b": true
+      },
+      {
+       "t": " sadaļā Profils → "
+      },
+      {
+       "t": "Dalīties ar lietošanas skaitiem",
+       "i": true
+      },
+      {
+       "t": "; no tā brīža nekas netiek glabāts nevienā no tavām ierīcēm. Glabā 400 dienas."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Kļūdu ziņojumi.",
+       "b": true
+      },
+      {
+       "t": " Kad lietotne salūzt — kas salūza un kurā ekrānā, pirms glabāšanas izņemot adreses, atslēgas un e-pasta adreses, un nepiesaistot nevienam. "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " lai to salabotu. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " leģitīmās intereses. Glabā 90 dienas. Pēc pieteikšanās tos izslēdz tas pats slēdzis."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Ieteikumi.",
+       "b": true
+      },
+      {
+       "t": " Lietotne iesaka notikuma veidu pēc nosaukuma vārdiem, atgādinājuma laiku pēc ģimenes paradumiem un brīdina, ja kādam tajā laikā jau kas ir. Tie ir noteikumi, kas darbojas mūsu serverī; "
+      },
+      {
+       "t": "neviens ārējs mākslīgā intelekta pakalpojums",
+       "b": true
+      },
+      {
+       "t": " tavus datus neredz. Mēs pierakstām, vai ieteikums tika pieņemts, lai saprastu, vai tie palīdz. Ieteikumi ir palīgs, nekad ne padoms (skat. lietošanas noteikumus)."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Balss ieraksti.",
+       "b": true
+      },
+      {
+       "t": " Ieraksts, ko tu veic FamStory un saglabā pie notikuma - kāds stāsta, nevis raksta. Tas glabājas mūsu serverī kā bilde, to dzird tie paši cilvēki, kam paredzēts notikums, "
+      },
+      {
+       "t": "nekad netiek rādīts caur viesa saiti",
+       "b": true
+      },
+      {
+       "t": ", un, to noņemot, tiek izdzēsts kopā ar failu. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " tāpat kā pārējam, ko raksta tava ģimene."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Diktēšana.",
+       "b": true
+      },
+      {
+       "t": " Ja nospied "
+      },
+      {
+       "t": "Diktēt",
+       "i": true
+      },
+      {
+       "t": ", tavs pārlūks pārvērš runu tekstā: "
+      },
+      {
+       "t": "Chrome un Edge sūta skaņu uz Google, Safari - uz Apple",
+       "b": true
+      },
+      {
+       "t": " saskaņā ar pārlūka noteikumiem. FamStory saņem tikai tekstu, kas kļūst par ieraksta daļu; skaņu mēs nekad nesaņemam un neglabājam. Pirms pirmās reizes katrā ierīcē lietotne to pasaka. Kaut ko privātu labāk uzraksti vai ieraksti kā balss ierakstu."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Ziņojumi.",
+       "b": true
+      },
+      {
+       "t": " Ja ziņo par ierakstu vai komentāru, mēs glabājam, par kuru tas bija, tevis izvēlēto iemeslu, tavu piezīmi, ja to uzrakstīji, un to, kurš ziņoja. Ģimenes administratori uzzina, ka par kaut ko ir ziņots, bet ne to, kurš ziņoja, un ziņojumu redzam arī mēs. "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " lai tiktu galā ar to, kas pārkāpj lietošanas noteikumus. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " leģitīmās intereses (6. panta 1. punkta f) apakšpunkts). Glabājam 12 mēnešus no ziņojuma brīža."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Bloķēšana.",
+       "b": true
+      },
+      {
+       "t": " Ja kādu savā ģimenē bloķē, mēs glabājam, ka tu šo cilvēku bloķēji, un kopš kura laika. Neviens par to neuzzina, arī bloķētais cilvēks. "
+      },
+      {
+       "t": "Kāpēc:",
+       "i": true
+      },
+      {
+       "t": " lai tas, ko šis cilvēks pievieno, tev netiktu rādīts. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " mūsu līgums ar tevi (6. panta 1. punkta b) apakšpunkts). Glabājam, līdz atbloķē; dzēšot kontu, tiek dzēsts arī tas."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Premium.",
+       "b": true
+      },
+      {
+       "t": " Ja Premium iegādājas lietotnē, maksājumu saskaņā ar saviem noteikumiem pieņem Apple vai Google, un RevenueCat (4. sadaļa) mūsu vārdā pirkumu pie viņiem pārbauda. Mēs saņemam tikai to, vai ģimenes abonements ir aktīvs, līdz kuram datumam un kurā veikalā tas nopirkts, nekad ne kartes datus. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " mūsu līgums ar tevi (6. panta 1. punkta b) apakšpunkts)."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Paziņojumi tavā telefonā.",
+       "b": true
+      },
+      {
+       "t": " Ja tos atļauj, tava telefona paziņojumu adrese (žetons, ko lietotnei dod Apple vai Google, nekas cits par telefonu) un lietotnes valoda, lai mūsu serveris varētu tavam telefonam pateikt, ka ir kas jauns. Paziņojumā ir tikai tas — \"tev ir atgādinājums\", \"ir jauna atbilde\" — "
+      },
+      {
+       "t": "nekad ne nosaukums, ne vārds, ne kas cits, ko rakstījusi tava ģimene",
+       "b": true
+      },
+      {
+       "t": "; kas tas ir, lietotne parāda, kad to atver. Paziņojumu nogādā Apple vai Google. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " mūsu līgums ar tevi (6. panta 1. punkta b) apakšpunkts). Paziņojumus jebkurā brīdī var izslēgt telefona iestatījumos; izrakstoties telefonā, tā adrese tiek dzēsta, un adrese, ko lietotne nav lietojusi sešus mēnešus, arī."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "E-pasti, ko mēs sūtām.",
+       "b": true
+      },
+      {
+       "t": " Ja palūdz jaunu paroli un mūsu serveris var sūtīt e-pastu, uz tava konta adresi ar [mailer] starpniecību nosūtām saiti. E-pastā ir tikai saite, nekas cits par tevi vai tavu ģimeni; saite der vienu reizi, vienu stundu. "
+      },
+      {
+       "t": "Pamats:",
+       "i": true
+      },
+      {
+       "t": " mūsu līgums ar tevi (6. panta 1. punkta b) apakšpunkts)."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "4. Kas ko var redzēt"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory katrs ieraksts pasaka, kam tas paredzēts: visai ģimenei, izvēlētām grupām un cilvēkiem vai tikai autoram. "
+      },
+      {
+       "t": "Šo izvēli nodrošina mūsu serveris, ne tikai lietotne.",
+       "b": true
+      },
+      {
+       "t": " Cilvēks, kurš nav ieraksta auditorijā, to nevar redzēt, atrast meklējot vai uzzināt, ka tāds ir."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Divas lietas var nonākt ārpus ģimenes, un abas tikai tāpēc, ka tās izveidoja kāds ģimenes loceklis:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Viesa saite",
+       "b": true
+      },
+      {
+       "t": " uz vienu notikumu: tā nosaukums, datums, apraksts un bildes ikvienam, kam ir saite, uz 1, 7 vai 30 dienām. To var jebkurā brīdī atsaukt. Tā nekad nerāda, kas vēl ir notikumā, kas to redz, ne komentārus."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Kalendāra plūsma",
+       "b": true
+      },
+      {
+       "t": ": tava adrese, kas ieliek tavā telefona kalendārā notikumus, ko redzi "
+      },
+      {
+       "t": "tu",
+       "i": true
+      },
+      {
+       "t": ". Ikviens, kam ir šī adrese, redz to pašu, ko tu, tāpēc glabā to kā paroli; to var jebkurā brīdī atjaunot sadaļā Profils."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Mūsu cilvēki",
+       "b": true
+      },
+      {
+       "t": " tehniski var piekļūt datubāzei, lai pakalpojumu uzturētu un labotu; viņi to dara tikai šim nolūkam, un tas tiek pierakstīts."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Pakalpojumu sniedzēji",
+       "b": true
+      },
+      {
+       "t": ", kas mūsu vārdā glabā vai sūta datus, saskaņā ar līgumiem, kas tos saista ar mūsu norādījumiem:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "[hosting], kas uztur mūsu serveri Eiropas Savienībā;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "[mailbox], kas glabā pastkasti, uz kuru tu raksti;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "[mailer], kas sūta e-pastus, ko sūta mūsu serveris — pagaidām tikai saiti jaunas paroles iestatīšanai;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "RevenueCat, Inc. Amerikas Savienotajās Valstīs, kas mūsu vārdā pārbauda Premium pirkumus pie Apple un Google. Tas saņem ģimenes identifikatoru, veikala ierakstu par pirkumu un tā tālruņa tīkla adresi, kurš jautā, nekad ne vārdus, ierakstus vai bildes;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Apple un Google, kuru paziņojumu pakalpojumi nogādā paziņojumus telefonos, kas tos atļāvuši: telefona paziņojumu adresi un vienu rindiņu, ko tas parāda, nekad to, ko raksta tava ģimene."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Mēs datus nepārdodam un nedalāmies ar tiem reklāmas nolūkā. To, ko raksta tava ģimene, nekad nepārsūtām ārpus Eiropas Savienības un Eiropas Ekonomikas zonas. Uz Amerikas Savienotajām Valstīm nonāk divas lietas: RevenueCat ieraksti par pirkumiem, saskaņā ar Eiropas Komisijas standarta līguma klauzulām (VDAR 46. panta 2. punkta c) apakšpunkts), kas ir daļa no mūsu līguma ar to; un, paziņojumam, telefona paziņojumu adrese un rindiņa, kurā nav nekā no tavas ģimenes, ar Apple un Google paziņojumu pakalpojumu starpniecību, kas ir sertificēti ES un ASV Datu privātuma regulējumā (45. pants)."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "5. Bērni"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Bērns FamStory ir "
+      },
+      {
+       "t": "profils, nevis konts",
+       "b": true
+      },
+      {
+       "t": ": bez pieteikšanās, e-pasta vai paroles. Katram bērna profilam ir vecāks, kurš to pārvalda. Notikumus, kuros ir bērns, redz tikai vecāki, ja vien kāds no vecākiem tos apzināti nepaplašina; katra piekļuve bērna profilam tiek pierakstīta, un lietotne brīdina, pirms tiek izveidota viesa saite uz notikumu, kurā ir bērns."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory nav paredzēts, lai bērni to lietotu paši. Savs konts var būt no 16 gadu vecuma; jaunāks bērns ir profils, ko pārvalda vecāks."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "6. Cik ilgi mēs to glabājam"
+      }
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Tavs konts"
+       }
+      ],
+      [
+       {
+        "t": "Līdz tu to izdzēs; tad 30 dienas, kurās, piesakoties, to var atgūt; pēc tam tas tiek izdzēsts"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Tas, ko tu rakstīji ģimenē"
+       }
+      ],
+      [
+       {
+        "t": "Paliek ģimenes hronikā arī pēc tam, kad aizej vai izdzēs kontu, ar vārdu \"Bijušais dalībnieks\" — tavs vārds, bilde un dzimšanas diena tiek izņemti"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Ģimene, kurā vairs neviens nevar pieteikties"
+       }
+      ],
+      [
+       {
+        "t": "Tiek slēgta, nevis iznīcināta: to var atjaunot, ja kāds lūdz 12 mēnešu laikā; pēc tam tā tiek dzēsta kopā ar bildēm"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Viesu saites"
+       }
+      ],
+      [
+       {
+        "t": "1, 7 vai 30 dienas vai līdz atsaukšanai"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Lietošanas skaiti"
+       }
+      ],
+      [
+       {
+        "t": "400 dienas"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Kļūdu ziņojumi"
+       }
+      ],
+      [
+       {
+        "t": "90 dienas"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Ziņojumi par ierakstu vai komentāru"
+       }
+      ],
+      [
+       {
+        "t": "12 mēneši"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Pieteikšanās ieraksti"
+       }
+      ],
+      [
+       {
+        "t": "Līdz sesija beidzas, un vēl 7 dienas"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Darbību žurnāls"
+       }
+      ],
+      [
+       {
+        "t": "24 mēneši"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Telefona paziņojumu adrese"
+       }
+      ],
+      [
+       {
+        "t": "Līdz tu tajā telefonā izrakstās; sešus mēnešus pēc tam, kad lietotne to pēdējo reizi lietoja"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "row",
+     "cells": [
+      [
+       {
+        "t": "Paroles saite, kas nosūtīta e-pastā"
+       }
+      ],
+      [
+       {
+        "t": "Der vienu stundu; ieraksts par to tiek dzēsts 30 dienas vēlāk"
+       }
+      ]
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "7. Tavas tiesības"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tu vari:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Redzēt un lejupielādēt",
+       "b": true
+      },
+      {
+       "t": " visu, kas ir tavs konts — Profils → "
+      },
+      {
+       "t": "Izgūt manus datus",
+       "i": true
+      },
+      {
+       "t": ". Bez maksas jebkurā plānā."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Labot",
+       "b": true
+      },
+      {
+       "t": " savu vārdu, bildi un dzimšanas dienu — Profils → labot."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Dzēst",
+       "b": true
+      },
+      {
+       "t": " savu kontu — Iestatījumi → "
+      },
+      {
+       "t": "Dzēst kontu",
+       "i": true
+      },
+      {
+       "t": " (30 dienas pārdomām)."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Iebilst",
+       "b": true
+      },
+      {
+       "t": " pret lietošanas skaitiem — Profils → "
+      },
+      {
+       "t": "Dalīties ar lietošanas skaitiem",
+       "i": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Ierobežot",
+       "b": true
+      },
+      {
+       "t": " citu apstrādi vai "
+      },
+      {
+       "t": "iebilst",
+       "b": true
+      },
+      {
+       "t": " pret to, vai jautāt jebko citu, rakstot uz privacy@famstory.lv. Mēs atbildam mēneša laikā."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Iesniegt sūdzību",
+       "b": true
+      },
+      {
+       "t": " Datu valsts inspekcijā (www.dvi.gov.lv) vai tās valsts uzraudzības iestādē, kurā dzīvo."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Daļa no tā, par ko jautāsi, var skart arī citus cilvēkus — piemēram, tavu bildi, ko pievienojis radinieks. Raksti mums, un mēs palīdzēsim to atrisināt tev un tavai ģimenei."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "8. Drošība"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Savienojumi ir šifrēti (HTTPS). Paroles glabā tikai kā lēnas, sālītas jaucējas (scrypt). Bildes rāda tikai caur saitēm, kas beidzas pēc 30 minūtēm un tiek pārbaudītas pret to, kurš tās drīkst redzēt. Pieteikšanās mēģinājumi ir ierobežoti. Rezerves kopijas tiek veidotas katru nakti, un katru reizi tiek pārbaudīta atjaunošana. Serveris un tā rezerves kopijas atrodas Eiropas Savienībā, un tiem varam piekļūt tikai mēs."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Ja notiks kas tāds, kas apdraud tavus datus, mēs 72 stundu laikā ziņosim Datu valsts inspekcijai un bez nepamatotas kavēšanās pastāstīsim tev, ja risks tev ir augsts."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "9. Izmaiņas"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Kad šī politika mainās būtiski, lietotne par to pateiks, pirms izmaiņas stājas spēkā, un, kur to prasa likums, jautās vēlreiz. Iepriekšējās versijas tiek glabātas, un jebkuru no tām pēc pieprasījuma nosūtām."
+      }
+     ]
+    }
+   ],
+   "placeholders": [
+    "[inForceFrom]",
+    "[company.name]",
+    "[company.registrationNumber]",
+    "[company.address]",
+    "[mailer]",
+    "[hosting]",
+    "[mailbox]"
+   ],
+   "version": "1.0"
+  }
+ },
+ "terms": {
+  "en": {
+   "title": "FamStory — Terms of use",
+   "blocks": [
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Version 1.0, in force from [inForceFrom].",
+       "i": true
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "These terms are the agreement between you and "
+      },
+      {
+       "t": "[company.name]",
+       "b": true
+      },
+      {
+       "t": ", registration number [company.registrationNumber], [company.address] (\"we\"), about using FamStory. The privacy policy, which says what happens to your data, is part of them."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "1. What FamStory is"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "A private chronicle and calendar for a family: events, photographs, comments, reminders and birthdays, each shown only to the people it is meant for."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "2. Your account"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "You need to be "
+      },
+      {
+       "t": "16",
+       "b": true
+      },
+      {
+       "t": " or older to have an account of your own. Younger children are in FamStory as profiles a parent manages (section 4)."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "One account is one person. Keep your password to yourself; you are responsible for what is done with your account unless it was used without your fault."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Give a real name the family will recognise. We may ask you to change a name that pretends to be somebody else."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "3. Your family"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Whoever creates a family is its first "
+      },
+      {
+       "t": "admin",
+       "b": true
+      },
+      {
+       "t": ". Admins invite people, choose their roles (admin, member, viewer, child profile), manage groups, and can remove people. A "
+      },
+      {
+       "t": "viewer",
+       "b": true
+      },
+      {
+       "t": " can see and react but not add. The family's admins are responsible for who is in the family; we do not check who is related to whom."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "4. Children"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "A child has "
+      },
+      {
+       "t": "no account",
+       "b": true
+      },
+      {
+       "t": " in FamStory. A child profile can only be created by a member of the family who is the child's parent or legal guardian, or who has their permission, and every child profile has an adult who manages it. By creating one you confirm that you have that right."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Entries with a child in them are shown to the parents only unless you deliberately choose a wider audience. Think before you do; the app will remind you."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "5. What you add"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "It stays yours.",
+       "b": true
+      },
+      {
+       "t": " You own what you write and upload. You give us the permission we need to provide the service with it — to store it, back it up, make smaller copies of photographs, and show it to the audience you chose — and nothing more. That permission ends when the content is deleted, except for copies in backups, which are overwritten within "
+      },
+      {
+       "t": "35 days",
+       "b": true
+      },
+      {
+       "t": "."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "It is part of the family's chronicle.",
+       "b": true
+      },
+      {
+       "t": " What you add to a family is shared with it. If you leave the family or delete your account, what you added stays in the family's chronicle, attributed to \"Former member\"; your name, photograph and birthday are removed. You can delete your own entries before you leave."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "You need the right to add it.",
+       "b": true
+      },
+      {
+       "t": " Only add what you are allowed to share: your own photographs, and pictures and information about other people when you may share them with your family. Do not add anything unlawful."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "6. What you must not do"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "try to see what is not meant for you, or get round who may see an entry;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "use somebody else's account, or let others use yours;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "upload anything unlawful, or anything that infringes someone else's rights;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "use FamStory to harass, threaten or spy on anyone;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "interfere with the service — overloading it, probing it for weaknesses, copying it by automated means. If you find a security problem, please tell us at "
+      },
+      {
+       "t": "security@famstory.lv",
+       "b": true
+      },
+      {
+       "t": " instead; we will not act against good-faith reports."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "We may remove content that breaks these terms, and suspend an account that breaks them seriously or repeatedly — telling you why, and first where we can."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "No tolerance for objectionable content or abusive users.",
+       "b": true
+      },
+      {
+       "t": " What is offensive, hateful, sexual, violent or threatening has no place in FamStory, and neither has anybody who uses it to hurt others."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Reporting.",
+       "b": true
+      },
+      {
+       "t": " If something in your family breaks these terms, open the entry or the comment and choose "
+      },
+      {
+       "t": "Report",
+       "i": true
+      },
+      {
+       "t": ". The family's admins are told, and so are we. We act on reports within 24 hours: what breaks these terms is removed, and an account that posted it can be removed from the service."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Blocking.",
+       "b": true
+      },
+      {
+       "t": " You can block any member of your family, on their profile or from one of their entries. From then on the entries, comments and reactions they add are not shown to you, and you are not told what they do. Nobody is told that you blocked them, and you can unblock them on their profile."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "7. Guest links and calendar feeds"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "A "
+      },
+      {
+       "t": "guest link",
+       "b": true
+      },
+      {
+       "t": " shows one event to whoever holds it, for the time you chose. A "
+      },
+      {
+       "t": "calendar feed",
+       "b": true
+      },
+      {
+       "t": " shows what you can see to whoever holds its address. Both work like keys: you decide who gets them, and you are responsible for sharing them only with people who should see what they show. You can withdraw a guest link and reset a calendar feed at any time."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "8. Suggestions"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory suggests things — an event type, a reminder time — and warns when somebody already has something at the same time. "
+      },
+      {
+       "t": "Suggestions are a helper, not advice: they are not legal, medical, psychological or financial advice, and they may be wrong.",
+       "b": true
+      },
+      {
+       "t": " The app never acts on a suggestion by itself; you decide whether to accept it. For anything about health, a child's wellbeing, or money, rely on a professional, not on FamStory."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "9. Plans and payment"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory has a free plan with limits (how many events and photographs), and "
+      },
+      {
+       "t": "Premium",
+       "b": true
+      },
+      {
+       "t": ", which removes them. Downloading your own data is free on every plan and never behind a payment."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Premium bought in the app",
+       "b": true
+      },
+      {
+       "t": " is a subscription through your Apple ID or your Google Play account:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "The price and the period are shown before you confirm."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "It renews automatically until you turn renewal off, at least 24 hours before the period ends."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "You manage or cancel it in the settings of the App Store or Google Play."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Refunds are Apple's or Google's, under their rules."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "The price is the one the App Store or Google Play shows before you confirm, in your currency and with VAT. Apple and Google sell the subscription to you: withdrawing from the purchase and refunds are under their terms."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "10. Availability"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "We work to keep FamStory running and your data safe — backups every night, tested each time — but we cannot promise it will never be unavailable, and during the beta it may change quickly. We will tell you in the app before a change that takes something away."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "11. Ending"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "You can delete your account at any time in Settings; you then have 30 days to change your mind. We may end the service as a whole with at least "
+      },
+      {
+       "t": "60 days'",
+       "b": true
+      },
+      {
+       "t": " notice, during which you can download everything."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "12. Responsibility"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Nothing in these terms limits a right you have as a consumer that the law does not allow to be limited."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "We are responsible for harm we cause on purpose or through gross negligence. Beyond that, and as far as the law allows, we are not responsible for harm we could not have foreseen, for what other people in your family do with what you share with them, or for what is outside our control, such as an outage of the internet, of a store or of our hosting provider. Where we are responsible, it is for no more than the price of twelve months of Premium."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "13. Changes"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "If we change these terms in a way that matters, we will tell you in the app at least "
+      },
+      {
+       "t": "30 days",
+       "b": true
+      },
+      {
+       "t": " before the change applies. If you do not agree, you can delete your account before then."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "14. Law and disputes"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Latvian law applies, without taking away the protection the law of your own country gives you as a consumer. Tell us first at "
+      },
+      {
+       "t": "support@famstory.lv",
+       "b": true
+      },
+      {
+       "t": "; if we cannot settle it, you can turn to the Consumer Rights Protection Centre (Patērētāju tiesību aizsardzības centrs, www.ptac.gov.lv) or the courts."
+      }
+     ]
+    }
+   ],
+   "placeholders": [
+    "[inForceFrom]",
+    "[company.name]",
+    "[company.registrationNumber]",
+    "[company.address]"
+   ],
+   "version": "1.0"
+  },
+  "lv": {
+   "title": "FamStory — Lietošanas noteikumi",
+   "blocks": [
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Versija 1.0, spēkā no [inForceFrom].",
+       "i": true
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Šie noteikumi ir vienošanās starp tevi un "
+      },
+      {
+       "t": "[company.name]",
+       "b": true
+      },
+      {
+       "t": ", reģistrācijas numurs [company.registrationNumber], [company.address] (\"mēs\"), par FamStory lietošanu. Privātuma politika, kas stāsta, kas notiek ar taviem datiem, ir to daļa."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "1. Kas ir FamStory"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Privāta ģimenes hronika un kalendārs: notikumi, bildes, komentāri, atgādinājumi un dzimšanas dienas, un katru no tiem redz tikai tie, kam tas paredzēts."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "2. Tavs konts"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Lai tev būtu savs konts, tev jābūt vismaz "
+      },
+      {
+       "t": "16",
+       "b": true
+      },
+      {
+       "t": " gadus vecam. Jaunāki bērni FamStory ir kā profili, kurus pārvalda vecāks (4. sadaļa)."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Viens konts ir viens cilvēks. Paroli glabā pie sevis; tu atbildi par to, kas ar tavu kontu darīts, ja vien tas netika izmantots bez tavas vainas."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Norādi īstu vārdu, ko ģimene atpazīs. Mēs varam lūgt mainīt vārdu, kas izliekas par kādu citu."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "3. Tava ģimene"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tas, kurš izveido ģimeni, ir tās pirmais "
+      },
+      {
+       "t": "administrators",
+       "b": true
+      },
+      {
+       "t": ". Administratori ielūdz cilvēkus, izvēlas viņu lomas (administrators, dalībnieks, skatītājs, bērna profils), pārvalda grupas un var cilvēkus izņemt. "
+      },
+      {
+       "t": "Skatītājs",
+       "b": true
+      },
+      {
+       "t": " var redzēt un reaģēt, bet ne pievienot. Par to, kas ir ģimenē, atbild ģimenes administratori; mēs nepārbaudām, kurš kuram ir radinieks."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "4. Bērni"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Bērnam FamStory "
+      },
+      {
+       "t": "nav sava konta",
+       "b": true
+      },
+      {
+       "t": ". Bērna profilu var izveidot tikai ģimenes loceklis, kurš ir bērna vecāks vai likumiskais aizbildnis vai kuram ir viņu atļauja, un katram bērna profilam ir pieaugušais, kurš to pārvalda. Izveidojot bērna profilu, tu apliecini, ka tev ir šīs tiesības."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Ierakstus, kuros ir bērns, redz tikai vecāki, ja vien tu apzināti neizvēlies plašāku auditoriju. Padomā, pirms to dari; lietotne tev atgādinās."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "5. Tas, ko tu pievieno"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tas paliek tavs.",
+       "b": true
+      },
+      {
+       "t": " Tas, ko tu raksti un augšupielādē, pieder tev. Tu dod mums atļauju, kas vajadzīga, lai ar to sniegtu pakalpojumu — to glabāt, veidot rezerves kopijas, taisīt bilžu mazākas kopijas un rādīt to tevis izvēlētajai auditorijai — un neko vairāk. Šī atļauja beidzas, kad saturs tiek izdzēsts, izņemot kopijas rezerves kopijās, kuras tiek pārrakstītas "
+      },
+      {
+       "t": "35 dienu",
+       "b": true
+      },
+      {
+       "t": " laikā."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tas ir daļa no ģimenes hronikas.",
+       "b": true
+      },
+      {
+       "t": " Tas, ko tu pievieno ģimenei, ir kopīgs ar to. Ja tu aizej no ģimenes vai izdzēs savu kontu, tas, ko pievienoji, paliek ģimenes hronikā ar norādi \"Bijušais dalībnieks\"; tavs vārds, bilde un dzimšanas diena tiek noņemti. Savus ierakstus vari izdzēst, pirms aizej."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Tev jābūt tiesībām to pievienot.",
+       "b": true
+      },
+      {
+       "t": " Pievieno tikai to, ar ko drīksti dalīties: savas bildes, un bildes un informāciju par citiem cilvēkiem, ja drīksti ar tām dalīties ar savu ģimeni. Nepievieno neko nelikumīgu."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "6. Ko nedrīkst darīt"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "mēģināt redzēt to, kas nav tev paredzēts, vai apiet to, kas drīkst redzēt ierakstu;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "izmantot kāda cita kontu vai ļaut citiem izmantot tavu;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "augšupielādēt kaut ko nelikumīgu vai kaut ko, kas pārkāpj kāda cita tiesības;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "izmantot FamStory, lai kādu aizskartu, draudētu vai izspiegotu;"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "traucēt pakalpojumu — to pārslogot, meklēt tajā vājās vietas, kopēt to ar automātiskiem līdzekļiem. Ja atrodi drošības problēmu, lūdzu, pastāsti mums uz "
+      },
+      {
+       "t": "security@famstory.lv",
+       "b": true
+      },
+      {
+       "t": "; pret labticīgiem ziņojumiem mēs nevērsīsimies."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Mēs varam noņemt saturu, kas pārkāpj šos noteikumus, un apturēt kontu, kas tos pārkāpj nopietni vai atkārtoti — pasakot, kāpēc, un, kur iespējams, iepriekš."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Aizskarošs saturs un aizskaroši lietotāji netiek pieļauti.",
+       "b": true
+      },
+      {
+       "t": " Tam, kas ir aizvainojošs, naidīgs, seksuāls, vardarbīgs vai draudīgs, FamStory nav vietas, un nav vietas arī tam, kurš FamStory izmanto, lai citiem nodarītu pāri."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Ziņošana.",
+       "b": true
+      },
+      {
+       "t": " Ja kaut kas tavā ģimenē pārkāpj šos noteikumus, atver ierakstu vai komentāru un izvēlies "
+      },
+      {
+       "t": "Ziņot",
+       "i": true
+      },
+      {
+       "t": ". To uzzina ģimenes administratori un arī mēs. Uz ziņojumiem rīkojamies 24 stundu laikā: to, kas pārkāpj šos noteikumus, noņemam, un kontu, kas to ievietoja, varam no pakalpojuma noņemt."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Bloķēšana.",
+       "b": true
+      },
+      {
+       "t": " Jebkuru savas ģimenes locekli vari bloķēt šī cilvēka profilā vai no kāda šī cilvēka ieraksta. No tā brīža ieraksti, komentāri un reakcijas, ko šis cilvēks pievieno, tev netiek rādīti, un tev netiek ziņots par šī cilvēka darbībām. Neviens par bloķēšanu neuzzina, un atbloķēt var šī cilvēka profilā."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "7. Viesu saites un kalendāra plūsmas"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Viesa saite",
+       "b": true
+      },
+      {
+       "t": " rāda vienu notikumu tam, kam tā ir, tik ilgi, cik tu izvēlējies. "
+      },
+      {
+       "t": "Kalendāra plūsma",
+       "b": true
+      },
+      {
+       "t": " rāda to, ko redzi tu, tam, kam ir tās adrese. Abas darbojas kā atslēgas: tu izlem, kas tās saņem, un tu atbildi par to, lai tās nonāktu tikai pie cilvēkiem, kam jāredz tas, ko tās rāda. Viesa saiti vari atsaukt un kalendāra plūsmu atjaunot jebkurā brīdī."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "8. Ieteikumi"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory iesaka lietas — notikuma veidu, atgādinājuma laiku — un brīdina, ja kādam tajā pašā laikā jau kaut kas ir. "
+      },
+      {
+       "t": "Ieteikumi ir palīgs, nevis padoms: tie nav juridiski, medicīniski, psiholoģiski vai finanšu padomi, un tie var būt kļūdaini.",
+       "b": true
+      },
+      {
+       "t": " Lietotne nekad neko nedara pēc ieteikuma pati; tu izlem, vai to pieņemt. Visā, kas saistīts ar veselību, bērna labklājību vai naudu, paļaujies uz speciālistu, nevis uz FamStory."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "9. Plāni un maksājumi"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "FamStory ir bezmaksas plāns ar ierobežojumiem (cik notikumu un bilžu), un "
+      },
+      {
+       "t": "Premium",
+       "b": true
+      },
+      {
+       "t": ", kas tos noņem. Savu datu lejupielāde ir bez maksas katrā plānā un nekad nav aiz maksas."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Lietotnē iegādāts Premium",
+       "b": true
+      },
+      {
+       "t": " ir abonements caur tavu Apple ID vai Google Play kontu:"
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Cena un periods tiek parādīti, pirms tu apstiprini."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Tas atjaunojas automātiski, līdz tu izslēdz atjaunošanu vismaz 24 stundas pirms perioda beigām."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "To pārvaldi vai atcel App Store vai Google Play iestatījumos."
+      }
+     ]
+    },
+    {
+     "k": "li",
+     "s": [
+      {
+       "t": "Naudas atmaksu izlemj Apple vai Google saskaņā ar saviem noteikumiem."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Cena ir tā, ko App Store vai Google Play parāda, pirms tu apstiprini, tavā valūtā un ar PVN. Abonementu tev pārdod Apple vai Google: atteikšanās no pirkuma un naudas atmaksa notiek saskaņā ar viņu noteikumiem."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "10. Pieejamība"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Mēs strādājam, lai FamStory darbotos un tavi dati būtu drošībā — rezerves kopijas katru nakti, katru reizi pārbaudītas —, bet nevaram apsolīt, ka tas nekad nebūs nepieejams, un beta laikā tas var ātri mainīties. Pirms izmaiņām, kas kaut ko atņem, mēs to pateiksim lietotnē."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "11. Beigas"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Savu kontu vari izdzēst jebkurā brīdī Iestatījumos; pēc tam tev ir 30 dienas, lai pārdomātu. Mēs varam beigt sniegt pakalpojumu kopumā, brīdinot vismaz "
+      },
+      {
+       "t": "60 dienas",
+       "b": true
+      },
+      {
+       "t": " iepriekš; šajā laikā vari lejupielādēt visu."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "12. Atbildība"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Nekas šajos noteikumos neierobežo tiesības, kas tev ir kā patērētājam un kuras likums neļauj ierobežot."
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Mēs atbildam par kaitējumu, ko nodarām ar nodomu vai rupjas neuzmanības dēļ. Pārējā, ciktāl to atļauj likums, mēs neatbildam par kaitējumu, ko nevarējām paredzēt, par to, ko citi tavas ģimenes cilvēki dara ar to, ar ko tu ar viņiem dalies, un par to, kas nav mūsu varā, piemēram, interneta, veikala vai mūsu mitināšanas pakalpojuma traucējumiem. Ja atbildam, tad ne vairāk kā par divpadsmit Premium mēnešu cenu."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "13. Izmaiņas"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Ja mēs šos noteikumus mainīsim būtiski, mēs to pateiksim lietotnē vismaz "
+      },
+      {
+       "t": "30 dienas",
+       "b": true
+      },
+      {
+       "t": " pirms izmaiņu stāšanās spēkā. Ja nepiekrīti, vari līdz tam izdzēst savu kontu."
+      }
+     ]
+    },
+    {
+     "k": "h",
+     "s": [
+      {
+       "t": "14. Tiesības un strīdi"
+      }
+     ]
+    },
+    {
+     "k": "p",
+     "s": [
+      {
+       "t": "Piemērojami Latvijas tiesību akti, neatņemot aizsardzību, ko tev kā patērētājam dod tavas valsts likumi. Vispirms pastāsti mums uz "
+      },
+      {
+       "t": "support@famstory.lv",
+       "b": true
+      },
+      {
+       "t": "; ja to nevaram atrisināt, vari vērsties Patērētāju tiesību aizsardzības centrā (www.ptac.gov.lv) vai tiesā."
+      }
+     ]
+    }
+   ],
+   "placeholders": [
+    "[inForceFrom]",
+    "[company.name]",
+    "[company.registrationNumber]",
+    "[company.address]"
+   ],
+   "version": "1.0"
+  }
+ }
+}

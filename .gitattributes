@@ -1,0 +1,20 @@
+# Line endings are normalised to LF in the repository and checked out however
+# the platform wants them. Without this, the first commit from a machine with a
+# different autocrlf setting rewrites every file in the repo and buries the real
+# change in it.
+* text=auto eol=lf
+
+# Generated, and noisy in a diff.
+package-lock.json linguist-generated=true -diff
+
+# The delivered design. Git would detect these as binary anyway, but the .fig is
+# the only copy of what the designer drew — it does not get to depend on that.
+*.png binary
+*.fig binary
+
+# Windows scripts stay CRLF in every checkout. The rest of the repo is LF, but
+# wscript and cmd are the two tools that still care, and a supervisor that fails
+# to parse fails silently: the scheduled task reports success and nothing runs.
+*.ps1 text eol=crlf
+*.vbs text eol=crlf
+*.bat text eol=crlf

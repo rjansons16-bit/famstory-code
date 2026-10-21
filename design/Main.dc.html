@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Work+Sans:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; font-family: 'Work Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    a { color: #B65A2E; text-decoration: none; }
+    a:hover { color: #8F4522; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+
+<div style="width: 390px; height: 844px; background: #FAF7F2; position: relative; overflow: hidden; color: #1F1B16;">
+
+  <!-- ── Galvene ────────────────────────────────────────────── -->
+  <div style="padding: 20px 20px 0; display: flex; align-items: flex-start; gap: 12px;">
+    <div style="flex-grow: 1; min-width: 0;">
+      <div style="font-family: 'Work Sans'; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #9A9086;">Timeline</div>
+      <div style="font-family: 'Newsreader', Georgia, serif; font-size: 28px; line-height: 34px; font-weight: 500; letter-spacing: -0.01em; margin-top: 2px;">The Bergs</div>
+    </div>
+    <div style="display: flex; gap: 4px; padding-top: 6px;">
+      <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4.2-4.2"/></svg>
+      </div>
+      <div style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; position: relative;">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#6B6259" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>
+        <div style="position: absolute; top: 9px; right: 10px; width: 8px; height: 8px; border-radius: 999px; background: #B65A2E; border: 2px solid #FAF7F2;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Filtri ─────────────────────────────────────────────── -->
+  <div style="display: flex; gap: 8px; padding: 16px 20px 0;">
+    <div style="padding: 8px 15px; border-radius: 999px; background: #2F5D4C; color: #FFFFFF; font-size: 13px; font-weight: 500;">Viss</div>
+    <div style="padding: 8px 15px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E5DED2; color: #6B6259; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B65A2E" stroke-width="1.8" stroke-linejoin="round"><path d="M6 4h12v17l-6-4-6 4z"/></svg>
+      Milestones
+    </div>
+    <div style="padding: 8px 15px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E5DED2; color: #6B6259; font-size: 13px; font-weight: 500;">Mani</div>
+  </div>
+
+  <!-- ── Month divider ──────────────────────────────────── -->
+  <div style="display: flex; align-items: center; gap: 12px; padding: 24px 20px 12px;">
+    <div style="font-family: 'Work Sans'; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #9A9086;">Septembris 2026</div>
+    <div style="flex-grow: 1; height: 1px; background: #E5DED2;"></div>
+  </div>
+
+  <!-- ── Card with a photo ──────────────────────────────────── -->
+  <div style="margin: 0 20px; background: #FFFFFF; border-radius: 14px; overflow: hidden; box-shadow: 0 1px 2px rgba(31,27,22,0.04), 0 8px 20px rgba(31,27,22,0.05);">
+
+    <div style="position: relative; height: 172px; background: linear-gradient(160deg, #DCE6DE 0%, #C9D9CE 45%, #E8DCCB 100%);">
+      <svg width="390" height="172" viewBox="0 0 390 172" style="position: absolute; inset: 0; opacity: 0.5;">
+        <path d="M0 128 L58 128 L58 78 L92 60 L126 78 L126 128 L390 128 L390 172 L0 172 Z" fill="#2F5D4C" opacity="0.28"/>
+        <rect x="74" y="92" width="14" height="16" fill="#FAF7F2" opacity="0.5"/>
+        <rect x="98" y="92" width="14" height="16" fill="#FAF7F2" opacity="0.5"/>
+        <circle cx="300" cy="104" r="26" fill="#2F5D4C" opacity="0.2"/>
+        <rect x="297" y="104" width="6" height="26" fill="#2F5D4C" opacity="0.24"/>
+        <circle cx="228" cy="112" r="18" fill="#2F5D4C" opacity="0.16"/>
+        <rect x="225" y="112" width="5" height="18" fill="#2F5D4C" opacity="0.2"/>
+      </svg>
+      <div style="position: absolute; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 999px; background: rgba(31,27,22,0.55); backdrop-filter: blur(6px);">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M3 17l5-4 4 3 3-2 6 4"/></svg>
+        <span style="font-size: 11px; font-weight: 600; color: #FFFFFF;">+2</span>
+      </div>
+    </div>
+
+    <div style="padding: 16px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="padding: 4px 10px; border-radius: 999px; background: #E4ECF5; color: #3A5F8A; font-size: 11px; font-weight: 600; letter-spacing: 0.02em;">Education</div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#B65A2E" stroke-width="1.8" stroke-linejoin="round"><path d="M6 4h12v17l-6-4-6 4z"/></svg>
+        <div style="flex-grow: 1;"></div>
+        <div style="font-size: 12px; color: #9A9086;">1 September · 08:30</div>
+      </div>
+
+      <div style="font-family: 'Newsreader', Georgia, serif; font-size: 20px; line-height: 26px; font-weight: 500; margin-top: 10px; letter-spacing: -0.005em;">Emily's first day of school</div>
+
+      <div style="font-size: 14px; line-height: 21px; color: #6B6259; margin-top: 6px; text-wrap: pretty;">She wanted to walk in alone, then looked back at the door anyway. The class is small — 18 children.</div>
+
+      <div style="display: flex; align-items: center; gap: 12px; margin-top: 14px;">
+        <div style="display: flex;">
+          <div style="width: 26px; height: 26px; border-radius: 999px; background: #E4ECF5; color: #3A5F8A; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF;">E</div>
+          <div style="width: 26px; height: 26px; border-radius: 999px; background: #F0E6F2; color: #7B4A86; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; margin-left: -8px;">A</div>
+          <div style="width: 26px; height: 26px; border-radius: 999px; background: #E6F1E8; color: #3D7A4E; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; margin-left: -8px;">M</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px; flex-grow: 1; min-width: 0;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9A9086" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span style="font-size: 12px; color: #9A9086;">Whole family</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#A93A33"><path d="M12 21s-8-5.2-8-10.4A4.6 4.6 0 0112 7a4.6 4.6 0 018 3.6C20 15.8 12 21 12 21z"/></svg>
+          <span style="font-size: 12px; color: #9A9086;">2</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9A9086" stroke-width="1.6" stroke-linejoin="round"><path d="M20 15a2 2 0 01-2 2H8l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"/></svg>
+          <span style="font-size: 12px; color: #9A9086;">3</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Card with no photo, restricted visibility ───────────── -->
+  <div style="margin: 14px 20px 0; background: #FFFFFF; border-radius: 14px; padding: 16px; box-shadow: 0 1px 2px rgba(31,27,22,0.04), 0 8px 20px rgba(31,27,22,0.05);">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="padding: 4px 10px; border-radius: 999px; background: #F8E4E2; color: #A93A33; font-size: 11px; font-weight: 600; letter-spacing: 0.02em;">Health</div>
+      <div style="flex-grow: 1;"></div>
+      <div style="font-size: 12px; color: #9A9086;">Yesterday · 15:00</div>
+    </div>
+
+    <div style="font-family: 'Newsreader', Georgia, serif; font-size: 20px; line-height: 26px; font-weight: 500; margin-top: 10px;">Meeting with the school counsellor</div>
+    <div style="font-size: 14px; line-height: 21px; color: #6B6259; margin-top: 6px;">Next appointment in a month. Nothing serious, but worth keeping an eye on.</div>
+
+    <div style="display: flex; align-items: center; gap: 12px; margin-top: 14px;">
+      <div style="display: flex;">
+        <div style="width: 26px; height: 26px; border-radius: 999px; background: #E4ECF5; color: #3A5F8A; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF;">E</div>
+        <div style="width: 26px; height: 26px; border-radius: 999px; background: #F0E6F2; color: #7B4A86; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF; margin-left: -8px;">A</div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 5px; flex-grow: 1;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B65A2E" stroke-width="1.7" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 19a6.5 6.5 0 0113 0"/><path d="M16 6.2a3.2 3.2 0 010 6"/><path d="M17.5 13.4A6.5 6.5 0 0121.5 19"/></svg>
+        <span style="font-size: 12px; color: #B65A2E; font-weight: 500;">Parents</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9A9086" stroke-width="1.6" stroke-linejoin="round"><path d="M20 15a2 2 0 01-2 2H8l-4 4V5a2 2 0 012-2h12a2 2 0 012 2z"/></svg>
+        <span style="font-size: 12px; color: #9A9086;">2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── The start of the next card (a natural scroll edge) ─── -->
+  <div style="margin: 14px 20px 0; background: #FFFFFF; border-radius: 14px 14px 0 0; padding: 16px 16px 0; box-shadow: 0 -1px 2px rgba(31,27,22,0.03);">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="padding: 4px 10px; border-radius: 999px; background: #FBEADF; color: #B8622A; font-size: 11px; font-weight: 600;">Celebration</div>
+      <div style="flex-grow: 1;"></div>
+      <div style="font-size: 12px; color: #9A9086;">31 August</div>
+    </div>
+    <div style="font-family: 'Newsreader', Georgia, serif; font-size: 20px; line-height: 26px; font-weight: 500; margin-top: 10px;">Robert's 3rd birthday</div>
+  </div>
+
+  <!-- ── Floating button ───────────────────────────────────────── -->
+  <div style="position: absolute; right: 20px; bottom: 96px; width: 56px; height: 56px; border-radius: 999px; background: #2F5D4C; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 18px rgba(47,93,76,0.34);">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+  </div>
+
+  <!-- ── Tab bar ────────────────────────────────────────── -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: rgba(255,255,255,0.94); backdrop-filter: blur(12px); border-top: 1px solid #E5DED2; display: flex; align-items: flex-start; padding-top: 10px;">
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2F5D4C" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+      <span style="font-size: 11px; font-weight: 600; color: #2F5D4C;">Timeline</span>
+    </div>
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A9086" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      <span style="font-size: 11px; color: #9A9086;">Calendar</span>
+    </div>
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A9086" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 19a6.5 6.5 0 0113 0"/><path d="M16 6.2a3.2 3.2 0 010 6"/><path d="M17.5 13.4A6.5 6.5 0 0121.5 19"/></svg>
+      <span style="font-size: 11px; color: #9A9086;">Family</span>
+    </div>
+    <div style="flex-grow: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#9A9086" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.2 18.5a6.5 6.5 0 0111.6 0"/></svg>
+      <span style="font-size: 11px; color: #9A9086;">Profils</span>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

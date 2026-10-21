@@ -1,0 +1,1053 @@
+// ============================================================================
+//  FamStory data model
+//
+//  From the study: "a structured family data model is at the centre of the
+//  product's innovation" and "the family as the primary entity". That is why
+//  nearly every table carries familyId — data is organised around the family.
+//
+//  Two rules run through the whole schema:
+//    1. MULTI-TENANCY: every query starts with familyId. There is no endpoint
+//       that returns data without naming a family.
+//    2. FAIL CLOSED: visibility is established by an explicit record, never by
+//       the meaning of "no restriction". An unknown state = do not show.
+//
+//  See also docs/02-DATA-MODEL.md
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Identity
+// ---------------------------------------------------------------------------
+
+model User {
+  id                     String  @id @default(cuid())
+  email                  String  @unique
+  /// null when the user only signs in with Google/Apple
+  passwordHash           String?
+  displayName            String
+  avatarUrl              String?
+  locale                 String  @default("lv")
+  /// The app may count what this person does (AnalyticsEvent - no person in
+  /// it, only the family). On until they say no in the profile; checked by the
+  /// server, so an old app that does not know the switch cannot ignore it.
+  shareUsageStats        Boolean @default(true)
+  /// Which kinds of notification reach this person's bell - the switches on
+  /// the settings screen. On the account, not the device, so every device
+  /// follows; read by NotificationsService when it chooses recipients.
+  notifyEvents           Boolean @default(true)
+  notifyComments         Boolean @default(true)
+  notifyReminders        Boolean @default(true)
+  /// Minutes before an event that a new event's reminder starts at in the
+  /// composer. Null: no reminder unless one is chosen.
+  defaultReminderMinutes Int?
+  /// Which version of the terms of use and the privacy policy this person
+  /// accepted, and when (docs/legal/facts.json, "version"). Recorded at sign-up;
+  /// the app asks again when the published version is a different one.
+  termsVersion           String?   @db.VarChar(20)
+  termsAcceptedAt        DateTime?
+  /// Explicit consent to keep health information this person writes - about
+  /// themselves, or as a parent about their child (GDPR Art. 9(2)(a)). Asked
+  /// before the first entry in the Health category; null: not given, or
+  /// withdrawn, and the server refuses a new one.
+  healthConsentAt        DateTime?
+
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  /// GDPR: soft delete before final anonymisation (a 30-day window)
+  deletedAt       DateTime?
+
+  identities     AuthIdentity[]
+  members        Member[]
+  devices        Device[]
+  auditEntries   AuditLog[]
+  refreshTokens  RefreshToken[]
+  passwordResets PasswordReset[]
+
+  @@index([deletedAt])
+}
+
+/// OAuth connections. A separate table, because one user can connect Google,
+/// Apple and email all at once.
+model AuthIdentity {
+  id             String       @id @default(cuid())
+  userId         String
+  provider       AuthProvider
+  providerUserId String
+  createdAt      DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+}
+
+enum AuthProvider {
+  email
+  google
+  apple
+}
+
+/// Refresh tokens with rotation.
+///
+/// The hash is stored, not the token itself: if the database leaks, the tokens
+/// are not usable. `replacedById` forms a chain that makes reuse detectable — if
+/// someone uses an already-rotated token it means the token was stolen, and the
+/// whole chain is revoked.
+model RefreshToken {
+  id           String    @id @default(cuid())
+  userId       String
+  tokenHash    String    @unique
+  /// Which token this one was exchanged for.
+  replacedById String?   @unique
+  expiresAt    DateTime
+  revokedAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  userAgent String?
+  ipHash    String?
+
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  replacedBy RefreshToken? @relation("TokenRotation", fields: [replacedById], references: [id], onDelete: SetNull)
+  replaces   RefreshToken? @relation("TokenRotation")
+
+  @@index([userId, revokedAt])
+  @@index([expiresAt])
+}
+
+/// Push tokens. One person — several devices.
+model Device {
+  id         String   @id @default(cuid())
+  userId     String
+  platform   Platform
+  pushToken  String   @unique
+  locale     String   @default("lv")
+  lastSeenAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum Platform {
+  ios
+  android
+  web
+}
+
+// ---------------------------------------------------------------------------
+// The family — the system's primary entity
+// ---------------------------------------------------------------------------
+
+model Family {
+  id        String    @id @default(cuid())
+  name      String
+  coverUrl  String?
+  locale    String    @default("lv")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  members       Member[]
+  groups        Group[]
+  events        Event[]
+  invitations   Invitation[]
+  subscription  Subscription?
+  insights      Insight[]
+  auditEntries  AuditLog[]
+  notifications Notification[]
+  wishItems     WishItem[]
+  shareLinks    EventShareLink[]
+  reports       ContentReport[]
+  blocks        MemberBlock[]
+
+  @@index([deletedAt])
+}
+
+model Member {
+  id          String       @id @default(cuid())
+  familyId    String
+  /// null for a child profile that is not connected to an account.
+  /// A regulatory requirement from the study: a child is managed through a parent's account.
+  userId      String?
+  displayName String
+  avatarUrl   String?
+  birthDate   DateTime?
+  role        MemberRole   @default(member)
+  status      MemberStatus @default(active)
+
+  /// Which member manages this profile. Required when role = child.
+  /// Without this field a child's data is left with no responsible person — that
+  /// is a legal defect as much as a product one.
+  managedByMemberId String?
+
+  /// The photograph, as a storage key like an attachment's - never a URL. The
+  /// API signs a short-lived link into `avatarUrl` on the way out, because a
+  /// child's face is exactly what must not sit behind a permanent address.
+  avatarKey String?
+
+  /// In memoriam: the day this person died, when the family has marked it.
+  /// The profile and everything it is part of stays; what stops is what
+  /// treats them as present - the birthday strip, reminders, sign-in.
+  diedOn DateTime?
+
+  /// What this person likes, for gift ideas before their birthday: keys from a
+  /// fixed list (src/common/interests.ts), never free text. Their own to set;
+  /// a child's, the adults' who manage the profile.
+  interests String[] @default([])
+
+  joinedAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  family    Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  managedBy Member?  @relation("ChildGuardian", fields: [managedByMemberId], references: [id], onDelete: SetNull)
+  manages   Member[] @relation("ChildGuardian")
+
+  groupLinks      GroupMember[]
+  authoredEvents  Event[]            @relation("EventAuthor")
+  /// Surprises being gathered for this member, which they cannot see yet.
+  surprisesFor    Event[]            @relation("EventHiddenFrom")
+  participations  EventParticipant[]
+  visibleEvents   EventVisibility[]
+  comments        Comment[]
+  reactions       Reaction[]
+  sentInvitations Invitation[]       @relation("InvitedBy")
+  reminderTargets ReminderTarget[]
+  notifications   Notification[]
+  visit           MemberVisit?
+  calendarFeed    CalendarFeed?
+  wishesFor       WishItem[]         @relation("WishFor")
+  wishesAdded     WishItem[]         @relation("WishAddedBy")
+  wishesClaimed   WishItem[]         @relation("WishClaimedBy")
+  shareLinks      EventShareLink[]
+  reportsMade     ContentReport[]
+  blocksMade      MemberBlock[]      @relation("BlocksMade")
+  blockedBy       MemberBlock[]      @relation("BlockedBy")
+
+  /// One user — one member record per family.
+  @@unique([familyId, userId])
+  @@index([familyId, status])
+  @@index([managedByMemberId])
+}
+
+enum MemberRole {
+  admin
+  member
+  child
+  viewer
+}
+
+enum MemberStatus {
+  active
+  invited
+  removed
+}
+
+/// A visibility group: "Parents", "Grandparents", "Children" or a custom one.
+model Group {
+  id       String  @id @default(cuid())
+  familyId String
+  name     String
+  icon     String?
+  /// System groups cannot be deleted — they are created with the family.
+  isSystem Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  family     Family            @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  members    GroupMember[]
+  visibleFor EventVisibility[]
+
+  @@unique([familyId, name])
+  @@index([familyId])
+}
+
+model GroupMember {
+  groupId  String
+  memberId String
+  addedAt  DateTime @default(now())
+
+  group  Group  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([groupId, memberId])
+  @@index([memberId])
+}
+
+// ---------------------------------------------------------------------------
+// Notikumi
+// ---------------------------------------------------------------------------
+
+model Event {
+  id       String @id @default(cuid())
+  familyId String
+
+  title       String
+  description String?   @db.Text
+  startsAt    DateTime
+  endsAt      DateTime?
+  allDay      Boolean   @default(false)
+
+  categoryId String
+  /// Free labels the family invents: "First steps", "Holiday", "School".
+  ///
+  /// Deliberately a scalar array rather than a Tag table. A tag has no
+  /// properties, no lifecycle and no owner beyond the event — a join table
+  /// would buy referential integrity for something that is, correctly, just a
+  /// word. Postgres indexes a text[] with GIN when filtering by tag arrives.
+  tags       String[] @default([])
+
+  /// An archive marker — it stays in the yearly summary and in exports.
+  isMilestone Boolean @default(false)
+
+  /// How the event repeats, or null for once. The series is ONE row: the
+  /// occurrences are computed from `startsAt` (apps/mobile/src/domain/
+  /// recurrence.ts, and the reminder worker on this side), so a weekly
+  /// practice is one event and not thirty.
+  repeat         RepeatRule?
+  /// The last day an occurrence may start on. Null: it goes on.
+  repeatUntil    DateTime?
+  /// Occurrences taken out of the series ("not this week"), as the local
+  /// day they would have started on, YYYY-MM-DD. Days rather than moments,
+  /// so moving the series to another hour does not bring a skipped week back.
+  repeatSkips    String[]    @default([])
+  /// The IANA zone the series was made in ("Europe/Riga"). 18:00 on Tuesdays
+  /// is 18:00 in Riga through both clock changes, which a fixed UTC hour is not.
+  repeatTimeZone String?
+
+  /// When this entry answers "the question of the week", which one it was
+  /// (a key into the app's list, like "childhood-home"). Lets the question
+  /// know it has been answered without a table of its own.
+  promptKey String?
+
+  /// A TIME CAPSULE: until this moment only the author sees what is inside.
+  /// Everybody else who may see the event sees the envelope - its title and
+  /// when it opens - and nothing that is in it: no words, photographs, voice,
+  /// comments or reactions (EventsService.present and assertCanOpenEvent).
+  /// Null: an ordinary event.
+  sealedUntil DateTime?
+
+  /// A SURPRISE: the event does not exist for this member until `revealAt` -
+  /// birthday wishes gathered while the one they are for cannot look. Checked
+  /// in VisibilityService.eventFilter before every other rule, the author's
+  /// included, and fail closed: a surprise with no reveal time stays hidden.
+  hiddenFromMemberId String?
+  revealAt           DateTime?
+
+  /// When the family was told the capsule has opened, or its person that the
+  /// surprise is ready - so the worker says it once.
+  unlockNotifiedAt DateTime?
+
+  /// On the story shelf: a voice to fall asleep to - a grandmother's tale, a
+  /// song. The shelf lists these apart from the timeline.
+  onStoryShelf Boolean @default(false)
+
+  authorMemberId String
+
+  /// The kind of visibility. The named recipients live in the EventVisibility table.
+  /// Splitting it across two places is deliberate: `family` and `private` need no
+  /// rows at all, so the common cases stay cheap.
+  visibilityKind VisibilityKind @default(family)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  family        Family             @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  author        Member             @relation("EventAuthor", fields: [authorMemberId], references: [id], onDelete: Cascade)
+  hiddenFrom    Member?            @relation("EventHiddenFrom", fields: [hiddenFromMemberId], references: [id], onDelete: Cascade)
+  participants  EventParticipant[]
+  visibility    EventVisibility[]
+  attachments   Attachment[]
+  comments      Comment[]
+  reactions     Reaction[]
+  reminders     Reminder[]
+  notifications Notification[]
+  shareLinks    EventShareLink[]
+  reports       ContentReport[]
+
+  /// The timeline's core query: a family's events in chronological order.
+  ///
+  /// One index also serves the calendar's date range: PostgreSQL scans b-tree
+  /// indexes in both directions, so a separate ascending index on the same
+  /// columns would only cost write speed and give nothing back.
+  @@index([familyId, startsAt(sort: Desc)])
+  @@index([familyId, categoryId])
+  @@index([authorMemberId])
+  @@index([deletedAt])
+  @@index([hiddenFromMemberId])
+}
+
+/// Weekly repeats on the weekday the series starts; monthly on the same day
+/// of the month, or the month's last day when it has fewer; yearly on the same
+/// date, 29 February falling back to the 28th.
+enum RepeatRule {
+  daily
+  weekly
+  monthly
+  yearly
+}
+
+enum VisibilityKind {
+  /// Every active member of the family
+  family
+  /// Named groups AND/OR named members, in one audience.
+  /// The design's "Custom — choose groups & people": a user who wants the
+  /// grandparents plus one sister should not have to give up half of that.
+  custom
+  /// Named groups only. Kept for events created before `custom` existed —
+  /// it is `custom` with an empty member list.
+  groups
+  /// Named members only. Same: `custom` with an empty group list.
+  members
+  /// The author alone
+  private
+}
+
+/// Visibility recipients. A row holds EITHER a group OR a member, never both.
+model EventVisibility {
+  id       String  @id @default(cuid())
+  eventId  String
+  groupId  String?
+  memberId String?
+
+  event  Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  group  Group?  @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  member Member? @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, groupId])
+  @@unique([eventId, memberId])
+  @@index([groupId])
+  @@index([memberId])
+}
+
+/// Who the event is about. Not to be confused with visibility:
+/// a child can be a participant in an event they cannot see themselves.
+model EventParticipant {
+  eventId  String
+  memberId String
+
+  event  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, memberId])
+  @@index([memberId])
+}
+
+model Attachment {
+  id           String         @id @default(cuid())
+  eventId      String
+  kind         AttachmentKind
+  /// The object-storage key, NOT a public URL. The public link is generated as a
+  /// short-lived presigned URL at request time — otherwise the event's visibility
+  /// control would mean nothing.
+  storageKey   String
+  thumbnailKey String?
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  durationSec  Int?
+  createdAt    DateTime       @default(now())
+  /// When the bytes actually arrived.
+  ///
+  /// A row is created when the upload is asked for and only becomes real when
+  /// it completes, so a picker that was cancelled, a connection that died or a
+  /// file over the limit leaves a row nobody ever serves. Every read filters on
+  /// this: an attachment with no bytes behind it is a broken image in a family
+  /// chronicle, which reads as lost data rather than as an unfinished upload.
+  uploadedAt   DateTime?
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+enum AttachmentKind {
+  image
+  video
+  document
+  /// A voice note: somebody telling it rather than typing it. No thumbnail;
+  /// `durationSec` says how long, for the player.
+  audio
+}
+
+model Comment {
+  id             String    @id @default(cuid())
+  eventId        String
+  authorMemberId String
+  body           String    @db.Text
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  event   Event           @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  author  Member          @relation(fields: [authorMemberId], references: [id], onDelete: Cascade)
+  reports ContentReport[]
+
+  @@index([eventId, createdAt])
+  @@index([authorMemberId])
+}
+
+// ---------------------------------------------------------------------------
+// Reports - "this should not be here" (docs/02-DATA-MODEL.md, Reports)
+// ---------------------------------------------------------------------------
+
+/// Somebody reported an entry or a comment. App Review guideline 1.2 asks
+/// this of an app whose people post things. Only what the reporter can see
+/// can be reported, and never their own. The family's admins are told
+/// without the reporter's name; the operator reads them all (npm run reports).
+model ContentReport {
+  id               String       @id @default(cuid())
+  familyId         String
+  reporterMemberId String
+  target           ReportTarget
+  /// Always set: for a comment, the event it is on - which is also what the
+  /// admins' notification points at.
+  eventId          String
+  commentId        String?
+  reason           ReportReason
+  note             String?      @db.VarChar(500)
+  createdAt        DateTime     @default(now())
+  /// Dealt with: the content is gone, or the operator has looked at it.
+  resolvedAt       DateTime?
+
+  family   Family   @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  reporter Member   @relation(fields: [reporterMemberId], references: [id], onDelete: Cascade)
+  event    Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  comment  Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@index([resolvedAt, createdAt])
+  @@index([familyId])
+  @@index([reporterMemberId, eventId])
+}
+
+enum ReportTarget {
+  event
+  comment
+}
+
+enum ReportReason {
+  inappropriate
+  harassment
+  spam
+  other
+}
+
+// ---------------------------------------------------------------------------
+// Blocks - "I do not want to see what this person posts" (docs/02-DATA-MODEL.md, Blocks)
+// ---------------------------------------------------------------------------
+
+/// One member blocked another. What the blocked member writes - entries,
+/// comments, reactions - leaves the blocker's view, and the bell tells the
+/// blocker nothing they do (VisibilityService.eventFilter, the comment and
+/// reaction queries, notifications.service.ts). Nobody is told, and nothing
+/// changes for the blocked member.
+model MemberBlock {
+  blockerMemberId String
+  blockedMemberId String
+  familyId        String
+  createdAt       DateTime @default(now())
+
+  family  Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  blocker Member @relation("BlocksMade", fields: [blockerMemberId], references: [id], onDelete: Cascade)
+  blocked Member @relation("BlockedBy", fields: [blockedMemberId], references: [id], onDelete: Cascade)
+
+  /// Also the index eventFilter's question uses for every event: "has this
+  /// viewer blocked the author".
+  @@id([blockerMemberId, blockedMemberId])
+  @@index([blockedMemberId])
+  @@index([familyId])
+}
+
+model Reaction {
+  eventId   String
+  memberId  String
+  kind      ReactionKind
+  createdAt DateTime     @default(now())
+
+  event  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  /// One member — one reaction per event.
+  @@id([eventId, memberId])
+  @@index([memberId])
+}
+
+enum ReactionKind {
+  heart
+  smile
+  clap
+  wow
+}
+
+// ---------------------------------------------------------------------------
+// Reminders
+// ---------------------------------------------------------------------------
+
+model Reminder {
+  id            String  @id @default(cuid())
+  eventId       String
+  minutesBefore Int
+  enabled       Boolean @default(true)
+
+  /// When the push has to be queued. Derived from event.startsAt — stored
+  /// separately so the worker can query by index instead of computing per row.
+  scheduledFor DateTime
+  deliveredAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  event   Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  targets ReminderTarget[]
+
+  /// The worker's query: what has to go out in the next minute.
+  @@index([scheduledFor, deliveredAt])
+  @@index([eventId])
+}
+
+/// Who to send to. An empty list = everyone who can see the event.
+model ReminderTarget {
+  reminderId String
+  memberId   String
+
+  reminder Reminder @relation(fields: [reminderId], references: [id], onDelete: Cascade)
+  member   Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([reminderId, memberId])
+}
+
+// ---------------------------------------------------------------------------
+// Invitations
+// ---------------------------------------------------------------------------
+
+model Invitation {
+  id       String     @id @default(cuid())
+  familyId String
+  /// null for an invitation link or code with no named recipient
+  email    String?
+  code     String     @unique
+  role     MemberRole @default(member)
+  /// The ids of the groups to join on acceptance.
+  groupIds String[]
+
+  invitedByMemberId String
+  expiresAt         DateTime
+  acceptedAt        DateTime?
+  revokedAt         DateTime?
+  createdAt         DateTime  @default(now())
+
+  family    Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  invitedBy Member @relation("InvitedBy", fields: [invitedByMemberId], references: [id], onDelete: Cascade)
+
+  @@index([familyId])
+  @@index([email])
+}
+
+// ---------------------------------------------------------------------------
+// Abonements
+// ---------------------------------------------------------------------------
+
+model Subscription {
+  id       String @id @default(cuid())
+  familyId String @unique
+
+  plan   PlanId             @default(free)
+  status SubscriptionStatus @default(active)
+  period BillingPeriod?
+
+  /// Payment-system identifiers. Three, because a subscription can be bought
+  /// through the App Store, Play or the web (Stripe) — and the price differs in each.
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  appleOriginalTxId    String?
+  googlePurchaseToken  String?
+
+  /// Where it was bought, as RevenueCat reports it (docs/02-DATA-MODEL.md,
+  /// Subscriptions). null for a plan set by hand, which RevenueCat never
+  /// overwrites.
+  store    PurchaseStore?
+  /// Bought in the stores' test environment - TestFlight, App Review. It
+  /// unlocks Premium like a real purchase and is never counted as revenue.
+  sandbox  Boolean        @default(false)
+  /// When the state was last read from RevenueCat.
+  syncedAt DateTime?
+
+  /// The end of what has been paid for, a grace period included. null with
+  /// plan = premium is a plan without an end (one set by hand).
+  currentPeriodEnd  DateTime?
+  cancelAtPeriodEnd Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  family Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+
+  @@index([status, currentPeriodEnd])
+}
+
+enum PlanId {
+  free
+  premium
+}
+
+enum SubscriptionStatus {
+  active
+  past_due
+  cancelled
+  expired
+}
+
+enum BillingPeriod {
+  monthly
+  annual
+}
+
+enum PurchaseStore {
+  app_store
+  play_store
+  /// Granted in RevenueCat's dashboard, not bought.
+  promotional
+  other
+}
+
+// ---------------------------------------------------------------------------
+// Audit log
+//
+// The study's technological risk "data security incident" — critical impact.
+// Its mitigation names an audit log explicitly.
+//
+// Must be recorded: viewing children's data, visibility changes, role changes,
+// member removals, exports, deletions.
+// ---------------------------------------------------------------------------
+
+model AuditLog {
+  id       String  @id @default(cuid())
+  familyId String?
+  /// Who performed the action. null for system actions (worker, cron).
+  userId   String?
+
+  action     String
+  entityType String
+  entityId   String
+  /// Context as JSON. MUST NOT hold event content, photos or comment text —
+  /// structural facts only. Data minimisation.
+  metadata   Json?
+
+  ipHash    String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  family Family? @relation(fields: [familyId], references: [id], onDelete: SetNull)
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([familyId, createdAt])
+  @@index([userId, createdAt])
+  @@index([entityType, entityId])
+}
+
+// ---------------------------------------------------------------------------
+// The AI layer
+//
+// MVP: rule-based. V2: LLM. The table is the same one — deliberately, so the
+// transition changes neither the API nor the UI.
+// ---------------------------------------------------------------------------
+
+model Insight {
+  id         String      @id @default(cuid())
+  familyId   String
+  kind       InsightKind
+  /// The finished text shown to the user.
+  message    String      @db.Text
+  /// 0..1. Below 0.6 nothing is shown.
+  confidence Float
+  payload    Json?
+
+  /// Whether the user accepted the suggestion. null = no answer yet.
+  /// This field is the only way to learn whether the AI layer is useful at all —
+  /// without it the V2 decision about AI would rest on a feeling.
+  acceptedAt DateTime?
+  rejectedAt DateTime?
+
+  /// Whether it was generated by rules or by a model. Needed to compare the
+  /// acceptance rates of the two approaches before monetising AI.
+  source InsightSource @default(rules)
+
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
+
+  family Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+
+  @@index([familyId, createdAt])
+  @@index([kind, source])
+}
+
+enum InsightKind {
+  category_suggestion
+  reminder_time
+  schedule_conflict
+  monthly_summary
+  yearly_summary
+}
+
+enum InsightSource {
+  rules
+  llm
+}
+
+// ---------------------------------------------------------------------------
+// Notifications
+//
+// Something that happened, for one person. Written when it happens rather than
+// derived when the bell is opened, because two of the four kinds - a reminder
+// coming due, somebody joining - are moments rather than rows, and because a
+// notification has its own read state that nothing else in the schema carries.
+//
+// One row per recipient, so "who was told" is a query and "mark all read" is
+// one person's update. The recipient list is decided at write time by the
+// same visibility rule as the timeline (notifications.service.ts), AND the
+// list is filtered again at read time: visibility can narrow after the fact,
+// and a notification must never become the one place an event is still seen.
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id            String           @id @default(cuid())
+  familyId      String
+  /// Who it is for.
+  memberId      String
+  kind          NotificationKind
+  eventId       String?
+  /// Who did it, when somebody did. A plain id rather than a relation: the
+  /// member row outlives an account (it is anonymised, not deleted), and the
+  /// name is read at display time so it follows a rename.
+  actorMemberId String?
+
+  /// A special day (kind special_day): which one, and its date - Mother's Day
+  /// on 10 May. The pair is unique per person, so however often the worker
+  /// runs, a day is announced once.
+  dayKey String?
+  dayOn  DateTime?
+
+  createdAt DateTime  @default(now())
+  readAt    DateTime?
+
+  family Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  event  Event? @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([memberId, dayKey, dayOn])
+  /// The bell: one person's newest first, and the unread count.
+  @@index([memberId, createdAt(sort: Desc)])
+  @@index([memberId, readAt])
+  @@index([eventId])
+}
+
+enum NotificationKind {
+  event_reminder
+  event_created
+  comment_added
+  member_joined
+  /// Somebody made a password reset link for this person. Said out loud,
+  /// because a link that lets an admin set another adult's password is a way
+  /// into their account, and the only defence that works in a family is that
+  /// it cannot happen quietly.
+  password_reset_created
+  /// A time capsule's day has come: everybody who may see it can open it.
+  capsule_opened
+  /// The birthday morning: the wishes the family gathered are there to read.
+  surprise_ready
+  /// A day the family marks is coming - Mother's Day, Midsummer, Christmas Eve
+  /// (src/common/special-days.ts).
+  special_day
+  /// Somebody reported an entry or a comment in it (ContentReport). For the
+  /// admins who can see the entry, with no actor: who reported it stays out.
+  content_reported
+}
+
+// ---------------------------------------------------------------------------
+// Visits - what "new since you last looked" is measured from
+//
+// A table of its own rather than a column on Member, on purpose: the member
+// row is what the whole family reads (every snapshot includes it), and when
+// somebody last opened the app is not the family's business. Kept apart, no
+// query that lists members can carry it by accident.
+// ---------------------------------------------------------------------------
+
+model MemberVisit {
+  memberId   String   @id
+  /// When this person's latest visit began.
+  lastSeenAt DateTime
+
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------------------------
+// Calendar feeds - the family's events in the phone's own calendar
+//
+// One read-only address per member, answering text/calendar with what that
+// member can see, run through the same eventFilter as the timeline. The
+// address is signed (HMAC over the member and `version`) instead of stored,
+// so it can be shown again; resetting it bumps `version`, and every copy of
+// the old one stops working at once.
+// ---------------------------------------------------------------------------
+
+model CalendarFeed {
+  memberId      String    @id
+  version       Int       @default(1)
+  createdAt     DateTime  @default(now())
+  /// When a calendar last fetched it - "is my phone still subscribed?"
+  lastFetchedAt DateTime?
+
+  member Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+}
+
+// ---------------------------------------------------------------------------
+// Wish lists
+//
+// A list per person of things they would like. The rule that makes it a
+// feature rather than a notes field: the person it is for sees only the
+// lines they wrote themselves, and never who is getting what. Everybody else
+// in the family sees all of it, so two people do not buy the same scarf.
+// ---------------------------------------------------------------------------
+
+model WishItem {
+  id                String    @id @default(cuid())
+  familyId          String
+  /// Whose list: the one person who never sees the others' ideas or the claims.
+  forMemberId       String
+  text              String
+  addedByMemberId   String
+  /// "I'll get this" - so nobody else does.
+  claimedByMemberId String?
+  createdAt         DateTime  @default(now())
+  deletedAt         DateTime?
+
+  family    Family  @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  forMember Member  @relation("WishFor", fields: [forMemberId], references: [id], onDelete: Cascade)
+  addedBy   Member  @relation("WishAddedBy", fields: [addedByMemberId], references: [id], onDelete: Cascade)
+  claimedBy Member? @relation("WishClaimedBy", fields: [claimedByMemberId], references: [id], onDelete: SetNull)
+
+  @@index([familyId, forMemberId])
+}
+
+// ---------------------------------------------------------------------------
+// Guest links - one event, for somebody outside the family
+//
+// The grandmother who will never install anything still sees the birthday.
+// View-only, one event, expiring, revocable, and only the hash is kept. The
+// one deliberate way data leaves the family (docs/08-LAUNCH-PLAN.md 3.8), so
+// every link made and every view of a child's event is in the audit log.
+// ---------------------------------------------------------------------------
+
+model EventShareLink {
+  id                String    @id @default(cuid())
+  eventId           String
+  familyId          String
+  tokenHash         String    @unique
+  createdByMemberId String
+  expiresAt         DateTime
+  revokedAt         DateTime?
+  /// A sticker for a family heirloom (the QR on grandfather's watch): made to
+  /// last - it expires a century on - and it carries the voice, which an
+  /// ordinary guest link never does. Chosen on purpose, with the warning that
+  /// whoever holds the sticker hears the recording.
+  heirloom          Boolean   @default(false)
+  viewCount         Int       @default(0)
+  lastViewedAt      DateTime?
+  createdAt         DateTime  @default(now())
+
+  event     Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  family    Family @relation(fields: [familyId], references: [id], onDelete: Cascade)
+  createdBy Member @relation(fields: [createdByMemberId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+// ---------------------------------------------------------------------------
+// Product analytics, first-party
+//
+// The KPIs in docs/00-PLAN.md section 6 decide whether this product goes on,
+// and the events that measure them (apps/mobile/src/domain/analytics.ts) went
+// nowhere. This keeps them here, without an outside service - and without a
+// person: no user id, no member id, no device, no address. A family id is the
+// finest grain, because "families with three events" is the finest question
+// the KPIs ask. Kept 400 days (a year's comparison and a month), then deleted.
+// ---------------------------------------------------------------------------
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  /// The event's name from the app's list, e.g. "event_created".
+  name      String
+  /// Its structural facts only - numbers, booleans and short words; never a
+  /// title, a name or a description (the app's events carry none).
+  props     Json?
+  familyId  String?
+  createdAt DateTime @default(now())
+
+  @@index([name, createdAt])
+  @@index([familyId, createdAt])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Errors the app ran into
+//
+// "Somebody has to know when it breaks" (docs/08-LAUNCH-PLAN.md 2.6), before
+// there is an error tracker to tell. What broke and where, truncated and
+// scrubbed (modules/telemetry/scrub.ts); kept 90 days. Nobody's: an error can
+// happen before anyone signs in, so the report is accepted without a session
+// and says whose it was in no way at all - not even the family.
+// ---------------------------------------------------------------------------
+
+model ClientError {
+  id         String   @id @default(cuid())
+  message    String
+  stack      String?
+  /// "web", "ios", "android".
+  platform   String
+  /// The screen it happened on, as a pattern: "/event/:id", never the id.
+  route      String?
+  appVersion String?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Password resets
+//
+// A forgotten password used to be permanent: no email is configured, so there
+// was no way back into an account and the family archive behind it. A family
+// admin can now make a one-time link for another adult in the family and hand
+// it over in person (or show it as a QR code); the email flow, when there is
+// a sender, uses the same rows.
+//
+// Only the hash is stored, like refresh tokens: a leaked database yields no
+// usable links. One use, 24 hours, and making a new one voids the old.
+// ---------------------------------------------------------------------------
+
+model PasswordReset {
+  id                String    @id @default(cuid())
+  userId            String
+  tokenHash         String    @unique
+  /// The admin who made it, when it came from inside a family.
+  createdByMemberId String?
+  expiresAt         DateTime
+  usedAt            DateTime?
+  createdAt         DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}

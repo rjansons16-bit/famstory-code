@@ -1,0 +1,13 @@
+-- Add the `custom` visibility kind.
+--
+-- The design merges "specific groups" and "specific people" into one choice:
+-- "Custom — choose groups & people". A user who wants the grandparents plus one
+-- sister should not have to give up half of that.
+--
+-- `EventVisibility` already stores either a groupId or a memberId per row, so a
+-- custom audience needs no new table — only a kind that means "read both".
+--
+-- Added AFTER 'family' so the enum order still reads widest-to-narrowest.
+-- Existing rows are untouched: `groups` and `members` remain valid and are the
+-- degenerate cases of `custom`.
+ALTER TYPE "VisibilityKind" ADD VALUE 'custom' AFTER 'family';

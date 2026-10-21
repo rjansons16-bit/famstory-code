@@ -1,0 +1,52 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# The static web exports served over the LAN (tools/lan-host): dist-web for the
+# app, dist-web-demo for the copy on sample data, and their .next/.empty staging
+# folders while install.ps1 publishes them.
+dist-web*/
+
+# Native
+.kotlin/
+# Firebase's Android config: an EAS file variable on the build machine
+# (app.config.js), kept out of git all the same.
+google-services.json
+GoogleService-Info.plist
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
+example
+
+# generated native folders
+/ios
+/android

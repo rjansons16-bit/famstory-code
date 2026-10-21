@@ -1,0 +1,6 @@
+{
+  "ios": {
+    "NSMicrophoneUsageDescription": "FamStory izmanto mikrofonu, lai ierakstītu balss ierakstus tavas ģimenes notikumiem.",
+    "NSPhotoLibraryUsageDescription": "FamStory izmanto tavus foto, lai tu tos varētu pievienot ģimenes notikumiem un profiliem."
+  }
+}

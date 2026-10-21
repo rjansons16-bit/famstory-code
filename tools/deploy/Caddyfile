@@ -1,0 +1,116 @@
+# The front door on a server: HTTPS for DOMAIN (Let's Encrypt, automatic),
+# /v1 to the API, everything else the web app - the same split
+# tools/lan-host/static-server.mjs makes on the laptop, in the same order.
+
+{
+	email {$ACME_EMAIL}
+}
+
+{$DOMAIN} {
+	# Security headers for the page. The API sets its own (helmet).
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# The microphone for this page itself: voice notes and dictation
+		# (docs/07-IMPROVEMENTS.md item 68). It said microphone=() here, which
+		# would have switched both off on the server without a word.
+		Permissions-Policy "geolocation=(), microphone=(self), camera=(self)"
+		-Server
+	}
+
+	# Nothing but the front door is for a search engine - above all a guest
+	# link that somebody pasted somewhere public. The welcome page is where
+	# somebody who searched for FamStory should land, with what it needs to
+	# draw; the same rule as tools/lan-host/static-server.mjs.
+	@private not path / /welcome /robots.txt /sitemap.xml /_expo/* /assets/* /favicon.ico /og-image.png /icon-* /apple-touch-icon.png /manifest.webmanifest
+	header @private X-Robots-Tag "noindex, nofollow"
+
+	handle /robots.txt {
+		header Content-Type "text/plain; charset=utf-8"
+		respond `User-agent: *
+Allow: /$
+Allow: /welcome$
+Allow: /_expo/
+Allow: /assets/
+Allow: /favicon.ico
+Allow: /og-image.png
+Allow: /icon-
+Allow: /apple-touch-icon.png
+Allow: /manifest.webmanifest
+Allow: /.well-known/
+Disallow: /
+
+Sitemap: https://{$DOMAIN}/sitemap.xml
+` 200
+	}
+
+	handle /sitemap.xml {
+		header Content-Type "application/xml; charset=utf-8"
+		respond `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://{$DOMAIN}/welcome</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+</urlset>
+` 200
+	}
+
+	# Which app may open this site's links: an invitation (/join) or a password
+	# reset (/reset) opens FamStory where it is installed, the web app where
+	# it is not (apps/mobile/app.config.js has the same two paths). Apple reads
+	# the first file and Android the second, as JSON over HTTPS with no
+	# redirect. Each is answered only once its value is in .env: before the
+	# developer accounts exist, there is no app to name.
+	@aasa {
+		path /.well-known/apple-app-site-association /apple-app-site-association
+		expression "{$APPLE_TEAM_ID}" != ""
+	}
+	handle @aasa {
+		header Content-Type "application/json"
+		respond `{"applinks":{"details":[{"appIDs":["{$APPLE_TEAM_ID}.lv.famstory.app"],"components":[{"/":"/join/*"},{"/":"/reset/*"}]}]},"webcredentials":{"apps":["{$APPLE_TEAM_ID}.lv.famstory.app"]}}` 200
+	}
+
+	@assetlinks {
+		path /.well-known/assetlinks.json
+		expression "{$ANDROID_CERT_SHA256}" != ""
+	}
+	handle @assetlinks {
+		header Content-Type "application/json"
+		respond `[{"relation":["delegate_permission/common.handle_all_urls","delegate_permission/common.get_login_creds"],"target":{"namespace":"android_app","package_name":"lv.famstory.app","sha256_cert_fingerprints":["{$ANDROID_CERT_SHA256}"]}}]` 200
+	}
+
+	# Photographs can be large; the API decides what it accepts.
+	request_body {
+		max_size 30MB
+	}
+
+	handle /v1/* {
+		# Caddy sets X-Forwarded-For to the caller and ignores one the caller
+		# sent. The API trusts it from this private network only (TRUST_PROXY),
+		# which is what makes the rate limiter count callers, not Caddy.
+		reverse_proxy api:3000
+	}
+
+	handle {
+		root * /srv/web
+
+		# Hashed names never change under the same name; pages always might.
+		@hashed path /_expo/static/* /assets/*
+		header @hashed Cache-Control "public, max-age=31536000, immutable"
+		@page not path /_expo/static/* /assets/*
+		header @page Cache-Control "no-cache"
+		# What makes the web app installable; Caddy does not know the extension.
+		@manifest path /manifest.webmanifest
+		header @manifest Content-Type "application/manifest+json; charset=utf-8"
+
+		# One .html per route in Expo's export (/calendar -> calendar.html);
+		# anything else is a route the app's own router owns.
+		try_files {path} {path}.html {path}/index.html /index.html
+		file_server {
+			# precompress.mjs wrote .br and .gz beside every large file.
+			precompressed br gzip
+		}
+	}
+
+	# No access log, deliberately. A guest link's token is in its path, and a
+	# log of paths would be a file of working keys to families' pages.
+}
